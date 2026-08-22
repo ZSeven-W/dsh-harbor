@@ -1,0 +1,111 @@
+# Harbor publishes capability descriptions of OTHER people's plugins. A wrong
+# public statement about a plugin is a bug against harbor, and every
+# uncorrected one burns trust with the next plugin author — so this form must
+# stay low friction: an evidence line plus one sentence is enough to start.
+#
+# GitHub rejects submissions from a template whose `labels` do not exist in
+# the repository settings: create the `false-positive` label before relying
+# on this form.
+name: False positive — harbor reported a capability my plugin does not have
+description: >-
+  Correct a capability harbor attributed to your plugin that your plugin
+  does not actually have.
+labels: ['false-positive']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this.
+
+        Harbor describes what other people's plugins do, in public: its reports
+        are statements about your code that you did not write. Pattern matching
+        over foreign code is imperfect by design — it can over-report (comments,
+        example code, bundled dependencies) and under-report (dynamic calls).
+        When it over-reports, the bug is ours, and your correction matters:
+        every uncorrected false positive is one reason for the next plugin
+        author to distrust every report harbor produces.
+
+        The fields below come from `harbor scan --evidence` /
+        `harbor scan --json`.
+  - type: input
+    id: plugin-package
+    attributes:
+      label: Plugin package name
+      description: The package the report is about (e.g. @zseven-w/dsh-crew).
+      placeholder: "@zseven-w/dsh-crew"
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: The version the report is about.
+      placeholder: "0.1.0-rc.4"
+    validations:
+      required: true
+  - type: input
+    id: capability-id
+    attributes:
+      label: Capability id harbor reported
+      description: >-
+        The id exactly as printed in the report — one of the vocabulary ids
+        in SPEC.md §2 (e.g. network-egress).
+      placeholder: "network-egress"
+    validations:
+      required: true
+  - type: input
+    id: evidence-line
+    attributes:
+      label: The evidence line harbor printed
+      description: >-
+        The file:line harbor gave for this capability, with the excerpt
+        (`harbor scan --evidence`).
+      placeholder: "node_modules/vendor/lib.js:12  fetch('https://api.example.com')"
+    validations:
+      required: true
+  - type: textarea
+    id: why-not
+    attributes:
+      label: Why this is not that capability
+      description: >-
+        What the code actually is or does. Common answers: a comment or
+        example, dead code, test scaffolding, or a bundled third-party
+        dependency rather than code you authored.
+      placeholder: |
+        This is vendored minified code from ...; my own source never calls fetch.
+    validations:
+      required: true
+  - type: input
+    id: harbor-version
+    attributes:
+      label: Harbor version
+      description: >-
+        The @zseven-w/dsh-harbor version that produced the report (shown in
+        the DSH plugin list), e.g. 0.1.0-rc.1.
+      placeholder: "0.1.0-rc.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: source-kind
+    attributes:
+      label: coverage.sourceKind of the report
+      description: >-
+        From `harbor scan --json` → `coverage.sourceKind`. `source` means
+        harbor scanned your author source; `bundled` means your package
+        shipped no usable source and harbor scanned the packed build output —
+        conclusions there describe the bundle as a whole (dependencies
+        included) at heuristic confidence. This is the single most useful
+        field for triaging a false positive.
+      options:
+        - source
+        - bundled
+        - not sure
+    validations:
+      required: true
+  - type: textarea
+    id: anything-else
+    attributes:
+      label: Anything else
+      description: Optional — links, screenshots, or the full report.
+    validations:
+      required: false

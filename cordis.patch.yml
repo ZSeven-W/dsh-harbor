@@ -1,0 +1,4 @@
+# dsh-harbor bundle patch: mounts the governance plugin into a profile layer.
+- insert:
+    - id: dsh-harbor-hub
+      name: '@zseven-w/dsh-harbor'

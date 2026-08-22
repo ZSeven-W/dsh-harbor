@@ -1,0 +1,81 @@
+{
+  "name": "@zseven-w/dsh-harbor",
+  "version": "0.1.0-rc.1",
+  "description": "A read-only mirror for installed DeepSeek Harness plugins: capability inventory with evidence, cross-plugin conflicts, and a diff of what changed since the last scan",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZSeven-W/dsh-harbor.git"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "governance",
+    "audit",
+    "capabilities",
+    "supply-chain",
+    "plugin"
+  ],
+  "bin": {
+    "harbor": "./src/cli.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "platform": "web"
+    },
+    "capabilities": [
+      "client-injection",
+      "env-read",
+      "foreign-config",
+      "network-egress",
+      "web-routes"
+    ]
+  },
+  "scripts": {
+    "prepack": "npm run build:client && npm test",
+    "build:client": "tsdown src/client/index.tsx --format cjs --platform browser --target es2022 --tsconfig tsconfig.client.json --deps.never-bundle react --deps.never-bundle react/jsx-runtime --deps.never-bundle react-dom --deps.never-bundle react-dom/client --out-dir .client-build --clean --logLevel warn && node scripts/build-client.mjs",
+    "test": "node --test 'test/*.test.mjs'"
+  },
+  "exports": {
+    ".": "./src/hub/index.mjs",
+    "./scan": "./src/scan/index.mjs",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "README.*.md",
+    "SPEC.md",
+    "SPEC.*.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@types/react": "^18.3.0",
+    "tsdown": "^0.12.0",
+    "typescript": "^5.6.0"
+  },
+  "main": "./src/hub/index.mjs"
+}

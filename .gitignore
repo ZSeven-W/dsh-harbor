@@ -1,0 +1,8 @@
+node_modules/
+# tsdown intermediate output. lib/ is the committed build artifact and stays tracked.
+.client-build/
+.pnpm-store/
+*.log
+.DS_Store
+
+# Scan output and snapshots live in ~/.config/dsh-harbor, never in the repo

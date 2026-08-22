@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "rootDir": "src",
+    "outDir": ".client-build",
+    "sourceMap": false,
+    "strict": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": ["react"]
+  },
+  "include": ["src/client/**/*.tsx", "src/client/**/*.ts"],
+  "exclude": ["lib", ".client-build", "node_modules"]
+}

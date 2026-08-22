@@ -1,0 +1,109 @@
+# Harbor publishes capability descriptions of OTHER people's plugins. A missed
+# capability is as harmful as a wrong one — it understates the plugin in every
+# public report built on the scan — so authors get the same low-friction
+# correction path for both directions.
+#
+# GitHub rejects submissions from a template whose `labels` do not exist in
+# the repository settings: create the `false-negative` label before relying
+# on this form.
+name: False negative — harbor missed a capability my plugin actually has
+description: >-
+  Report a capability your plugin actually has that harbor failed to
+  detect.
+labels: ['false-negative']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this.
+
+        Harbor describes what other people's plugins do, in public, and it can
+        also miss things: detection is pattern matching over foreign code, so
+        dynamic calls, unusual APIs, and new idioms may not match any detector.
+        A capability your plugin has but the report omits is a false negative —
+        it makes every public description of your plugin understate what it
+        does. We treat it as a bug in harbor and will add or sharpen a
+        detector.
+
+        The fields below come from `harbor scan --evidence` /
+        `harbor scan --json`.
+  - type: input
+    id: plugin-package
+    attributes:
+      label: Plugin package name
+      description: The package the report is about (e.g. @zseven-w/dsh-crew).
+      placeholder: "@zseven-w/dsh-crew"
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: The version the report is about.
+      placeholder: "0.1.0-rc.4"
+    validations:
+      required: true
+  - type: input
+    id: capability-id
+    attributes:
+      label: Capability that exists but was not detected
+      description: >-
+        The id from the SPEC.md §2 vocabulary that describes what your plugin
+        does. If you believe the behavior needs a NEW id, name the behavior
+        and say so below.
+      placeholder: "network-egress"
+    validations:
+      required: true
+  - type: input
+    id: source-location
+    attributes:
+      label: Where the capability lives in your source
+      description: >-
+        The file:line (and a short quote) showing the behavior.
+      placeholder: "src/client/index.tsx:42  fetch('https://api.example.com')"
+    validations:
+      required: true
+  - type: textarea
+    id: why-detected
+    attributes:
+      label: What harbor should have detected there
+      description: >-
+        What the code does and why it counts as this capability. Dynamic or
+        indirect calls (function references in variables, helper wrappers) are
+        the most common reason a detector misses.
+      placeholder: |
+        My fetch call goes through a helper: apiGet = (u) => fetch(u) ...
+    validations:
+      required: true
+  - type: input
+    id: harbor-version
+    attributes:
+      label: Harbor version
+      description: >-
+        The @zseven-w/dsh-harbor version that produced the report (shown in
+        the DSH plugin list), e.g. 0.1.0-rc.1.
+      placeholder: "0.1.0-rc.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: source-kind
+    attributes:
+      label: coverage.sourceKind of the report
+      description: >-
+        From `harbor scan --json` → `coverage.sourceKind`. `source` means
+        harbor scanned your author source; `bundled` means it scanned packed
+        build output, where minification can strip the very signal a detector
+        looks for — which changes how we fix the miss.
+      options:
+        - source
+        - bundled
+        - not sure
+    validations:
+      required: true
+  - type: textarea
+    id: anything-else
+    attributes:
+      label: Anything else
+      description: Optional — links, screenshots, or the full report.
+    validations:
+      required: false
