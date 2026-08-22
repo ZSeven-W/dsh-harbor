@@ -1,4 +1,8 @@
 <p align="center">
+  <img src="./docs/images/dsh-harbor-logo.png" alt="DSH Harbor" width="120" />
+</p>
+
+<p align="center">
   <a href="./README.md"><b>English</b></a> &middot; <a href="./README.zh.md">简体中文</a>
 </p>
 
