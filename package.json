@@ -23,7 +23,7 @@
     "plugin"
   ],
   "bin": {
-    "harbor": "./src/cli.mjs"
+    "harbor": "src/cli.mjs"
   },
   "dsh": {
     "bundle": {
