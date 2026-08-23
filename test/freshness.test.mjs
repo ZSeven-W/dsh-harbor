@@ -60,7 +60,9 @@ test('fingerprintSource: deleting a file changes the fingerprint', async () => {
   });
 });
 
-test('fingerprintSource: an unreadable file flips the skip counter and changes the fingerprint', async () => {
+test('fingerprintSource: an unreadable file flips the skip counter and changes the fingerprint', {
+  skip: process.platform === 'win32',
+}, async () => {
   await withRepo(async (root) => {
     const before = await fingerprintSource(root);
     chmodSync(join(root, 'src', 'scan', 'b.mjs'), 0o000);

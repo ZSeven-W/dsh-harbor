@@ -7,7 +7,7 @@
 import {
   closeSync, constants as fsConstants, fstatSync, lstatSync, openSync, opendirSync, readSync,
 } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
 
 const SOURCE_EXT = /\.(mjs|cjs|js|ts|tsx|mts|cts)$/;
 const MAX_EVIDENCE_PER_CAP = 6;
@@ -203,7 +203,9 @@ export function* walkSource(dir, { libArtifact = false, coverage, limits: reques
         if (!SOURCE_EXT.test(entry.name)) continue;
 
         const path = join(current.path, entry.name);
-        const rel = relative(dir, path);
+        // Reports and snapshots are platform-neutral data. Keep evidence paths
+        // stable across POSIX and Windows instead of leaking `\\` separators.
+        const rel = relative(dir, path).split(sep).join('/');
         const kind = classifySourcePath(rel, { libArtifact });
         if (kind === 'skip') continue;
 

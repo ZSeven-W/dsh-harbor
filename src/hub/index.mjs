@@ -5,7 +5,7 @@
 import { scan, CAPABILITIES, checkUpstream } from '../scan/index.mjs';
 import { collectRuntimeSurface, attributeSurface } from '../scan/runtime.mjs';
 import { fingerprintSource, readClientBuildId } from './freshness.mjs';
-import { basename, dirname, resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const name = 'dsh-harbor';
@@ -135,7 +135,11 @@ export function profileFromContext(ctx) {
   try {
     const url = new URL(baseUrl);
     if (url.protocol !== 'file:') return null;
-    return basename(resolve(fileURLToPath(url))) || null;
+    const pathname = url.pathname.replace(/\/+$/u, '');
+    const raw = pathname.slice(pathname.lastIndexOf('/') + 1);
+    const profile = decodeURIComponent(raw);
+    if (!profile || profile === '.' || profile === '..' || /[/\\]/u.test(profile)) return null;
+    return profile;
   } catch {
     return null;
   }

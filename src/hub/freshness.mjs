@@ -11,7 +11,7 @@
 
 import { createHash } from 'node:crypto';
 import { constants as FS } from 'node:fs';
-import { open, opendir } from 'node:fs/promises';
+import { lstat, open, opendir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 const HEX_LEN = 16;
@@ -70,11 +70,17 @@ async function collectMjs(rootDir, dir, state, limits, depth = 0) {
 
 async function hashRegularFile(rootDir, rel, state, limits, hash) {
   let handle;
-  try { handle = await open(join(rootDir, rel), OPEN_FLAGS); }
+  let before;
+  try {
+    before = await lstat(join(rootDir, rel));
+    if (!before.isFile() || before.isSymbolicLink()) { state.skipped += 1; return; }
+    handle = await open(join(rootDir, rel), OPEN_FLAGS);
+  }
   catch { state.skipped += 1; return; }
   try {
     const stat = await handle.stat();
     if (!stat.isFile()) { state.skipped += 1; return; }
+    if (stat.dev !== before.dev || stat.ino !== before.ino) { state.skipped += 1; return; }
     const budget = Math.min(limits.maxFileBytes, limits.maxTotalBytes - state.bytes);
     hash.update('file\0' + rel + '\0');
     if (budget <= 0 || stat.size > budget) {
@@ -156,12 +162,19 @@ export async function fingerprintSource(rootDir, options = {}) {
  *   missing/unreadable or carries no identifier (older bundle format)
  */
 export async function readClientBuildId(rootDir) {
+  const path = join(rootDir, 'lib', 'client.js');
   let handle;
-  try { handle = await open(join(rootDir, 'lib', 'client.js'), OPEN_FLAGS); }
+  let before;
+  try {
+    before = await lstat(path);
+    if (!before.isFile() || before.isSymbolicLink()) return null;
+    handle = await open(path, OPEN_FLAGS);
+  }
   catch { return null; }
   try {
     const stat = await handle.stat();
     if (!stat.isFile() || stat.size <= 0) return null;
+    if (stat.dev !== before.dev || stat.ino !== before.ino) return null;
     const length = Math.min(CLIENT_TAIL_BYTES, stat.size);
     const buffer = Buffer.allocUnsafe(length);
     const { bytesRead } = await handle.read(buffer, 0, length, stat.size - length);
