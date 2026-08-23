@@ -4,10 +4,11 @@
 // libIsArtifact, walkSource).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, symlinkSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { Findings, looksBundled, lineNumberAt, lineAt, classifySourcePath, libIsArtifact, walkSource } from '../src/scan/evidence.mjs';
+import { Findings, looksBundled, lineNumberAt, lineAt, createLineLocator, classifySourcePath, libIsArtifact, walkSource, readSourceFile } from '../src/scan/evidence.mjs';
 
 test('Findings: a static citation beats a heuristic one', () => {
   const f = new Findings();
@@ -47,6 +48,27 @@ test('lineNumberAt and lineAt locate the matched line (text, not exact bytes)', 
   const idx = text.indexOf('token');
   assert.equal(lineNumberAt(text, idx), 2);
   assert.ok(lineAt(text, idx).includes('token'));
+});
+
+test('createLineLocator indexes once and handles many findings without quadratic rescans', () => {
+  const count = 20_000;
+  const rows = Array.from({ length: count }, (_, i) => `line-${i}`);
+  const text = rows.join('\n');
+  const offsets = [];
+  let offset = 0;
+  for (const row of rows) {
+    offsets.push(offset);
+    offset += row.length + 1;
+  }
+
+  const locator = createLineLocator(text);
+  const started = performance.now();
+  for (let i = offsets.length - 1; i >= 0; i--) {
+    assert.equal(locator.lineNumberAt(offsets[i]), i + 1);
+  }
+  const elapsed = performance.now() - started;
+  assert.ok(elapsed < 1_000, `20k indexed lookups should stay sublinear per hit, got ${elapsed.toFixed(1)}ms`);
+  assert.equal(locator.lineAt(offsets[12_345]), 'line-12345');
 });
 
 // ---------------------------------------------------------------------------
@@ -113,4 +135,74 @@ test('walkSource: yields classified entries and never descends into skip dirs', 
   assert.equal(rels.get('test/c.mjs'), 'test');
   assert.equal(rels.get('lib/e.mjs'), 'artifact');
   assert.equal(rels.has('node_modules/d.mjs'), false, 'node_modules is pruned, never yielded');
+});
+
+test('walkSource never follows source-looking symlinks outside the root', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'harbor-walk-link-'));
+  const outside = mkdtempSync(join(tmpdir(), 'harbor-walk-outside-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  writeFileSync(join(outside, 'secret.mjs'), 'export const escaped = true;\n');
+  symlinkSync(join(outside, 'secret.mjs'), join(root, 'linked.mjs'));
+
+  const coverage = {};
+  assert.deepEqual([...walkSource(root, { coverage })], []);
+  assert.equal(coverage.skippedFiles, 1);
+  assert.equal(coverage.nonRegularFiles, 1);
+});
+
+test('walkSource rejects FIFOs before any read can block', { skip: process.platform === 'win32' }, (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'harbor-walk-fifo-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const fifo = join(root, 'pipe.mjs');
+  execFileSync('mkfifo', [fifo]);
+
+  const coverage = {};
+  assert.deepEqual([...walkSource(root, { coverage })], []);
+  assert.equal(coverage.nonRegularFiles, 1);
+});
+
+test('walkSource records bounded entry, file, byte, and depth coverage', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'harbor-walk-limits-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, 'deep', 'nested'), { recursive: true });
+  writeFileSync(join(root, 'a.mjs'), '123456');
+  writeFileSync(join(root, 'b.mjs'), '123456');
+  writeFileSync(join(root, 'deep', 'nested', 'c.mjs'), 'x');
+
+  const coverage = {};
+  [...walkSource(root, {
+    coverage,
+    limits: { maxEntries: 20, maxFiles: 1 },
+  })];
+  assert.equal(coverage.fileLimitExceeded, true);
+  assert.ok(coverage.filesAccepted <= 1);
+
+  const byteCoverage = {};
+  [...walkSource(root, { coverage: byteCoverage, limits: { maxTotalBytes: 6 } })];
+  assert.equal(byteCoverage.totalBytesLimitExceeded, true);
+  assert.ok(byteCoverage.bytesAccepted <= 6);
+
+  const depthCoverage = {};
+  [...walkSource(root, { coverage: depthCoverage, limits: { maxDepth: 1 } })];
+  assert.equal(depthCoverage.depthLimitExceeded, true);
+
+  const entryCoverage = {};
+  [...walkSource(root, { coverage: entryCoverage, limits: { maxEntries: 1 } })];
+  assert.equal(entryCoverage.entryLimitExceeded, true);
+});
+
+test('readSourceFile rejects a path replaced after walk admission', { skip: process.platform === 'win32' }, (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'harbor-read-race-'));
+  const outside = mkdtempSync(join(tmpdir(), 'harbor-read-race-outside-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  const path = join(root, 'source.mjs');
+  const target = join(outside, 'target.mjs');
+  writeFileSync(path, 'safe');
+  writeFileSync(target, 'outside');
+  const [admitted] = [...walkSource(root)];
+  rmSync(path);
+  symlinkSync(target, path);
+  assert.equal(readSourceFile(admitted).ok, false);
 });

@@ -11,6 +11,7 @@
 // in the room. Keeping the default posture offline is what earns that.
 
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
 import { stateDir } from './snapshot.mjs';
@@ -22,18 +23,22 @@ const REQUEST_TIMEOUT_MS = 8000;
 
 // ---------------------------------------------------------------- semver
 
+const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+
+function parseVersion(value) {
+  const m = SEMVER.exec(String(value ?? '').trim());
+  if (m?.[4]?.split('.').some((id) => /^\d+$/.test(id) && id.length > 1 && id.startsWith('0'))) return null;
+  return m ? { nums: [+m[1], +m[2], +m[3]], pre: m[4] ?? null } : null;
+}
+
 /**
  * Compare two semver strings. Returns >0 when a is newer, <0 when b is, 0 when
  * equal or unparseable. Prerelease rules matter here: harbor's whole ecosystem
  * is on `-rc.N`, and a naive string compare puts rc.10 before rc.9.
  */
 export function compareVersions(a, b) {
-  const parse = (v) => {
-    const m = /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?/.exec(String(v ?? '').trim());
-    return m ? { nums: [+m[1], +m[2], +m[3]], pre: m[4] ?? null } : null;
-  };
-  const pa = parse(a);
-  const pb = parse(b);
+  const pa = parseVersion(a);
+  const pb = parseVersion(b);
   if (!pa || !pb) return 0; // unparseable: say nothing rather than guess
   for (let i = 0; i < 3; i++) {
     if (pa.nums[i] !== pb.nums[i]) return pa.nums[i] - pb.nums[i];
@@ -68,17 +73,14 @@ export function compareVersions(a, b) {
  * listed alongside, marked, so the picture stays complete.
  *
  * Each row adds two derived fields on top of the raw install data:
- * - `behind` — strictly below `newest` (`compareVersions(newest, version) > 0`).
- *   Equal or higher is false. It must be "strictly below", never "not equal":
- *   a link/file working tree ahead of the published baseline is the normal
- *   state on a developer machine, not drift — flagging it would highlight
- *   exactly the row that is fine.
+ * - `behind` — a comparable registry row strictly below `highestInstalled`.
+ *   Equal or higher is false; link/file rows are context only and never behind.
  * - `kind` — provenance of the row's installs, judged from the spec prefix:
  *   'link' | 'file' | 'registry'. A more precise complement to the legacy
  *   `linked` boolean, which cannot tell a link: install from a file: one.
  *
  * @param {Array<{name: string, version: string, installs: Array<{profile: string, spec: string, linked: boolean}>}>} reports
- * @returns {Array<{name: string, newest: string, rows: Array<{version: string, linked: boolean, kind: 'link'|'file'|'registry', behind: boolean, profiles: string[]}>}>}
+ * @returns {Array<{name: string, highestInstalled: string, baseline: {kind: 'installed-registry', version: string}, newest: string, rows: Array<{version: string, linked: boolean, kind: 'link'|'file'|'registry', comparable: boolean, behind: boolean, profiles: string[]}>}>}
  */
 export function crossProfileDrift(reports) {
   const byName = new Map();
@@ -90,27 +92,44 @@ export function crossProfileDrift(reports) {
   const findings = [];
   for (const [name, rows] of byName) {
     const registryRows = rows.filter((r) => !(r.installs ?? []).every((i) => i.linked));
-    const versions = new Set(registryRows.map((r) => r.version));
+    const comparableRows = registryRows.filter((r) => parseVersion(r.version));
+    const versions = new Set(comparableRows.map((r) => r.version));
     if (versions.size < 2) continue;
 
-    const sorted = [...rows].sort((a, b) => compareVersions(b.version, a.version));
-    // The baseline deliberately skips all-local rows: published versions only.
-    const newest = sorted.find((r) => !(r.installs ?? []).every((i) => i.linked))?.version ?? sorted[0].version;
+    const sorted = [...rows].sort((a, b) => {
+      const av = !!parseVersion(a.version);
+      const bv = !!parseVersion(b.version);
+      if (av !== bv) return av ? -1 : 1;
+      return compareVersions(b.version, a.version);
+    });
+    // This is a local baseline, never a registry claim. Only checkUpstream()
+    // knows what is currently published.
+    const highestInstalled = comparableRows.reduce((highest, row) => (
+      compareVersions(row.version, highest) > 0 ? row.version : highest
+    ), comparableRows[0].version);
     findings.push({
       name,
-      newest,
+      highestInstalled,
+      baseline: { kind: 'installed-registry', version: highestInstalled },
+      // Kept for one compatibility cycle. Consumers must prefer
+      // highestInstalled; calling this "latest published" is incorrect.
+      newest: highestInstalled,
       rows: sorted.map((r) => {
         const installs = r.installs ?? [];
         // One row is one provenance identity (`name@spec`), so every install
         // in the row shares a spec; the first one decides the kind.
         const spec = installs[0]?.spec ?? '';
+        const linked = installs.every((i) => i.linked);
+        const comparable = !linked && !!parseVersion(r.version);
         return {
           version: r.version,
-          linked: installs.every((i) => i.linked),
+          linked,
           kind: spec.startsWith('link:') ? 'link' : spec.startsWith('file:') ? 'file' : 'registry',
-          // Strictly below, not merely different: a working tree running ahead
-          // of the published baseline is the norm, not drift.
-          behind: compareVersions(newest, r.version) > 0,
+          comparable,
+          // Local link/file rows are context only; they never participate in
+          // registry-install drift, regardless of whether their package.json
+          // version happens to be lower or higher than the local baseline.
+          behind: comparable && compareVersions(highestInstalled, r.version) > 0,
           profiles: installs.map((i) => i.profile),
         };
       }),
@@ -149,7 +168,12 @@ function readNpmrc() {
 }
 
 function readCache(dir) {
-  try { return JSON.parse(readFileSync(join(dir, CACHE_FILE), 'utf8')); } catch { return { entries: {} }; }
+  try {
+    const value = JSON.parse(readFileSync(join(dir, CACHE_FILE), 'utf8'));
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : { entries: {} };
+  } catch {
+    return { entries: {} };
+  }
 }
 
 function writeCache(dir, cache) {
@@ -159,17 +183,66 @@ function writeCache(dir, cache) {
   } catch { /* a read-only config dir must not fail the check */ }
 }
 
+// A package name alone is not a cache identity: changing .npmrc from a private
+// registry to npmjs must never reuse the private registry's answer.
+const cacheKey = (registry, name) => {
+  // Registry URLs can legally carry credentials. Hash the full identity so
+  // cache isolation remains exact without persisting secrets in versions.json.
+  const registryHash = createHash('sha256').update(registry).digest('hex');
+  return `${registryHash}:${name}`;
+};
+
+function redactRegistryError(error, registry) {
+  let message;
+  try { message = String(error?.message ?? error); } catch { return 'registry request failed'; }
+  const replace = (needle) => {
+    if (needle && message.includes(needle)) message = message.split(needle).join('[redacted]');
+  };
+
+  try {
+    const url = new URL(registry);
+    const encodedUser = url.username;
+    const encodedPassword = url.password;
+    let decodedUser = encodedUser;
+    let decodedPassword = encodedPassword;
+    try { decodedUser = decodeURIComponent(encodedUser); } catch { /* keep encoded value */ }
+    try { decodedPassword = decodeURIComponent(encodedPassword); } catch { /* keep encoded value */ }
+
+    for (const pair of new Set([
+      encodedUser || encodedPassword ? `${encodedUser}:${encodedPassword}` : '',
+      decodedUser || decodedPassword ? `${decodedUser}:${decodedPassword}` : '',
+    ])) replace(pair);
+
+    // Userinfo is credential material even when an HTTP implementation reports
+    // it outside the URL. Very short values would make surgical replacement
+    // destroy arbitrary prose, so fall back to a safe generic message.
+    for (const credential of new Set([
+      encodedUser, decodedUser, encodedPassword, decodedPassword,
+    ])) {
+      if (!credential || !message.includes(credential)) continue;
+      if (credential.length < 3) return 'registry request failed (credentials redacted)';
+      replace(credential);
+    }
+  } catch { /* malformed registries are still handled by the generic URL scrub below */ }
+
+  // Covers credentials embedded in any URL carried by a nested fetch error,
+  // including a package suffix appended to the configured registry string.
+  message = message.replace(/\b([a-z][a-z0-9+.-]*:\/\/)[^\s/@]+@/gi, '$1[redacted]@');
+  return message || 'registry request failed';
+}
+
 /**
  * Ask the registry what the newest published version is, for every install
  * that has an upstream at all.
  *
- * Status is three-valued on purpose. `link:` and `file:` installs have no
- * upstream to compare against, and rendering them as "up to date" would be a
- * lie — the working tree is whatever the developer last saved.
+ * Registry comparisons use behind/current/ahead, with unknown for data that
+ * cannot be compared. `link:` and `file:` installs are local: rendering them
+ * as "up to date" would be a lie — the working tree is whatever the developer
+ * last saved.
  *
  * @param {Array<{name: string, version: string, identity: string, installs: Array<{spec: string, linked: boolean}>}>} reports
- * @param {{dir?: string, ttlMs?: number, now?: number, fetchImpl?: typeof fetch}} [options]
- * @returns {Promise<{checkedAt: string, results: Array<object>, registryHosts: string[]}>}
+ * @param {{dir?: string, ttlMs?: number, now?: number, fetchImpl?: typeof fetch, npmrc?: Record<string, string>}} [options]
+ * @returns {Promise<{checkedAt: string, requestedAt: string, results: Array<object>, registryHosts: string[]}>}
  */
 export async function checkUpstream(reports, options = {}) {
   const {
@@ -177,15 +250,17 @@ export async function checkUpstream(reports, options = {}) {
     ttlMs = CACHE_TTL_MS,
     now = Date.now(),
     fetchImpl = globalThis.fetch,
+    npmrc = readNpmrc(),
   } = options;
 
   const cache = readCache(dir);
-  cache.entries ??= {};
-  const npmrc = readNpmrc();
+  if (!cache.entries || typeof cache.entries !== 'object' || Array.isArray(cache.entries)) cache.entries = {};
   const hosts = new Set();
+  const requestedAt = new Date(now).toISOString();
+  let cacheDirty = false;
 
-  // One request per package name, not per install: three profiles holding the
-  // same package ask the registry once.
+  // One request per package + resolved registry, not per install: three
+  // profiles holding the same package ask the registry once.
   const wanted = new Map();
   for (const r of reports) {
     const local = (r.installs ?? []).every((i) => i.linked);
@@ -195,13 +270,21 @@ export async function checkUpstream(reports, options = {}) {
 
   const latest = new Map();
   for (const [name, registry] of wanted) {
-    try { hosts.add(new URL(registry).host); } catch { /* malformed registry: reported per-package below */ }
-    const cached = cache.entries[name];
-    if (cached && now - (cached.at ?? 0) < ttlMs) {
-      latest.set(name, { latest: cached.latest, cached: true });
+    const key = cacheKey(registry, name);
+    const cached = cache.entries[key];
+    const cachedAt = Number(cached?.at);
+    if (cached && Number.isFinite(cachedAt) && cachedAt <= now && now - cachedAt < ttlMs) {
+      latest.set(name, {
+        latest: cached.latest ?? null,
+        cached: true,
+        checkedAt: cached.checkedAt ?? new Date(cachedAt).toISOString(),
+      });
       continue;
     }
     try {
+      // registryHosts means hosts contacted by this request. Cache hits must
+      // not appear here: doing so made an offline cache read look networked.
+      try { hosts.add(new URL(registry).host); } catch { /* fetch reports the malformed URL below */ }
       // Abbreviated metadata: an order of magnitude smaller than the full
       // packument, and it carries dist-tags, which is all we need.
       const res = await fetchImpl(`${registry}/${name}`, {
@@ -211,21 +294,51 @@ export async function checkUpstream(reports, options = {}) {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const meta = await res.json();
       const tag = meta?.['dist-tags']?.latest ?? null;
-      latest.set(name, { latest: tag, cached: false });
-      cache.entries[name] = { latest: tag, at: now };
+      latest.set(name, { latest: tag, cached: false, checkedAt: requestedAt });
+      cache.entries[key] = { name, latest: tag, at: now, checkedAt: requestedAt };
+      cacheDirty = true;
     } catch (err) {
-      latest.set(name, { latest: null, error: err?.message ?? String(err) });
+      latest.set(name, {
+        latest: null,
+        cached: false,
+        checkedAt: requestedAt,
+        error: redactRegistryError(err, registry),
+      });
     }
   }
 
   const results = reports.map((r) => {
     const local = (r.installs ?? []).every((i) => i.linked);
     if (local) {
-      return { identity: r.identity, name: r.name, installed: r.version, status: 'local', latest: null };
+      return {
+        identity: r.identity, name: r.name, installed: r.version,
+        status: 'local', latest: null, cached: null, checkedAt: null,
+      };
     }
     const hit = latest.get(r.name);
     if (!hit || hit.latest === null) {
-      return { identity: r.identity, name: r.name, installed: r.version, status: 'unknown', latest: null, error: hit?.error ?? null };
+      return {
+        identity: r.identity, name: r.name, installed: r.version,
+        status: 'unknown', latest: null, cached: !!hit?.cached,
+        checkedAt: hit?.checkedAt ?? null,
+        error: hit?.error ?? 'registry 未提供可比较的 latest 版本',
+      };
+    }
+    if (!parseVersion(r.version)) {
+      return {
+        identity: r.identity, name: r.name, installed: r.version,
+        status: 'unknown', latest: hit.latest, cached: !!hit.cached,
+        checkedAt: hit.checkedAt,
+        error: `无法解析已安装版本: ${r.version ?? '(missing)'}`,
+      };
+    }
+    if (!parseVersion(hit.latest)) {
+      return {
+        identity: r.identity, name: r.name, installed: r.version,
+        status: 'unknown', latest: hit.latest, cached: !!hit.cached,
+        checkedAt: hit.checkedAt,
+        error: `无法解析 registry latest 版本: ${hit.latest}`,
+      };
     }
     const delta = compareVersions(hit.latest, r.version);
     return {
@@ -234,6 +347,7 @@ export async function checkUpstream(reports, options = {}) {
       installed: r.version,
       latest: hit.latest,
       cached: !!hit.cached,
+      checkedAt: hit.checkedAt,
       // Ahead of the registry is a real state on a maintainer's machine
       // (published later, or a local build), so it gets its own name instead
       // of being flattened into "current".
@@ -241,6 +355,6 @@ export async function checkUpstream(reports, options = {}) {
     };
   });
 
-  writeCache(dir, { checkedAt: new Date(now).toISOString(), entries: cache.entries });
-  return { checkedAt: new Date(now).toISOString(), results, registryHosts: [...hosts].sort() };
+  if (cacheDirty) writeCache(dir, { updatedAt: requestedAt, entries: cache.entries });
+  return { checkedAt: requestedAt, requestedAt, results, registryHosts: [...hosts].sort() };
 }

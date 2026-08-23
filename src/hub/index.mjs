@@ -1,42 +1,44 @@
 // DSH plugin hub: the loopback-only HTTP surface the settings panel reads.
-// Deliberately thin — every scanning decision lives in ../scan. Zero
-// @deepseek-ai/* imports keeps harbor inside the host's single module realm,
-// the very failure mode it is built to detect.
-//
-// Governance data (installed plugins, their capabilities, what changed) is
-// sensitive, so every route is loopback-only and refuses anything else with
-// 403 — the same pattern dsh-crew and dsh-noema use for their hub APIs.
+// Scanning decisions live in ../scan; this module owns transport, lifecycle,
+// caching, and the boundary between a live host profile and all-profile data.
 
 import { scan, CAPABILITIES, checkUpstream } from '../scan/index.mjs';
 import { collectRuntimeSurface, attributeSurface } from '../scan/runtime.mjs';
 import { fingerprintSource, readClientBuildId } from './freshness.mjs';
-import { dirname, resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const name = 'dsh-harbor';
-// webServer is a hard requirement so apply() runs with the service ready;
-// profiles without a web server simply never start this fiber (headless stays
-// inert instead of mounting routes nobody can reach).
 export const inject = ['webServer'];
 
 const ROUTE_BASE = '/_dsh/dsh-harbor';
-// Re-scanning walks every plugin source tree; serve cached results within one
-// minute so panel re-renders stay cheap, with ?refresh=1 as the escape hatch.
+const ROUTE_PATHS = [
+  ROUTE_BASE + '/ping',
+  ROUTE_BASE + '/report',
+  ROUTE_BASE + '/capabilities',
+  ROUTE_BASE + '/updates',
+];
+// Static scanning walks every plugin source tree. Runtime registries are not
+// cached: tools/providers/routes can change as fibers load or dispose.
 const REPORT_CACHE_TTL_MS = 60_000;
-
-// The repository root is derived from this module's own URL, never from
-// process.cwd(): DSH runs hubs with its own working directory, while the
-// plugin sources live where the plugin is installed (file: links point
-// straight at a working tree, so freshness reflects that tree).
 const ROOT_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-// ---------- loopback guards and JSON helper (pattern from dsh-noema) ----------
+function headerValue(req, name) {
+  const headers = req?.headers;
+  if (headers === null || typeof headers !== 'object') return undefined;
+  const direct = headers[name];
+  if (typeof direct === 'string') return direct;
+  if (Array.isArray(direct)) return direct[0];
+  const key = Object.keys(headers).find((candidate) => candidate.toLowerCase() === name);
+  const value = key === undefined ? undefined : headers[key];
+  return typeof value === 'string' ? value : (Array.isArray(value) ? value[0] : undefined);
+}
 
 function isIpv4Loopback(address) {
   const parts = address.split('.');
   return parts.length === 4
     && parts[0] === '127'
-    && parts.every((p) => /^\d{1,3}$/.test(p) && Number(p) <= 255);
+    && parts.every((part) => /^\d{1,3}$/.test(part) && Number(part) <= 255);
 }
 
 function isLoopbackRemoteAddress(address) {
@@ -46,18 +48,15 @@ function isLoopbackRemoteAddress(address) {
   if (!normalized.startsWith('::ffff:')) return false;
   const mapped = normalized.slice('::ffff:'.length);
   if (isIpv4Loopback(mapped)) return true;
-  // IPv4-mapped hex form, e.g. ::ffff:7f00:1.
   const hex = /^([a-f0-9]{1,4}):([a-f0-9]{1,4})$/.exec(mapped);
   return hex !== null && (Number.parseInt(hex[1], 16) >>> 8) === 127;
 }
 
 function requestAuthority(req) {
-  const host = req?.headers?.host;
+  const host = headerValue(req, 'host');
   if (typeof host !== 'string') return undefined;
   try {
     const parsed = new URL('http://' + host);
-    // Only a bare authority qualifies: paths or credentials mean the header
-    // is not an ordinary Host value.
     if (parsed.pathname !== '/' || parsed.search !== '' || parsed.hash !== ''
       || parsed.username !== '' || parsed.password !== '') return undefined;
     return parsed;
@@ -71,11 +70,44 @@ function isLoopbackHostname(hostname) {
   return isIpv4Loopback(hostname);
 }
 
-/** Reject remote peers and DNS-rebinding Host headers before serving data. */
 function isLoopbackRequest(req) {
   if (!isLoopbackRemoteAddress(req?.socket?.remoteAddress)) return false;
   const authority = requestAuthority(req);
   return authority !== undefined && isLoopbackHostname(authority.hostname);
+}
+
+function expectedOrigin(req) {
+  const authority = requestAuthority(req);
+  if (authority === undefined) return null;
+  const scheme = req?.socket?.encrypted === true ? 'https:' : 'http:';
+  return new URL(`${scheme}//${authority.host}`).origin;
+}
+
+/**
+ * Stateful/networked GETs need browser CSRF protection in addition to the
+ * loopback peer/Host fence. Cross-origin pages can send requests to localhost;
+ * Fetch Metadata identifies those requests, while Origin/Referer cover older
+ * clients. Headerless non-browser callers remain usable.
+ */
+function isSameOriginBrowserRequest(req) {
+  const expected = expectedOrigin(req);
+  if (expected === null) return false;
+
+  const fetchSite = headerValue(req, 'sec-fetch-site')?.trim().toLowerCase();
+  if (fetchSite && fetchSite !== 'same-origin' && fetchSite !== 'none') return false;
+
+  const origin = headerValue(req, 'origin');
+  if (origin) {
+    try { if (new URL(origin).origin !== expected) return false; }
+    catch { return false; }
+  }
+
+  const referer = headerValue(req, 'referer');
+  if (!origin && referer) {
+    try { if (new URL(referer).origin !== expected) return false; }
+    catch { return false; }
+  }
+  return true;
 }
 
 function sendJson(res, status, value, headers = {}) {
@@ -91,22 +123,46 @@ function sendJson(res, status, value, headers = {}) {
   res.end(body);
 }
 
-// ---------- plugin entry ----------
+function errorMessage(error) {
+  return typeof error?.message === 'string' ? error.message : String(error);
+}
 
-export async function apply(ctx) {
-  // Captured once, before anything else: which scanning source this instance
-  // actually loaded into memory at boot. The panel bundle is re-read from
-  // disk on every page load, so after an upgrade the two can drift apart —
-  // this fingerprint is what /report compares the current disk against.
-  const bootFingerprint = await fingerprintSource(ROOT_DIR);
+/** Resolve the profile directory set as the root Cordis context base URL. */
+export function profileFromContext(ctx) {
+  let baseUrl;
+  try { baseUrl = ctx?.baseUrl; } catch { return null; }
+  if (typeof baseUrl !== 'string') return null;
+  try {
+    const url = new URL(baseUrl);
+    if (url.protocol !== 'file:') return null;
+    return basename(resolve(fileURLToPath(url))) || null;
+  } catch {
+    return null;
+  }
+}
 
-  const warn = (message) => { try { ctx?.logger?.warn?.(message); } catch { /* logging is best-effort */ } };
+/**
+ * Mount the hub with overridable pure dependencies for fake-host tests. The
+ * public Cordis apply() below always uses production dependencies.
+ */
+export async function mountHub(ctx, dependencies = {}) {
+  const scanFn = dependencies.scan ?? scan;
+  const checkUpstreamFn = dependencies.checkUpstream ?? checkUpstream;
+  const collectRuntimeFn = dependencies.collectRuntimeSurface ?? collectRuntimeSurface;
+  const attributeFn = dependencies.attributeSurface ?? attributeSurface;
+  const fingerprintFn = dependencies.fingerprintSource ?? fingerprintSource;
+  const readClientBuildIdFn = dependencies.readClientBuildId ?? readClientBuildId;
+  const now = dependencies.now ?? Date.now;
+  const rootDir = dependencies.rootDir ?? ROOT_DIR;
+  const activeProfile = typeof dependencies.profile === 'string'
+    ? dependencies.profile
+    : profileFromContext(ctx);
 
-  // Resolve the web server defensively: a direct property on injected
-  // contexts, ctx.get() everywhere else, and a no-op dispose when the host
-  // has no webServer at all — a missing optional service must not kill
-  // loading.
-  let webServer = ctx?.webServer;
+  const bootFingerprint = await fingerprintFn(rootDir);
+  const warn = (message) => { try { ctx?.logger?.warn?.(message); } catch { /* best effort */ } };
+
+  let webServer;
+  try { webServer = ctx?.webServer; } catch { /* absent */ }
   if (!webServer && typeof ctx?.get === 'function') {
     try { webServer = ctx.get('webServer'); } catch { /* absent */ }
   }
@@ -116,99 +172,141 @@ export async function apply(ctx) {
   }
 
   const disposers = [];
-  let reportCache = null; // { at: number, report: object }
+  const routeState = { mounted: [], failed: [] };
+  let scanCache = null; // { at: number, base: object }
+  let lastReport = null;
 
-  // Computed on every /report request, deliberately OUTSIDE the 60s report
-  // cache: the freshness fields are exactly the "code moved on disk" signal,
-  // and caching them would delay the restart/reload banners by up to a
-  // minute. Hashing a dozen small source files is cheap.
   const currentFreshness = async () => ({
-    hubStale: (await fingerprintSource(ROOT_DIR)) !== bootFingerprint,
-    clientBuildId: await readClientBuildId(ROOT_DIR),
+    hubStale: (await fingerprintFn(rootDir)) !== bootFingerprint,
+    clientBuildId: await readClientBuildIdFn(rootDir),
   });
 
-  // Call a disposer at most once; the host may dispose a route before our
-  // own dispose() runs, and double disposal must stay a no-op.
   const once = (dispose) => {
     let done = false;
     return () => {
       if (done) return;
       done = true;
-      try { dispose(); } catch { /* already removed by the host */ }
+      try { dispose(); } catch { /* already removed by host */ }
     };
   };
 
-  // Every handler: loopback gate, GET method, then JSON errors for anything
-  // that slips through — a throwing scan must yield a 500, never a broken
-  // socket or a failed request pipeline.
-  const guard = (handler) => async (req, res) => {
-    if (!isLoopbackRequest(req)) return sendJson(res, 403, { ok: false, error: 'loopback only' });
-    if (req.method !== 'GET') return sendJson(res, 405, { ok: false, error: 'GET only' }, { allow: 'GET' });
+  const guard = (handler, { sameOrigin = false } = {}) => async (req, res) => {
+    if (!isLoopbackRequest(req)) {
+      return sendJson(res, 403, { ok: false, error: 'loopback only' });
+    }
+    if (req.method !== 'GET') {
+      return sendJson(res, 405, { ok: false, error: 'GET only' }, { allow: 'GET' });
+    }
+    if (sameOrigin && !isSameOriginBrowserRequest(req)) {
+      return sendJson(res, 403, { ok: false, error: 'same-origin browser request required' });
+    }
     try {
       return await handler(req, res);
-    } catch (err) {
-      return sendJson(res, 500, { ok: false, error: err?.message ?? String(err) });
+    } catch (error) {
+      return sendJson(res, 500, { ok: false, error: errorMessage(error) });
     }
   };
 
-  // Duplicate (kind, path) throws on the host (two harbor copies in one
-  // profile) — contain each registration so one collision never kills apply.
   const register = (route) => {
     try {
       const dispose = webServer.register(route);
+      routeState.mounted.push(route.path);
       if (typeof dispose === 'function') disposers.push(once(dispose));
-    } catch (err) {
-      warn('dsh-harbor: route ' + route.path + ' not mounted: ' + (err?.message ?? err));
+      return true;
+    } catch (error) {
+      const message = errorMessage(error);
+      routeState.failed.push({ path: route.path, error: message });
+      warn('dsh-harbor: route ' + route.path + ' not mounted: ' + message);
+      return false;
     }
   };
 
-  register({ kind: 'exact', path: ROUTE_BASE + '/ping', handler: guard((req, res) => sendJson(res, 200, { ok: true, service: 'dsh-harbor' })) });
+  register({
+    kind: 'exact', path: ROUTE_BASE + '/ping',
+    handler: guard((req, res) => {
+      const missing = ROUTE_PATHS.filter((path) => !routeState.mounted.includes(path));
+      const complete = missing.length === 0 && routeState.failed.length === 0;
+      return sendJson(res, complete ? 200 : 503, {
+        ok: complete,
+        service: 'dsh-harbor',
+        routes: {
+          expected: ROUTE_PATHS.length,
+          mounted: [...routeState.mounted],
+          failed: [...routeState.failed],
+        },
+      });
+    }),
+  });
 
   register({
     kind: 'exact', path: ROUTE_BASE + '/report',
     handler: guard(async (req, res) => {
       const url = new URL(req?.url ?? '/', 'http://localhost');
       const force = url.searchParams.get('refresh') === '1';
-      if (!force && reportCache && Date.now() - reportCache.at < REPORT_CACHE_TTL_MS) {
-        return sendJson(res, 200, { ok: true, report: reportCache.report, freshness: await currentFreshness() });
+      try {
+        let base;
+        if (!force && scanCache && now() - scanCache.at < REPORT_CACHE_TTL_MS) {
+          base = scanCache.base;
+        } else {
+          base = await scanFn();
+          scanCache = { at: now(), base };
+        }
+
+        // Runtime is deliberately collected for every request, even when the
+        // expensive static scan is cached. Fiber lifecycle changes must show
+        // up immediately rather than looking alive for another minute.
+        const runtime = await collectRuntimeFn(ctx);
+        const attribution = attributeFn(runtime, base.plugins, { profile: activeProfile });
+        const report = { ...base, runtime, attribution };
+        lastReport = report;
+        return sendJson(res, 200, { ok: true, report, freshness: await currentFreshness() });
+      } catch (error) {
+        let freshness = null;
+        try { freshness = await currentFreshness(); } catch { /* keep error response JSON */ }
+        return sendJson(res, 500, {
+          ok: false,
+          error: errorMessage(error),
+          // A client can keep showing the last valid report while surfacing
+          // the error; on first load this is explicitly null, never omitted.
+          report: lastReport,
+          freshness,
+        });
       }
-      // Static scan first, then attach the two runtime layers: what the host
-      // actually registered, and which plugin claims each observed name.
-      const base = await scan();
-      const runtime = await collectRuntimeSurface(ctx);
-      const attribution = attributeSurface(runtime, base.plugins);
-      const report = { ...base, runtime, attribution };
-      reportCache = { at: Date.now(), report };
-      return sendJson(res, 200, { ok: true, report, freshness: await currentFreshness() });
-    }),
+    }, { sameOrigin: true }),
   });
 
   register({
     kind: 'exact', path: ROUTE_BASE + '/capabilities',
-    handler: guard((req, res) => {
-      // The fixed capability table drives the panel's labels and descriptions,
-      // so reports stay comparable and diffable between scans.
-      return sendJson(res, 200, { ok: true, capabilities: CAPABILITIES });
-    }),
+    handler: guard((req, res) => sendJson(res, 200, { ok: true, capabilities: CAPABILITIES })),
   });
 
   register({
     kind: 'exact', path: ROUTE_BASE + '/updates',
     handler: guard(async (req, res) => {
-      // Network only on explicit request: the default posture stays offline.
-      // Caching is versions.mjs's own on-disk cache (6h TTL); this layer adds none.
-      const base = await scan({ snapshot: false });
-      const updates = await checkUpstream(base.plugins);
+      // Network only on an explicit panel action. versions.mjs owns its 6h
+      // on-disk cache; this route deliberately adds no second cache.
+      const base = await scanFn({ snapshot: false });
+      const updates = await checkUpstreamFn(base.plugins);
       return sendJson(res, 200, { ok: true, updates });
-    }),
+    }, { sameOrigin: true }),
   });
 
-  try { ctx?.logger?.info?.('dsh-harbor hub mounted (ping, report, capabilities, updates)'); } catch {}
+  if (routeState.failed.length === 0 && routeState.mounted.length === ROUTE_PATHS.length) {
+    try { ctx?.logger?.info?.('dsh-harbor hub mounted (ping, report, capabilities, updates)'); } catch {}
+  } else {
+    warn(`dsh-harbor: hub partially mounted (${routeState.mounted.length}/${ROUTE_PATHS.length} routes)`);
+  }
 
+  let disposed = false;
   return () => {
-    reportCache = null;
-    for (const d of [...disposers].reverse()) {
-      try { d(); } catch { /* already disposed by the host */ }
-    }
+    if (disposed) return;
+    disposed = true;
+    scanCache = null;
+    lastReport = null;
+    for (const dispose of [...disposers].reverse()) dispose();
   };
+}
+
+export async function apply(ctx) {
+  return mountHub(ctx);
 }

@@ -10,33 +10,100 @@
 // governance tool. These two functions let the hub detect that state.
 
 import { createHash } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
+import { constants as FS } from 'node:fs';
+import { open, opendir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 const HEX_LEN = 16;
+const OPEN_FLAGS = FS.O_RDONLY | (FS.O_NOFOLLOW ?? 0) | (FS.O_NONBLOCK ?? 0);
+const DEFAULT_LIMITS = Object.freeze({
+  maxDepth: 12,
+  maxDirectories: 64,
+  maxEntriesPerDirectory: 512,
+  maxFiles: 256,
+  maxFileBytes: 512 * 1024,
+  maxTotalBytes: 4 * 1024 * 1024,
+});
+const READ_CHUNK_BYTES = 64 * 1024;
+const CLIENT_TAIL_BYTES = 4096;
 
 /**
  * Recursively collect every .mjs file under a directory, as repo-root-
  * relative paths with forward slashes so the fingerprint is identical
  * across platforms.
  */
-async function collectMjs(rootDir, dir, state) {
-  let entries;
-  try {
-    entries = await readdir(dir, { withFileTypes: true });
-  } catch {
-    // A whole unreadable directory counts as one skip (see fingerprintSource).
-    state.skipped += 1;
+async function collectMjs(rootDir, dir, state, limits, depth = 0) {
+  if (depth > limits.maxDepth || state.directories >= limits.maxDirectories) {
+    state.limited += 1;
     return;
   }
+  state.directories += 1;
+  let handle;
+  try { handle = await opendir(dir); }
+  catch { state.skipped += 1; return; }
+
+  const entries = [];
+  try {
+    for await (const entry of handle) {
+      if (entries.length >= limits.maxEntriesPerDirectory) {
+        state.limited += 1;
+        break;
+      }
+      entries.push(entry);
+    }
+  } catch { state.skipped += 1; }
+  entries.sort((a, b) => a.name.localeCompare(b.name));
+
   for (const entry of entries) {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) {
-      await collectMjs(rootDir, full, state);
+      await collectMjs(rootDir, full, state, limits, depth + 1);
     } else if (entry.isFile() && entry.name.endsWith('.mjs')) {
-      state.files.push(relative(rootDir, full).split(/[\\/]/u).join('/'));
+      if (state.files.length >= limits.maxFiles) state.limited += 1;
+      else state.files.push(relative(rootDir, full).split(/[\\/]/u).join('/'));
+    } else if (entry.isSymbolicLink() || entry.name.endsWith('.mjs')) {
+      // Symlinks and special files are never opened through the freshness path.
+      state.skipped += 1;
     }
   }
+}
+
+async function hashRegularFile(rootDir, rel, state, limits, hash) {
+  let handle;
+  try { handle = await open(join(rootDir, rel), OPEN_FLAGS); }
+  catch { state.skipped += 1; return; }
+  try {
+    const stat = await handle.stat();
+    if (!stat.isFile()) { state.skipped += 1; return; }
+    const budget = Math.min(limits.maxFileBytes, limits.maxTotalBytes - state.bytes);
+    hash.update('file\0' + rel + '\0');
+    if (budget <= 0 || stat.size > budget) {
+      state.limited += 1;
+      hash.update(`bounded:${stat.size}:${stat.mtimeMs}`);
+      return;
+    }
+
+    const buffer = Buffer.allocUnsafe(Math.min(READ_CHUNK_BYTES, Math.max(1, budget)));
+    let position = 0;
+    while (position < budget) {
+      const length = Math.min(buffer.length, budget - position);
+      const { bytesRead } = await handle.read(buffer, 0, length, position);
+      if (bytesRead === 0) break;
+      hash.update(buffer.subarray(0, bytesRead));
+      position += bytesRead;
+    }
+    const extra = Buffer.allocUnsafe(1);
+    const grewPastBudget = position === budget
+      && (await handle.read(extra, 0, 1, position)).bytesRead !== 0;
+    if (grewPastBudget) {
+      state.limited += 1;
+      const latest = await handle.stat();
+      hash.update(`\0bounded:${latest.size}:${latest.mtimeMs}`);
+    }
+    state.bytes += position;
+    hash.update('\0end');
+  } catch { state.skipped += 1; }
+  finally { try { await handle.close(); } catch {} }
 }
 
 /**
@@ -57,29 +124,18 @@ async function collectMjs(rootDir, dir, state) {
  * @param {string} rootDir repository root containing src/ and lib/
  * @returns {Promise<string>} first 16 hex chars of the sha256 digest
  */
-export async function fingerprintSource(rootDir) {
-  const state = { files: [], skipped: 0 };
-  await collectMjs(rootDir, join(rootDir, 'src', 'scan'), state);
-  await collectMjs(rootDir, join(rootDir, 'src', 'hub'), state);
+export async function fingerprintSource(rootDir, options = {}) {
+  const limits = { ...DEFAULT_LIMITS, ...options };
+  const state = { files: [], skipped: 0, limited: 0, directories: 0, bytes: 0 };
+  await collectMjs(rootDir, join(rootDir, 'src', 'scan'), state, limits);
+  await collectMjs(rootDir, join(rootDir, 'src', 'hub'), state, limits);
   state.files.sort();
 
   const hash = createHash('sha256');
   for (const rel of state.files) {
-    let content;
-    try {
-      content = await readFile(join(rootDir, rel), 'utf8');
-    } catch {
-      // Same contract as a missing directory: never throw, always count.
-      state.skipped += 1;
-      continue;
-    }
-    // Feed the relative path then the content; NUL separators keep path and
-    // payload unambiguous (e.g. "a/b.mjs" + "c" vs "a" + "b.mjsc").
-    hash.update(rel);
-    hash.update('\0');
-    hash.update(content);
+    await hashRegularFile(rootDir, rel, state, limits, hash);
   }
-  hash.update('skipped:' + state.skipped);
+  hash.update(`state:${state.skipped}:${state.limited}:${state.directories}:${state.files.length}:${state.bytes}`);
   return hash.digest('hex').slice(0, HEX_LEN);
 }
 
@@ -100,12 +156,17 @@ export async function fingerprintSource(rootDir) {
  *   missing/unreadable or carries no identifier (older bundle format)
  */
 export async function readClientBuildId(rootDir) {
-  let text;
+  let handle;
+  try { handle = await open(join(rootDir, 'lib', 'client.js'), OPEN_FLAGS); }
+  catch { return null; }
   try {
-    text = await readFile(join(rootDir, 'lib', 'client.js'), 'utf8');
-  } catch {
-    return null;
-  }
-  const match = /\/\/__HARBOR_CLIENT_BUILD__=([0-9a-f]{16})/u.exec(text);
-  return match === null ? null : match[1];
+    const stat = await handle.stat();
+    if (!stat.isFile() || stat.size <= 0) return null;
+    const length = Math.min(CLIENT_TAIL_BYTES, stat.size);
+    const buffer = Buffer.allocUnsafe(length);
+    const { bytesRead } = await handle.read(buffer, 0, length, stat.size - length);
+    const match = /\/\/__HARBOR_CLIENT_BUILD__=([0-9a-f]{16})/u.exec(buffer.subarray(0, bytesRead).toString('utf8'));
+    return match === null ? null : match[1];
+  } catch { return null; }
+  finally { try { await handle.close(); } catch {} }
 }

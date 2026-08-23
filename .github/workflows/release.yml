@@ -20,19 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write   # required for trusted publishing
-      contents: read
+      contents: write   # create the matching GitHub release after npm succeeds
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      # dsh-harbor's package.json has no `packageManager` field, so
-      # pnpm/action-setup has nothing to read a version from: pin the major
-      # here explicitly instead of depending on its fallback behavior. 11 is
-      # what produced the committed pnpm-lock.yaml (lockfileVersion 9.0).
+      # Reads the exact pnpm version from package.json#packageManager, so local,
+      # CI and release installs all use the same lockfile implementation.
       - uses: pnpm/action-setup@v4
-        with:
-          version: '11'
 
       - uses: actions/setup-node@v4
         with:
@@ -64,7 +60,7 @@ jobs:
       # the full test suite before touching the registry: lib/client.js is
       # what the DSH host loads, and a stale copy would ship unnoticed.
       #
-      # This duplicates `prepack` (npm run build:client && npm test), which
+      # This duplicates `prepack` (build + typecheck + tests), which
       # npm runs again inside `npm publish` below. The duplication is
       # deliberate:
       # - a failure surfaces here, in a labeled step with clean test output,
@@ -78,7 +74,13 @@ jobs:
       #   covering a path the other might miss; the price is one extra
       #   build+test run when a publish actually happens.
       - name: Build and test the bundle
-        run: pnpm run build:client && pnpm test
+        run: pnpm run build:client && pnpm run typecheck && pnpm test
+
+      # Exercise the artifact an external user receives: pack it, install it
+      # with plain npm in an empty directory, import the public entry, and run
+      # the installed CLI. prepublishOnly repeats this for manual publishes.
+      - name: Smoke the packed install
+        run: pnpm run smoke:pack
 
       # A prerelease must never take the `latest` dist-tag: `npm install`
       # with no version would hand it to everyone.
@@ -105,8 +107,31 @@ jobs:
             *-*) dist_tag=next ;;
             *)   dist_tag=latest ;;
           esac
-          # @zseven-w/... is scoped, and npm publishes scoped packages as
-          # restricted unless told otherwise; harbor's package.json sets no
-          # publishConfig.access, so this flag is what keeps the package
-          # publicly installable.
+          # Keep the flag as a release-log assertion even though package.json
+          # also declares publishConfig.access=public for manual publishes.
           npm publish --access public --tag "$dist_tag"
+
+      - name: Create the matching GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTES: |
+            ## English
+
+            This release was built and verified from the matching tag. Prerelease builds install from npm with `@next` or an exact version. See `README.md` for installation, usage, evidence levels, and known limits.
+
+            ## 简体中文
+
+            本版本由同名 tag 构建并完成验收。候选版本请通过 npm 的 `@next` 或精确版本号安装。安装、用法、证据等级与已知边界见 `README.zh.md`。
+        shell: bash
+        run: |
+          tag="$GITHUB_REF_NAME"
+          pkg="$(node -p "require('./package.json').version")"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "GitHub release $tag already exists — nothing to create."
+            exit 0
+          fi
+          flags=(--verify-tag --generate-notes --notes "$RELEASE_NOTES")
+          case "$pkg" in
+            *-*) flags+=(--prerelease --latest=false) ;;
+          esac
+          gh release create "$tag" --title "dsh-harbor $pkg" "${flags[@]}"

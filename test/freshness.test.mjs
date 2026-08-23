@@ -5,7 +5,7 @@
 // repo (src/scan/*.mjs + src/hub/*.mjs, or lib/client.js) inside mkdtemp.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, mkdirSync, writeFileSync, chmodSync } from 'node:fs';
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync, chmodSync, symlinkSync, utimesSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fingerprintSource, readClientBuildId } from '../src/hub/freshness.mjs';
@@ -73,6 +73,31 @@ test('fingerprintSource: an unreadable file flips the skip counter and changes t
   });
 });
 
+test('fingerprintSource: never follows an mjs symlink outside the source tree', async () => {
+  await withRepo(async (root) => {
+    const outside = join(root, 'outside.mjs');
+    writeFileSync(outside, 'export const outside = 1;\n');
+    symlinkSync(outside, join(root, 'src', 'scan', 'linked.mjs'));
+    const before = await fingerprintSource(root);
+    writeFileSync(outside, 'export const outside = 2;\n');
+    const after = await fingerprintSource(root);
+    assert.equal(after, before);
+  });
+});
+
+test('fingerprintSource: oversized files use a bounded metadata fallback', async () => {
+  await withRepo(async (root) => {
+    const path = join(root, 'src', 'scan', 'large.mjs');
+    writeFileSync(path, 'a'.repeat(1024 * 1024));
+    const before = await fingerprintSource(root, { maxFileBytes: 64, maxTotalBytes: 256 });
+    writeFileSync(path, 'b'.repeat(1024 * 1024));
+    utimesSync(path, new Date(2_000_000), new Date(2_000_000));
+    const after = await fingerprintSource(root, { maxFileBytes: 64, maxTotalBytes: 256 });
+    assert.match(before, /^[0-9a-f]{16}$/);
+    assert.notEqual(after, before);
+  });
+});
+
 // ------------------------------------------------ readClientBuildId
 
 test('readClientBuildId: extracts the stamped id from a fake bundle', async () => {
@@ -101,6 +126,19 @@ test('readClientBuildId: returns null when the bundle carries no identifier', as
   try {
     mkdirSync(join(root, 'lib'), { recursive: true });
     writeFileSync(join(root, 'lib', 'client.js'), 'window.__ModuleLoader__.load({ factory: () => {} });\n');
+    assert.equal(await readClientBuildId(root), null);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('readClientBuildId: reads only the bounded tail and rejects a symlink', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'harbor-freshness-'));
+  try {
+    mkdirSync(join(root, 'lib'), { recursive: true });
+    const outside = join(root, 'outside-client.js');
+    writeFileSync(outside, 'x'.repeat(32 * 1024) + '\n//__HARBOR_CLIENT_BUILD__=fedcba9876543210\n');
+    symlinkSync(outside, join(root, 'lib', 'client.js'));
     assert.equal(await readClientBuildId(root), null);
   } finally {
     rmSync(root, { recursive: true, force: true });

@@ -4,6 +4,10 @@
   "description": "A read-only mirror for installed DeepSeek Harness plugins: capability inventory with evidence, cross-plugin conflicts, and a diff of what changed since the last scan",
   "license": "MIT",
   "type": "module",
+  "packageManager": "pnpm@10.34.5",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ZSeven-W/dsh-harbor.git"
@@ -43,9 +47,12 @@
     ]
   },
   "scripts": {
-    "prepack": "npm run build:client && npm test",
+    "prepack": "npm run build:client && npm run typecheck && npm test",
+    "prepublishOnly": "npm run smoke:pack",
     "build:client": "tsdown src/client/index.tsx --format cjs --platform browser --target es2022 --tsconfig tsconfig.client.json --deps.never-bundle react --deps.never-bundle react/jsx-runtime --deps.never-bundle react-dom --deps.never-bundle react-dom/client --out-dir .client-build --clean --logLevel warn && node scripts/build-client.mjs",
-    "test": "node --test 'test/*.test.mjs'"
+    "smoke:pack": "node test/smoke-pack.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.client.json",
+    "test": "node test/run-tests.mjs"
   },
   "exports": {
     ".": "./src/hub/index.mjs",
@@ -56,6 +63,7 @@
   "files": [
     "src",
     "lib",
+    "docs/images",
     "cordis.patch.yml",
     "README.md",
     "README.*.md",
@@ -74,7 +82,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "@types/react": "^18.3.0",
-    "tsdown": "^0.12.0",
+    "tsdown": "0.12.9",
     "typescript": "^5.6.0"
   },
   "main": "./src/hub/index.mjs"

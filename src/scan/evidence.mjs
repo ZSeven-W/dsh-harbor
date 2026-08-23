@@ -4,12 +4,49 @@
 // that, a report is just an opinion — the author cannot check it and the user
 // cannot trust it.
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import {
+  closeSync, constants as fsConstants, fstatSync, lstatSync, openSync, opendirSync, readSync,
+} from 'node:fs';
 import { join, relative } from 'node:path';
 
 const SOURCE_EXT = /\.(mjs|cjs|js|ts|tsx|mts|cts)$/;
-const MAX_FILE_BYTES = 2_000_000;
 const MAX_EVIDENCE_PER_CAP = 6;
+const READ_CHUNK_BYTES = 64 * 1024;
+
+/** Hard ceilings for one plugin scan. Optional caller limits may lower these
+ * values for tests or tighter hosts, but can never expand them. */
+export const SOURCE_SCAN_LIMITS = Object.freeze({
+  maxFileBytes: 2_000_000,
+  maxEntries: 50_000,
+  maxFiles: 5_000,
+  maxTotalBytes: 100_000_000,
+  maxDepth: 32,
+});
+
+function boundedLimit(requested, ceiling) {
+  return Number.isSafeInteger(requested) && requested >= 0
+    ? Math.min(requested, ceiling)
+    : ceiling;
+}
+
+function effectiveLimits(overrides = {}) {
+  return Object.fromEntries(Object.entries(SOURCE_SCAN_LIMITS).map(([key, ceiling]) => (
+    [key, boundedLimit(overrides[key], ceiling)]
+  )));
+}
+
+function increment(coverage, key, amount = 1) {
+  if (coverage) coverage[key] = (coverage[key] ?? 0) + amount;
+}
+
+function skipFile(coverage, reason) {
+  increment(coverage, 'skippedFiles');
+  increment(coverage, reason);
+}
+
+function hitLimit(coverage, key) {
+  if (coverage) coverage[key] = true;
+}
 
 // ---------------------------------------------------------------------------
 // File classification: which files in a plugin tree are the author's own
@@ -121,29 +158,145 @@ export function classifySourcePath(rel, { libArtifact = false } = {}) {
  * Walk a plugin's own files, never its dependencies. Each entry carries the
  * classification above; callers decide which kinds to scan (see scanSources
  * in inspect.mjs for the artifact fallback).
+ * @param {string} dir plugin root
+ * @param {{libArtifact?: boolean, coverage?: object, limits?: object}} [opts]
+ *   scan hints, an optional mutable coverage object, and limits that may only
+ *   lower the production ceilings
  */
-export function* walkSource(dir, { libArtifact = false } = {}) {
-  const stack = [dir];
-  while (stack.length) {
+export function* walkSource(dir, { libArtifact = false, coverage, limits: requestedLimits } = {}) {
+  const limits = effectiveLimits(requestedLimits);
+  const stack = [{ path: dir, depth: 0 }];
+  let visitedEntries = 0;
+  let acceptedFiles = 0;
+  let acceptedBytes = 0;
+  let stop = false;
+
+  while (stack.length && !stop) {
     const current = stack.pop();
-    let entries;
-    try { entries = readdirSync(current, { withFileTypes: true }); } catch { continue; }
-    for (const entry of entries) {
-      if (entry.isDirectory()) {
-        // Prune never-scanned trees during the walk itself: node_modules is
-        // enormous and walking it would dominate the scan for zero yield.
-        if (!ALWAYS_SKIP_DIRS.has(entry.name)) stack.push(join(current, entry.name));
-        continue;
+    let directory;
+    try { directory = opendirSync(current.path); }
+    catch { increment(coverage, 'unreadableDirectories'); continue; }
+
+    try {
+      let entry;
+      while ((entry = directory.readSync()) !== null) {
+        visitedEntries += 1;
+        if (coverage) coverage.entriesVisited = visitedEntries;
+        if (visitedEntries > limits.maxEntries) {
+          hitLimit(coverage, 'entryLimitExceeded');
+          stop = true;
+          break;
+        }
+
+        if (entry.isDirectory()) {
+          // Prune never-scanned trees during the walk itself: node_modules is
+          // enormous and walking it would dominate the scan for zero yield.
+          if (ALWAYS_SKIP_DIRS.has(entry.name)) continue;
+          if (current.depth >= limits.maxDepth) {
+            hitLimit(coverage, 'depthLimitExceeded');
+            increment(coverage, 'skippedDirectories');
+            continue;
+          }
+          stack.push({ path: join(current.path, entry.name), depth: current.depth + 1 });
+          continue;
+        }
+        if (!SOURCE_EXT.test(entry.name)) continue;
+
+        const path = join(current.path, entry.name);
+        const rel = relative(dir, path);
+        const kind = classifySourcePath(rel, { libArtifact });
+        if (kind === 'skip') continue;
+
+        // This lstat is the walk-time admission check. readSourceFile repeats
+        // lstat immediately before O_NOFOLLOW open and verifies dev/ino after
+        // fstat, closing the replacement race between enumeration and read.
+        let stat;
+        try { stat = lstatSync(path); }
+        catch { skipFile(coverage, 'unreadableFiles'); continue; }
+        if (!stat.isFile()) { skipFile(coverage, 'nonRegularFiles'); continue; }
+        if (stat.size > limits.maxFileBytes) { skipFile(coverage, 'oversizeFiles'); continue; }
+        if (acceptedFiles >= limits.maxFiles) {
+          hitLimit(coverage, 'fileLimitExceeded');
+          skipFile(coverage, 'limitSkippedFiles');
+          stop = true;
+          break;
+        }
+        if (acceptedBytes + stat.size > limits.maxTotalBytes) {
+          hitLimit(coverage, 'totalBytesLimitExceeded');
+          skipFile(coverage, 'limitSkippedFiles');
+          continue;
+        }
+
+        acceptedFiles += 1;
+        acceptedBytes += stat.size;
+        if (coverage) {
+          coverage.filesAccepted = acceptedFiles;
+          coverage.bytesAccepted = acceptedBytes;
+        }
+        yield {
+          path, rel, size: stat.size, kind,
+          device: stat.dev, inode: stat.ino,
+        };
       }
-      if (!SOURCE_EXT.test(entry.name)) continue;
-      const path = join(current, entry.name);
-      let size;
-      try { size = statSync(path).size; } catch { continue; }
-      if (size > MAX_FILE_BYTES) continue;
-      const rel = relative(dir, path);
-      const kind = classifySourcePath(rel, { libArtifact });
-      if (kind === 'skip') continue;
-      yield { path, rel, size, kind };
+    } catch {
+      increment(coverage, 'unreadableDirectories');
+    } finally {
+      try { directory.closeSync(); } catch { /* best effort after read error */ }
+    }
+  }
+}
+
+/**
+ * Safely read one admitted source file without following a replacement link or
+ * blocking on a replacement FIFO/device. The sequence is intentionally:
+ * lstat -> O_NOFOLLOW|O_NONBLOCK open -> fstat -> bounded chunked reads.
+ * dev/ino must still equal the walk-time entry, so replacing a regular file
+ * with another regular file is rejected too.
+ *
+ * @param {{path:string, device?:number, inode?:number}} file walkSource entry
+ * @param {{maxBytes?:number}} [opts] caller's remaining total-byte budget
+ * @returns {{ok:true,text:string,bytes:number}|{ok:false,reason:string}}
+ */
+export function readSourceFile(file, { maxBytes = SOURCE_SCAN_LIMITS.maxFileBytes } = {}) {
+  const ceiling = boundedLimit(maxBytes, SOURCE_SCAN_LIMITS.maxFileBytes);
+  let descriptor;
+  try {
+    const before = lstatSync(file.path);
+    if (!before.isFile()) return { ok: false, reason: 'nonRegular' };
+    if ((file.device !== undefined && before.dev !== file.device)
+      || (file.inode !== undefined && before.ino !== file.inode)) {
+      return { ok: false, reason: 'changed' };
+    }
+
+    const noFollow = fsConstants.O_NOFOLLOW ?? 0;
+    const nonBlock = fsConstants.O_NONBLOCK ?? 0;
+    descriptor = openSync(file.path, fsConstants.O_RDONLY | noFollow | nonBlock);
+    const after = fstatSync(descriptor);
+    if (!after.isFile()) return { ok: false, reason: 'nonRegular' };
+    if (after.dev !== before.dev || after.ino !== before.ino) {
+      return { ok: false, reason: 'changed' };
+    }
+    if (after.size > ceiling) return { ok: false, reason: 'oversize' };
+
+    const chunks = [];
+    let total = 0;
+    while (true) {
+      // The extra byte distinguishes an exact-ceiling file from one that grew
+      // after fstat. It is never retained when the file is over budget.
+      const capacity = Math.min(READ_CHUNK_BYTES, ceiling - total + 1);
+      const chunk = Buffer.allocUnsafe(capacity);
+      const bytesRead = readSync(descriptor, chunk, 0, capacity, null);
+      if (bytesRead === 0) break;
+      total += bytesRead;
+      if (total > ceiling) return { ok: false, reason: 'oversize' };
+      chunks.push(chunk.subarray(0, bytesRead));
+    }
+    return { ok: true, text: Buffer.concat(chunks, total).toString('utf8'), bytes: total };
+  } catch {
+    return { ok: false, reason: 'unreadable' };
+  } finally {
+    if (descriptor !== undefined) {
+      try { closeSync(descriptor); } catch { /* best effort */ }
     }
   }
 }
@@ -164,6 +317,49 @@ export function lineNumberAt(text, index) {
   let line = 1;
   for (let i = 0; i < index; i++) if (text.charCodeAt(i) === 10) line += 1;
   return line;
+}
+
+/**
+ * Build one line index for a source file and reuse it for every finding.
+ *
+ * Calling lineNumberAt(text, index) for each regex hit rescans from byte zero
+ * every time. A generated file with thousands of findings therefore becomes
+ * quadratic. This locator does one O(n) pass, then answers both the line
+ * number and excerpt in O(log lines) + O(line length). The standalone helpers
+ * remain exported for API compatibility; the scanner uses this indexed form.
+ */
+export function createLineLocator(text) {
+  const starts = [0];
+  for (let i = 0; i < text.length; i++) {
+    if (text.charCodeAt(i) === 10) starts.push(i + 1);
+  }
+
+  const lineIndexAt = (rawIndex) => {
+    const index = Math.max(0, Math.min(Number.isFinite(rawIndex) ? rawIndex : 0, text.length));
+    let low = 0;
+    let high = starts.length;
+    while (low + 1 < high) {
+      const mid = (low + high) >>> 1;
+      if (starts[mid] <= index) low = mid;
+      else high = mid;
+    }
+    return low;
+  };
+
+  return {
+    lineNumberAt(index) {
+      return lineIndexAt(index) + 1;
+    },
+    lineAt(index, limit = 180) {
+      const lineIndex = lineIndexAt(index);
+      const start = starts[lineIndex];
+      let end = lineIndex + 1 < starts.length ? starts[lineIndex + 1] - 1 : text.length;
+      // CRLF: the line-feed is excluded above; exclude its preceding CR too.
+      if (end > start && text.charCodeAt(end - 1) === 13) end -= 1;
+      const slice = sanitizeLine(text.slice(start, end).trim());
+      return slice.length > limit ? `${slice.slice(0, limit)}…` : slice;
+    },
+  };
 }
 
 /**

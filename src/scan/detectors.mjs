@@ -55,6 +55,121 @@ const GLOBAL_FETCH_REF = new RegExp(['\\b(?:globalThis|global|window)\\.', 'fetc
 // match.
 const DESTRUCTURED_FETCH = new RegExp(['\\{[^}\\n]*\\bfetch\\b[^}\\n]*\\}\\s*='].join(''), 'g');
 
+const CHILD_PROCESS_METHODS = new Set([
+  'spawn', 'spawnSync', 'exec', 'execSync', 'execFile', 'execFileSync', 'fork',
+]);
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function addNamedChildProcessBindings(spec, directBindings) {
+  const body = spec.match(/\{([\s\S]*)\}/)?.[1];
+  if (!body) return;
+  for (const rawPart of body.split(',')) {
+    const part = rawPart.trim().replace(/^type\s+/, '');
+    const match = part.match(/^([A-Za-z_$][\w$]*)(?:(?:\s+as\s+|\s*:\s*)([A-Za-z_$][\w$]*))?$/);
+    if (!match || !CHILD_PROCESS_METHODS.has(match[1])) continue;
+    directBindings.add(match[2] || match[1]);
+  }
+}
+
+/**
+ * Locate process-launch calls through bindings that provably came from
+ * node:child_process. A file-level import gate plus a bare-word regex misses
+ * namespace and renamed imports, while accepting an unrelated local function
+ * merely because the file imports some other child_process member. Binding
+ * extraction keeps both sides precise: `cp.spawn` counts only when `cp` is
+ * the imported namespace, and `obj.spawn` never counts by resemblance alone.
+ */
+function childProcessCallMatches(text) {
+  const namespaces = new Set();
+  const directBindings = new Set();
+
+  // ESM imports: namespace/default bindings and named aliases. The three
+  // shapes are kept separate so a semicolon-less import above the real one
+  // cannot be swallowed into a cross-statement `import ... from` match.
+  for (const match of text.matchAll(/\bimport\s+\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\s+['"](?:node:)?child_process['"]/g)) {
+    namespaces.add(match[1]);
+  }
+  for (const match of text.matchAll(/\bimport\s+([A-Za-z_$][\w$]*)\s*(?:,\s*(\{[^}]{0,500}\}))?\s+from\s+['"](?:node:)?child_process['"]/g)) {
+    namespaces.add(match[1]);
+    if (match[2]) addNamedChildProcessBindings(match[2], directBindings);
+  }
+  for (const match of text.matchAll(/\bimport\s*(\{[^}]{1,500}\})\s*from\s+['"](?:node:)?child_process['"]/g)) {
+    addNamedChildProcessBindings(match[1], directBindings);
+  }
+
+  const moduleExpr = String.raw`(?:require\(\s*['"](?:node:)?child_process['"]\s*\)|(?:await\s+)?import\(\s*['"](?:node:)?child_process['"]\s*\))`;
+
+  // CommonJS/dynamic-import namespace and destructured bindings.
+  const namespaceBinding = new RegExp(
+    String.raw`\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*${moduleExpr}(?!\s*\.)`,
+    'g',
+  );
+  for (const match of text.matchAll(namespaceBinding)) namespaces.add(match[1]);
+
+  const destructuredBinding = new RegExp(
+    String.raw`\b(?:const|let|var)\s*\{([^}]{1,500})\}\s*=\s*${moduleExpr}`,
+    'g',
+  );
+  for (const match of text.matchAll(destructuredBinding)) {
+    addNamedChildProcessBindings(`{${match[1]}}`, directBindings);
+  }
+
+  // `const launch = require('node:child_process').spawn`.
+  const memberBinding = new RegExp(
+    String.raw`\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*${moduleExpr}\s*\.\s*([A-Za-z_$][\w$]*)`,
+    'g',
+  );
+  for (const match of text.matchAll(memberBinding)) {
+    if (CHILD_PROCESS_METHODS.has(match[2])) directBindings.add(match[1]);
+  }
+
+  // TypeScript's `import cp = require('node:child_process')` form.
+  for (const match of text.matchAll(/\bimport\s+([A-Za-z_$][\w$]*)\s*=\s*require\(\s*['"](?:node:)?child_process['"]\s*\)/g)) {
+    namespaces.add(match[1]);
+  }
+
+  // Aliases taken from a proven namespace remain proven bindings.
+  for (const namespace of namespaces) {
+    const escaped = escapeRegExp(namespace);
+    const memberAlias = new RegExp(
+      String.raw`\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*${escaped}\s*\.\s*([A-Za-z_$][\w$]*)`,
+      'g',
+    );
+    for (const match of text.matchAll(memberAlias)) {
+      if (CHILD_PROCESS_METHODS.has(match[2])) directBindings.add(match[1]);
+    }
+    const objectAlias = new RegExp(
+      String.raw`\b(?:const|let|var)\s*\{([^}]{1,500})\}\s*=\s*${escaped}\b`,
+      'g',
+    );
+    for (const match of text.matchAll(objectAlias)) {
+      addNamedChildProcessBindings(`{${match[1]}}`, directBindings);
+    }
+  }
+
+  const matches = [];
+  const seen = new Set();
+  const addCalls = (pattern) => {
+    for (const match of text.matchAll(pattern)) {
+      if (seen.has(match.index)) continue;
+      seen.add(match.index);
+      matches.push(match);
+    }
+  };
+
+  for (const binding of directBindings) {
+    addCalls(new RegExp(String.raw`(?<![.\w$])${escapeRegExp(binding)}\s*\(`, 'g'));
+  }
+  for (const namespace of namespaces) {
+    addCalls(new RegExp(
+      String.raw`(?<![\w$])${escapeRegExp(namespace)}\s*(?:\?\.|\.)\s*(?:spawn|spawnSync|exec|execSync|execFile|execFileSync|fork)\s*\(`,
+      'g',
+    ));
+  }
+  return matches.sort((a, b) => a.index - b.index);
+}
+
 export const CAPABILITIES = [
   {
     id: 'client-injection',
@@ -104,7 +219,7 @@ export const CAPABILITIES = [
       require: /from\s+['"](?:node:)?child_process['"]|require\(\s*['"](?:node:)?child_process['"]\s*\)/,
       // (?<![.\w]) keeps `hub.spawn(...)` and similar method calls out: they are
       // ordinary calls on someone else's object, not a process launch.
-      patterns: [/(?<![.\w])(?:spawn|spawnSync|exec|execSync|execFile|execFileSync)\s*\(/g],
+      patterns: [/(?<![.\w])(?:spawn|spawnSync|exec|execSync|execFile|execFileSync|fork)\s*\(/g],
     },
     note: '起本机进程，权力等同于用户自己的 shell。',
   },
@@ -179,3 +294,22 @@ export const CLASH_KINDS = ['tool-name', 'route-base', 'provider-id', 'client-mo
 export const ORDER_SENSITIVE_EVENTS = [/^agent\//, /^session\//, /^llm\//];
 
 export const byId = Object.fromEntries(CAPABILITIES.map((c) => [c.id, c]));
+
+/**
+ * Return source matches for one capability. Kept here beside the detector
+ * table so binding-aware detectors do not leak special cases into the report
+ * builder. The returned values are ordinary RegExp match arrays and preserve
+ * the scanner's existing evidence contract (`index`, captures, matched text).
+ */
+export function capabilityMatches(capability, text) {
+  if (capability.id === 'subprocess') return childProcessCallMatches(text);
+  if (capability.match?.require) {
+    const gate = new RegExp(capability.match.require.source, capability.match.require.flags);
+    if (!gate.test(text)) return [];
+  }
+  const matches = [];
+  for (const pattern of capability.match?.patterns ?? []) {
+    matches.push(...text.matchAll(new RegExp(pattern.source, pattern.flags)));
+  }
+  return matches.sort((a, b) => a.index - b.index);
+}

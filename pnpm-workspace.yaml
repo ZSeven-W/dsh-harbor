@@ -1,0 +1,5 @@
+overrides:
+  # tsdown 0.12.9 passes options removed after this beta. Newer Rolldown emits
+  # warnings and also drops Node 20.18 support. Remove this pin when tsdown and
+  # the package's minimum Node version are upgraded together.
+  rolldown: 1.0.0-beta.33

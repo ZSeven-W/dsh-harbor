@@ -46,6 +46,71 @@ test('diffAndStore: a version change is reported with profiles', (t) => {
   assert.deepEqual(change.profiles, ['p1', 'p2']);
 });
 
+test('diffAndStore: a registry identity change during an exact upgrade is one version change', (t) => {
+  const dir = stateDir(t);
+  diffAndStore([report({ identity: 'pkg@registry:1.0.0:old-bytes', version: '1.0.0' })], { dir });
+  const res = diffAndStore([report({ identity: 'pkg@registry:1.0.1:new-bytes', version: '1.0.1' })], { dir });
+
+  assert.deepEqual(res.changes.map((c) => c.type), ['version']);
+  assert.equal(res.changes[0].detail, '1.0.0 → 1.0.1');
+  assert.deepEqual(res.changes[0].profiles, ['p1', 'p2']);
+});
+
+test('diffAndStore: two artifact identities exchanging profiles report both version transitions', (t) => {
+  const dir = stateDir(t);
+  const row = (identity, version, profile) => report({
+    identity,
+    version,
+    dir: `/install/${identity}`,
+    installs: [{ profile, spec: version }],
+  });
+  diffAndStore([
+    row('pkg@registry:1.0.0:bytes-v1', '1.0.0', 'A'),
+    row('pkg@registry:2.0.0:bytes-v2', '2.0.0', 'B'),
+  ], { dir });
+
+  const res = diffAndStore([
+    row('pkg@registry:1.0.0:bytes-v1', '1.0.0', 'B'),
+    row('pkg@registry:2.0.0:bytes-v2', '2.0.0', 'A'),
+  ], { dir });
+
+  assert.deepEqual(res.changes.map((c) => ({
+    type: c.type, profiles: c.profiles, detail: c.detail,
+  })), [
+    { type: 'version', profiles: ['A'], detail: '1.0.0 → 2.0.0' },
+    { type: 'version', profiles: ['B'], detail: '2.0.0 → 1.0.0' },
+  ]);
+});
+
+test('diffAndStore: same-version artifact identities exchanging profiles report profile moves', (t) => {
+  const dir = stateDir(t);
+  const row = (identity, profile) => report({
+    identity,
+    dir: `/install/${identity}`,
+    installs: [{ profile, spec: '1.0.0' }],
+  });
+  diffAndStore([row('pkg@artifact-one', 'A'), row('pkg@artifact-two', 'B')], { dir });
+  const res = diffAndStore([row('pkg@artifact-one', 'B'), row('pkg@artifact-two', 'A')], { dir });
+
+  assert.deepEqual(res.changes.map((c) => ({ type: c.type, profiles: c.profiles })), [
+    { type: 'profile-move', profiles: ['A'] },
+    { type: 'profile-move', profiles: ['B'] },
+  ]);
+});
+
+test('diffAndStore: adding a profile to an unchanged merged artifact is visible once', (t) => {
+  const dir = stateDir(t);
+  diffAndStore([report({ installs: [{ profile: 'A', spec: '1.0.0' }] })], { dir });
+  const res = diffAndStore([report({ installs: [
+    { profile: 'A', spec: '1.0.0' },
+    { profile: 'B', spec: '1.0.0' },
+  ] })], { dir });
+
+  assert.deepEqual(res.changes.map((c) => ({
+    type: c.type, profiles: c.profiles, detail: c.detail,
+  })), [{ type: 'added', profiles: ['B'], detail: '版本 1.0.0' }]);
+});
+
 test('diffAndStore: capability add/remove changes carry profiles', (t) => {
   const dir = stateDir(t);
   diffAndStore([report({ capabilities: { a: {}, b: {} } })], { dir });

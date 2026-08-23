@@ -1,10 +1,13 @@
 // Per-plugin inspection: declared surface, capabilities with evidence, and the
 // registry keys it claims (which feed the conflict matrix).
 
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { CAPABILITIES } from './detectors.mjs';
-import { walkSource, looksBundled, lineNumberAt, lineAt, Findings, libIsArtifact, classifySourcePath } from './evidence.mjs';
+import { lstatSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
+import { isAbsolute, join, relative, sep } from 'node:path';
+import { CAPABILITIES, capabilityMatches } from './detectors.mjs';
+import {
+  walkSource, readSourceFile, SOURCE_SCAN_LIMITS, looksBundled, createLineLocator,
+  Findings, libIsArtifact, classifySourcePath,
+} from './evidence.mjs';
 import { readJson, OFFICIAL_SCOPE } from './discover.mjs';
 
 const SOURCE_CAPS = CAPABILITIES.filter((c) => c.where === 'source' && c.match);
@@ -26,7 +29,59 @@ function isRealHost(host) {
   if (DOC_HOSTS.has(host)) return false;
   if (!host.includes('.')) return false;
   if (RESERVED_TLD.test(host)) return false;
-  return true;
+  // The URL extractor intentionally stops before ports/paths, but source
+  // examples such as "https://..." otherwise leave "..." behind. Require
+  // valid DNS-style labels (IPv4 also satisfies this shape) before presenting
+  // a value as a contacted host.
+  return host.split('.').every((label) => (
+    label.length > 0
+    && label.length <= 63
+    && /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(label)
+  ));
+}
+
+function pathIsInside(root, target) {
+  const rel = relative(root, target);
+  return rel === '' || (rel !== '..' && !rel.startsWith(`..${sep}`) && !isAbsolute(rel));
+}
+
+function isPhysicalDirectory(path) {
+  try { return lstatSync(path).isDirectory(); } catch { return false; }
+}
+
+/** Count official packages physically owned by this plugin tree.
+ *
+ * Workspace installs commonly expose the host's @deepseek-ai packages through
+ * symlinks under a plugin's node_modules. Their path looks nested, but they are
+ * the exact host realm, not a second copy. A package counts only when its
+ * resolved target remains inside the plugin root; pnpm links into the plugin's
+ * own .pnpm store still count because those are genuinely plugin-owned copies.
+ */
+function nestedOfficialCopies(dir) {
+  const nested = join(dir, 'node_modules', '@deepseek-ai');
+  let root;
+  let scopeTarget;
+  try {
+    root = realpathSync(dir);
+    scopeTarget = realpathSync(nested);
+  } catch {
+    return [];
+  }
+  if (!pathIsInside(root, scopeTarget)) return [];
+
+  let entries;
+  try { entries = readdirSync(nested, { withFileTypes: true }); } catch { return []; }
+  const copies = [];
+  for (const entry of entries) {
+    const packagePath = join(nested, entry.name);
+    try {
+      const stat = lstatSync(packagePath);
+      if (!stat.isDirectory() && !stat.isSymbolicLink()) continue;
+      const target = realpathSync(packagePath);
+      if (pathIsInside(root, target)) copies.push(entry.name);
+    } catch { /* dangling/unreadable entries are not disk evidence */ }
+  }
+  return copies;
 }
 
 function scanManifest(dir, findings) {
@@ -50,27 +105,41 @@ function scanManifest(dir, findings) {
 
   // A nested copy is the direct cause of the Symbol identity split, so count it
   // — "20 packages" reads very differently from "1".
-  const nested = join(dir, 'node_modules', '@deepseek-ai');
-  if (existsSync(nested)) {
-    let count = 0;
-    try { count = readdirSync(nested).length; } catch { /* unreadable: report presence only */ }
+  const nestedCopies = nestedOfficialCopies(dir);
+  if (nestedCopies.length) {
+    const count = nestedCopies.length;
     findings.add('realm-copy', {
       tier: 'declared', file: 'node_modules/@deepseek-ai', line: 0,
-      excerpt: `插件目录内自带 ${count || '若干'} 个官方包副本，装载时可能造成 Symbol 身份分裂`,
+      excerpt: `插件目录内自带 ${count} 个官方包副本，装载时可能造成 Symbol 身份分裂`,
     });
   }
 
   const patchRel = pkg.dsh?.bundle?.patch?.replace(/^\.\//, '') ?? 'cordis.patch.yml';
   const patchPath = join(dir, patchRel);
-  const patchIds = existsSync(patchPath)
-    ? [...readFileSync(patchPath, 'utf8').matchAll(/^\s*-?\s*id:\s*(\S+)/gm)].map((m) => m[1])
-    : [];
+  let patchIds = [];
+  try {
+    // A manifest may point `dsh.bundle.patch` at arbitrary filesystem input.
+    // Treat it by the same regular-file rule as source so a symlink cannot
+    // escape the plugin and a FIFO/device cannot block the scan.
+    const patchStat = lstatSync(patchPath);
+    const root = realpathSync(dir);
+    const target = realpathSync(patchPath);
+    if (patchStat.isFile() && pathIsInside(root, target) && patchStat.size <= 2_000_000) {
+      patchIds = [...readFileSync(patchPath, 'utf8').matchAll(/^\s*-?\s*id:\s*(\S+)/gm)].map((m) => m[1]);
+    }
+  } catch { /* absent, unreadable, or non-regular patch: no declared ids */ }
 
   return {
     version: pkg.version ?? '?',
     description: pkg.description ?? '',
     isBundle: !!pkg.dsh?.bundle,
     hasClient: !!pkg.dsh?.client,
+    // DSH's client loader contract uses the npm package name as the module id.
+    // This is declared truth, unlike a generated source string in a build
+    // script; literal runtime registrations found later are unioned with it.
+    clientModuleId: pkg.dsh?.client && typeof pkg.name === 'string' && pkg.name.trim()
+      ? pkg.name.trim()
+      : null,
     patchIds,
     declaredCapabilities: pkg.dsh?.capabilities ?? null,
   };
@@ -192,20 +261,203 @@ function sourceIsShim(srcFiles, artFiles, pkg, libArtifact) {
   return entryTargetsArtifact(pkg, { libArtifact });
 }
 
+// Replace strings and comments with spaces while retaining offsets. Client
+// bundle builders contain generated `__ModuleLoader__` source inside quoted
+// strings; scanning the raw text treats the quote that *ends* such a string as
+// the quote that starts a literal module id. We first locate loader calls in
+// executable code, then read the literal id from the original slice.
+function maskStringsAndComments(text) {
+  // split('') preserves UTF-16 code-unit offsets used by RegExp match.index;
+  // a code-point spread would shift every position after an emoji.
+  const chars = text.split('');
+  let state = 'code';
+  let escaped = false;
+  for (let i = 0; i < chars.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+    if (state === 'code') {
+      if (char === '/' && next === '/') {
+        chars[i] = chars[i + 1] = ' ';
+        i += 1;
+        state = 'line-comment';
+      } else if (char === '/' && next === '*') {
+        chars[i] = chars[i + 1] = ' ';
+        i += 1;
+        state = 'block-comment';
+      } else if (char === "'" || char === '"' || char === '`') {
+        chars[i] = ' ';
+        state = char;
+        escaped = false;
+      }
+      continue;
+    }
+    if (state === 'line-comment') {
+      if (char === '\n') state = 'code';
+      else chars[i] = ' ';
+      continue;
+    }
+    if (state === 'block-comment') {
+      if (char === '*' && next === '/') {
+        chars[i] = chars[i + 1] = ' ';
+        i += 1;
+        state = 'code';
+      } else if (char !== '\n') chars[i] = ' ';
+      continue;
+    }
+    if (char === '\n') {
+      // Keep line offsets readable even in template literals.
+      escaped = false;
+      continue;
+    }
+    chars[i] = ' ';
+    if (escaped) {
+      escaped = false;
+    } else if (char === '\\') {
+      escaped = true;
+    } else if (char === state) {
+      state = 'code';
+    }
+  }
+  return chars.join('');
+}
+
+function matchingParen(masked, open) {
+  let depth = 0;
+  for (let i = open; i < masked.length; i++) {
+    if (masked[i] === '(') depth += 1;
+    else if (masked[i] === ')' && --depth === 0) return i;
+  }
+  return -1;
+}
+
+function clientModuleIdsIn(text) {
+  if (!text.includes('__ModuleLoader__')) return [];
+  const masked = maskStringsAndComments(text);
+  const ids = [];
+  const calls = /(?:\b(?:window|globalThis)\s*\.\s*)?\b__ModuleLoader__\s*\.\s*(?:load|register)\s*\(/g;
+  for (const call of masked.matchAll(calls)) {
+    const open = call.index + call[0].lastIndexOf('(');
+    const close = matchingParen(masked, open);
+    if (close === -1) continue;
+    const args = text.slice(open + 1, close);
+    const id = args.match(/(?:^|[{,])\s*id\s*:\s*(['"])([A-Za-z0-9@._:/-]{1,200})\1/)?.[2];
+    if (id) ids.push(id);
+  }
+  return ids;
+}
+
+function sourceExpression(text, masked, start, stopChars) {
+  let round = 0;
+  let square = 0;
+  let curly = 0;
+  const endLimit = Math.min(masked.length, start + 1_000);
+  for (let i = start; i < endLimit; i++) {
+    const char = masked[i];
+    if (char === '(') round += 1;
+    else if (char === ')' && round > 0) round -= 1;
+    else if (char === '[') square += 1;
+    else if (char === ']' && square > 0) square -= 1;
+    else if (char === '{') curly += 1;
+    else if (char === '}' && curly > 0) curly -= 1;
+    if (round === 0 && square === 0 && curly === 0 && stopChars.has(char)) {
+      return text.slice(start, i).trim();
+    }
+  }
+  return text.slice(start, endLimit).trim();
+}
+
+function routeDefinitionsIn(text, masked) {
+  const definitions = new Map();
+  const declarations = /\b(?:export\s+)?const\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*=/g;
+  for (const declaration of masked.matchAll(declarations)) {
+    const start = declaration.index + declaration[0].length;
+    const expression = sourceExpression(text, masked, start, new Set([';', '\n']));
+    // Keep the graph route-specific. Feeding every const in a large plugin
+    // into global name resolution creates dense collisions on generic names
+    // such as `value` and `result`; route chains are either rooted in a
+    // literal /_dsh value or use an explicit route/path/prefix/base name.
+    if (!expression.includes('/_dsh/')
+      && !/(?:route|path|prefix|base|endpoint|api|url)/i.test(declaration[1])
+      && !/(?:route|path|prefix|base|endpoint|api|url)/i.test(expression)) continue;
+    if (!definitions.has(declaration[1])) definitions.set(declaration[1], []);
+    definitions.get(declaration[1]).push(expression);
+  }
+  return definitions;
+}
+
+function registeredRouteExpressionsIn(text, masked) {
+  // A route claim exists only in a module that executes the DSH registration
+  // API. Frontend fetch constants and shared protocol modules may carry the
+  // same /_dsh path, but they consume the route rather than own it.
+  if (!/\bwebServer\s*\.\s*register(?:Upgrade)?\s*\(/.test(masked)) return [];
+  const expressions = [];
+  for (const field of masked.matchAll(/\bpath\s*:/g)) {
+    const start = field.index + field[0].length;
+    expressions.push(sourceExpression(text, masked, start, new Set([',', ';', '\n', '}'])));
+  }
+  return expressions;
+}
+
+function addDefinitions(target, incoming) {
+  for (const [name, expressions] of incoming) {
+    if (!target.has(name)) target.set(name, []);
+    target.get(name).push(...expressions);
+  }
+}
+
+function routeBase(value) {
+  const match = /\/_dsh\/([A-Za-z0-9._-]+)/.exec(value);
+  return match ? `/_dsh/${match[1]}` : null;
+}
+
+function resolveRouteBases(expression, localDefinitions, globalDefinitions, seen = new Set()) {
+  const bases = new Set();
+  for (const path of expression.matchAll(/\/_dsh\/[A-Za-z0-9._-]+/g)) {
+    const base = routeBase(path[0]);
+    if (base) bases.add(base);
+  }
+  for (const token of expression.matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*)\b/g)) {
+    const name = token[1];
+    if (seen.has(name) || seen.size >= 24) continue;
+    const definitions = localDefinitions.get(name) ?? globalDefinitions.get(name);
+    if (!definitions) continue;
+    seen.add(name);
+    for (const nested of definitions) {
+      for (const base of resolveRouteBases(nested, localDefinitions, globalDefinitions, seen)) bases.add(base);
+    }
+    seen.delete(name);
+  }
+  return bases;
+}
+
 function scanSources(dir, findings) {
   const claims = { toolNames: new Set(), routeBases: new Set(), providerIds: new Set(), clientModuleIds: new Set() };
   const hooks = new Set();
   const egressHosts = new Set();
   const envVars = new Set();
+  const globalRouteDefinitions = new Map();
+  const routeRegistrationSites = [];
   let sourceFiles = 0;
   let bundledFiles = 0;
+  let sourceBytes = 0;
+  const skipped = {
+    skippedFiles: 0,
+    nonRegularFiles: 0,
+    oversizeFiles: 0,
+    unreadableFiles: 0,
+    changedFiles: 0,
+    limitSkippedFiles: 0,
+    entriesVisited: 0,
+    filesAccepted: 0,
+    bytesAccepted: 0,
+  };
 
   const pkg = readJson(join(dir, 'package.json')) ?? {};
   const libArtifact = libIsArtifact({
-    hasSrc: existsSync(join(dir, 'src')),
+    hasSrc: isPhysicalDirectory(join(dir, 'src')),
     entryInSrc: entryTargetsSrc(pkg),
   });
-  const files = [...walkSource(dir, { libArtifact })];
+  const files = [...walkSource(dir, { libArtifact, coverage: skipped })];
 
   // Author source first — but only when it is the implementation. Two
   // distinct shapes make that assumption false, and both fall back to the
@@ -240,9 +492,25 @@ function scanSources(dir, findings) {
   }
 
   for (const file of scanFiles) {
-    let text;
-    try { text = readFileSync(file.path, 'utf8'); } catch { continue; }
+    const remainingBytes = Math.max(0, SOURCE_SCAN_LIMITS.maxTotalBytes - sourceBytes);
+    const read = readSourceFile(file, {
+      maxBytes: Math.min(SOURCE_SCAN_LIMITS.maxFileBytes, remainingBytes),
+    });
+    if (!read.ok) {
+      skipped.skippedFiles += 1;
+      if (read.reason === 'nonRegular') skipped.nonRegularFiles += 1;
+      else if (read.reason === 'changed') skipped.changedFiles += 1;
+      else if (read.reason === 'oversize' && remainingBytes < SOURCE_SCAN_LIMITS.maxFileBytes) {
+        skipped.totalBytesLimitExceeded = true;
+        skipped.limitSkippedFiles += 1;
+      } else if (read.reason === 'oversize') skipped.oversizeFiles += 1;
+      else skipped.unreadableFiles += 1;
+      continue;
+    }
+    const text = read.text;
+    sourceBytes += read.bytes;
     sourceFiles += 1;
+    const lines = createLineLocator(text);
     // The kind from the classification table overrides the looksBundled
     // heuristic: a small chunk file can have short lines and pass the
     // heuristic, but it is still bundled output by class.
@@ -262,49 +530,49 @@ function scanSources(dir, findings) {
       constStringValues.set(c[1], c[2]);
     }
 
+    const codeMask = maskStringsAndComments(text);
+    const routeDefinitions = routeDefinitionsIn(text, codeMask);
+    addDefinitions(globalRouteDefinitions, routeDefinitions);
+    for (const expression of registeredRouteExpressionsIn(text, codeMask)) {
+      routeRegistrationSites.push({ expression, definitions: routeDefinitions });
+    }
+
     for (const cap of SOURCE_CAPS) {
-      if (cap.match.require && !cap.match.require.test(text)) continue;
       const tier = bundled ? 'heuristic' : cap.tier;
-      for (const pattern of cap.match.patterns) {
-        for (const m of text.matchAll(new RegExp(pattern.source, pattern.flags))) {
-          findings.add(cap.id, {
-            tier, file: label, line: lineNumberAt(text, m.index), excerpt: lineAt(text, m.index),
-          });
-          if (cap.id === 'global-hook' && m[1]) hooks.add(m[1]);
-          if (cap.id === 'llm-adapter' && m[1]) {
-            for (const id of m[1].matchAll(/['"]([^'"]+)['"]/g)) claims.providerIds.add(id[1]);
-            // dsh-crew registers by identifier: `const VISION_PROVIDER =
-            // 'deepseek-vision'` far above, then hands registerAdapter a
-            // bracket list of identifiers, so the inline-quoted extraction
-            // above finds nothing. Resolve identifiers inside the bracket list
-            // against the same-file const table, but only when the list is a
-            // plain comma-separated identifier list: every element in that API
-            // position is a provider id by definition, while any operator, call
-            // or spread means the id is computed and its value must not be
-            // guessed at.
-            if (/^[\s,A-Za-z_$][\s,A-Za-z0-9_$]*$/.test(m[1])) {
-              for (const id of m[1].matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*)\b/g)) {
-                const value = constStringValues.get(id[1]);
-                if (value) claims.providerIds.add(value);
-              }
+      for (const m of capabilityMatches(cap, text)) {
+        findings.add(cap.id, {
+          tier, file: label, line: lines.lineNumberAt(m.index), excerpt: lines.lineAt(m.index),
+        });
+        if (cap.id === 'global-hook' && m[1]) hooks.add(m[1]);
+        if (cap.id === 'llm-adapter' && m[1]) {
+          for (const id of m[1].matchAll(/['"]([^'"]+)['"]/g)) claims.providerIds.add(id[1]);
+          // dsh-crew registers by identifier: `const VISION_PROVIDER =
+          // 'deepseek-vision'` far above, then hands registerAdapter a
+          // bracket list of identifiers, so the inline-quoted extraction
+          // above finds nothing. Resolve identifiers inside the bracket list
+          // against the same-file const table, but only when the list is a
+          // plain comma-separated identifier list: every element in that API
+          // position is a provider id by definition, while any operator, call
+          // or spread means the id is computed and its value must not be
+          // guessed at.
+          if (/^[\s,A-Za-z_$][\s,A-Za-z0-9_$]*$/.test(m[1])) {
+            for (const id of m[1].matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*)\b/g)) {
+              const value = constStringValues.get(id[1]);
+              if (value) claims.providerIds.add(value);
             }
           }
-          if (cap.id === 'env-read' && m[1]) envVars.add(m[1]);
         }
+        if (cap.id === 'env-read' && m[1]) envVars.add(m[1]);
       }
     }
 
-    // Registry claims that are not capabilities themselves, but drive conflicts.
-    for (const m of text.matchAll(/['"`](\/_dsh\/[A-Za-z0-9._-]+)/g)) {
-      claims.routeBases.add(m[1].split('/').slice(0, 3).join('/'));
-    }
     // A tool is an object with both a name and a description next to it.
     for (const m of text.matchAll(/name:\s*['"]([a-z][a-z0-9_]{2,})['"]/g)) {
       if (/description:\s*['"`]/.test(text.slice(m.index, m.index + 500))) {
         claims.toolNames.add(m[1]);
         findings.add('tool-registration', {
           tier: bundled ? 'heuristic' : 'heuristic', file: label,
-          line: lineNumberAt(text, m.index), excerpt: `tool "${m[1]}"`,
+          line: lines.lineNumberAt(m.index), excerpt: `tool "${m[1]}"`,
         });
       }
     }
@@ -327,15 +595,23 @@ function scanSources(dir, findings) {
       claims.toolNames.add(m[2]);
       findings.add('tool-registration', {
         tier: 'heuristic', file: label,
-        line: lineNumberAt(text, m.index), excerpt: `tool "${m[2]}" (${m[1]} const)`,
+        line: lines.lineNumberAt(m.index), excerpt: `tool "${m[2]}" (${m[1]} const)`,
       });
     }
-    for (const m of text.matchAll(/__ModuleLoader__[\s\S]{0,120}?id:\s*['"]([^'"]+)['"]/g)) {
-      claims.clientModuleIds.add(m[1]);
-    }
+    for (const id of clientModuleIdsIn(text)) claims.clientModuleIds.add(id);
     for (const m of text.matchAll(/https?:\/\/([a-z0-9.-]+)/gi)) {
       const host = m[1].toLowerCase();
       if (isRealHost(host)) egressHosts.add(host);
+    }
+  }
+
+  // Resolve only path fields from modules that actually call the registration
+  // API. Constants may live in a shared host/client module, so resolution is a
+  // post-pass over all scanned definitions; the consumer file itself still
+  // cannot claim ownership without a registrar.
+  for (const site of routeRegistrationSites) {
+    for (const base of resolveRouteBases(site.expression, site.definitions, globalRouteDefinitions)) {
+      claims.routeBases.add(base);
     }
   }
 
@@ -343,7 +619,9 @@ function scanSources(dir, findings) {
   // fallback must not smuggle in a static-tier summary over heuristic
   // evidence, or the bundle would pass for a source read after all.
   const aggregateTier = sourceKind === 'bundled' ? 'heuristic' : 'static';
-  if (egressHosts.size) {
+  // A URL literal is data, not an action. Host detail may enrich an existing
+  // egress finding, but must never manufacture the capability by itself.
+  if (egressHosts.size && findings.has('network-egress')) {
     findings.add('network-egress', {
       tier: aggregateTier, file: '', detail: `${sourceKind === 'bundled' ? '产物' : '源码'}中出现的主机: ${[...egressHosts].slice(0, 8).join(', ')}${egressHosts.size > 8 ? ` +${egressHosts.size - 8}` : ''}`,
     });
@@ -354,14 +632,15 @@ function scanSources(dir, findings) {
     });
   }
 
-  return { claims, hooks: [...hooks].sort(), sourceFiles, bundledFiles, sourceKind };
+  return { claims, hooks: [...hooks].sort(), sourceFiles, sourceBytes, bundledFiles, sourceKind, skipped };
 }
 
 /** @returns a full report for one installed plugin */
 export function inspectPlugin(plugin) {
   const findings = new Findings();
   const declared = scanManifest(plugin.dir, findings);
-  const { claims, hooks, sourceFiles, bundledFiles, sourceKind } = scanSources(plugin.dir, findings);
+  const { claims, hooks, sourceFiles, sourceBytes, bundledFiles, sourceKind, skipped } = scanSources(plugin.dir, findings);
+  if (declared.clientModuleId) claims.clientModuleIds.add(declared.clientModuleId);
 
   return {
     name: plugin.name,
@@ -381,6 +660,7 @@ export function inspectPlugin(plugin) {
     hooks,
     coverage: {
       sourceFiles,
+      sourceBytes,
       bundledFiles,
       // Everything below rests on build output; say so rather than implying
       // the same confidence as a source read.
@@ -392,6 +672,23 @@ export function inspectPlugin(plugin) {
       // finding above is flagged and the capability profile must be read as
       // "what got bundled in", not "what the author wrote".
       sourceKind,
+      skippedFiles: skipped.skippedFiles,
+      skipped: {
+        nonRegular: skipped.nonRegularFiles,
+        oversize: skipped.oversizeFiles,
+        unreadable: skipped.unreadableFiles,
+        changed: skipped.changedFiles,
+        limit: skipped.limitSkippedFiles,
+      },
+      limits: {
+        entriesVisited: skipped.entriesVisited,
+        filesAccepted: skipped.filesAccepted,
+        bytesAccepted: skipped.bytesAccepted,
+        entryExceeded: skipped.entryLimitExceeded === true,
+        fileExceeded: skipped.fileLimitExceeded === true,
+        totalBytesExceeded: skipped.totalBytesLimitExceeded === true,
+        depthExceeded: skipped.depthLimitExceeded === true,
+      },
     },
   };
 }

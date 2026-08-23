@@ -2,102 +2,233 @@
   <img src="./docs/images/dsh-harbor-logo.png" alt="DSH Harbor" width="120" />
 </p>
 
+<h1 align="center">DSH Harbor</h1>
+
 <p align="center">
-  <a href="./README.md"><b>English</b></a> &middot; <a href="./README.zh.md">简体中文</a>
+  <strong>Evidence-first governance for the DeepSeek Harness plugins already installed on your machine.</strong><br />
+  <sub>Capability Inventory &bull; Declared vs Detected &bull; Runtime Attribution &bull; Conflict Detection &bull; Version Drift &bull; Change Timeline</sub>
 </p>
 
-# dsh-harbor
+<p align="center">
+  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; Current plugin release: <code>0.1.0-rc.1</code> &middot; Tested with DSH <code>0.1.1-rc.2</code></sub>
+</p>
 
-A read-only mirror for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugins you have installed: what each one **can do**, where they **collide**, and what **changed** since the last scan — with `file:line` evidence for every claim.
+<p align="center">
+  <a href="./README.md"><b>English</b></a> &middot; <a href="./README.zh.md">简体中文</a> &middot; <a href="./README.zh-TW.md">繁體中文</a> &middot; <a href="./README.ja.md">日本語</a> &middot; <a href="./README.ko.md">한국어</a> &middot; <a href="./README.fr.md">Français</a> &middot; <a href="./README.es.md">Español</a> &middot; <a href="./README.de.md">Deutsch</a> &middot; <a href="./README.pt.md">Português</a> &middot; <a href="./README.ru.md">Русский</a> &middot; <a href="./README.hi.md">हिन्दी</a> &middot; <a href="./README.tr.md">Türkçe</a> &middot; <a href="./README.th.md">ไทย</a> &middot; <a href="./README.vi.md">Tiếng Việt</a> &middot; <a href="./README.id.md">Bahasa Indonesia</a>
+</p>
 
-Whether to clean anything up is your call. harbor states facts; it does not judge, gate installs, or intercept anything.
+<p align="center">
+  <a href="https://github.com/ZSeven-W/dsh-harbor/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/ZSeven-W/dsh-harbor/ci.yml?label=CI" alt="CI" /></a>
+  <a href="https://github.com/ZSeven-W/dsh-harbor/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ZSeven-W/dsh-harbor?color=64748b" alt="License" /></a>
+</p>
 
-## What it is — and what it is not
+<br />
 
-harbor does one thing: it keeps a running, evidence-backed ledger of the plugins you have installed. The ledger has three columns — the inventory itself (every installed third-party plugin, with a `file:line` citation behind every capability claim), the reconciliation between what each plugin declares and what its code actually does, and the timeline of what changed between scans.
+<p align="center">
+  <img src="./docs/images/dsh-harbor-overview.png" alt="DSH Harbor light-theme overview — runtime evidence, route attribution, versions, and scan changes" width="100%" />
+</p>
+<p align="center"><sub>The Harbor settings page in DSH light mode — live runtime registries, profile-scoped attribution, local version truth, and the change baseline.</sub></p>
 
-What harbor deliberately does not do is equally part of its design. It does not vet or gate plugins before they are installed — admission control belongs to plugin-marketplace tooling. It does not dive into upstream dependency monitoring; the upstream check covers plugin versions and stops there. It does not perform general code auditing, and it does not intercept, block, or sandbox plugin behavior.
+## Why DSH Harbor
 
-The last of these is not a scope decision but a fact about the host. DSH's Cordis runtime has no capability sandbox: a plugin runs inside the host's main Node realm, with the host's own privileges. harbor can make capabilities **visible**, **detect** them, and **reconcile** them against declarations — but it cannot shut them off. Containing plugin behavior needs support in the DSH loader itself, and the declaration flow below is how that standard gets earned with data instead of argued for in the abstract.
+DSH plugins run in the host's Node realm with the same local permissions as DSH itself. Harbor does not pretend this can be solved with a score or a badge: it keeps a read-only, evidence-backed ledger of what is installed, what each plugin declares, what its code and live host actually expose, where plugins collide, and what changed since the previous scan.
 
-Finally, harbor reports facts, not scores. Its output is always "what was detected, and where the evidence is" — never a risk level, never a quality grade. What a finding means for you is your judgment, not harbor's.
+<table>
+<tr>
+<td width="50%">
 
-> **Status: `0.1.0-rc.1`, release candidate.** `harbor scan` / `harbor manifest`, the loopback hub routes, the DSH settings panel, and both version axes — cross-profile drift and the opt-in upstream check — all work; runtime-registry evidence is wired but degrades to `available: false` outside a live host. The feature set is complete; what is still early is detector calibration against the wider ecosystem, which is exactly what an rc is for.
+### 🔎 Capability Inventory
 
-## What it looks at
+Harbor scans every installed third-party bundle across DSH profiles and reports a fixed 13-capability vocabulary. Source findings carry `file:line` evidence; manifest, filesystem, and runtime facts state their origin explicitly.
 
+</td>
+<td width="50%">
+
+### 🤝 Declared vs Detected
+
+Plugins may declare `dsh.capabilities` in `package.json`. Harbor reconciles the declaration against detection, exposes missing and unknown ids, and fails closed on malformed declarations instead of letting one bad package break the whole report.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🟢 Runtime Attribution
+
+Inside a live DSH host, Harbor enumerates tools, providers, and routes, then attributes them only to plugins installed in the active profile. Missing host registries remain visible as coverage gaps rather than empty proof.
+
+</td>
+<td width="50%">
+
+### ⚠️ Conflict Detection
+
+The ledger finds same-profile tool names, route prefixes, provider ids, client-module ids, and order-sensitive message hooks. A quoted route used by a client does not make that client the route owner.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🧭 Two Version Axes
+
+Cross-profile drift is local and always offline. The optional upstream check is separate, explicit, registry-aware, credential-redacted, and cached for six hours. `link:` and `file:` installs never masquerade as current registry versions.
+
+</td>
+<td width="50%">
+
+### 🕰️ Change Timeline
+
+Snapshots track additions, removals, version transitions, profile moves, capability changes, and claim changes. Even two artifacts exchanging profiles are reported as concrete per-profile transitions.
+
+</td>
+</tr>
+</table>
+
+## How it works
+
+```text
+~/.dsh/profiles/*
+  ├─ installed package + provenance
+  │    registry artifact | link: working tree | file: snapshot
+  ├─ declared
+  │    package.json + cordis.patch.yml
+  ├─ static
+  │    bounded source scan + file:line evidence
+  ├─ runtime (when loaded inside DSH)
+  │    tools + providers + routes + profile-scoped attribution
+  ├─ versions
+  │    local cross-profile drift + opt-in registry check
+  └─ snapshot
+       additions + removals + version/profile/capability/claim changes
 ```
-~/.dsh/profiles/*                → installed third-party bundles (npm and link: alike)
-  ├─ declared    package.json / cordis.patch.yml — what the plugin says about itself
-  ├─ runtime     tools / routes / providers / waterfalls actually registered in the host
-  ├─ static      subprocess, egress, foreign-config writes — with file:line
-  ├─ versions    drift (local, always) + upstream (networked, opt-in)
-  └─ snapshot    diff against the previous scan: new versions, new capabilities
-        └─ reconciliation: declared dsh.capabilities vs what was detected
+
+The CLI and the settings page consume the same scan core. The default path is offline. Only `harbor scan --check-updates` or the panel's **Check for updates** button contacts a registry.
+
+## Evidence you can inspect
+
+<p align="center">
+  <img src="./docs/images/dsh-harbor-evidence.png" alt="DSH Harbor light-theme plugin card with an expanded file:line Web route finding" width="100%" />
+</p>
+<p align="center"><sub>Expand any capability pill to inspect its tier, detail, and source evidence — here the Web route registration resolves to <code>src/hub/index.mjs:212</code>.</sub></p>
+
+| Tier | What Harbor actually knows |
+| --- | --- |
+| `declared` | A manifest or filesystem fact, such as client injection or an on-disk realm copy. |
+| `runtime` | A registry entry observed in the active DSH host. |
+| `static` | A source behavior matched with inspectable `file:line` evidence. |
+| `heuristic` | A pattern-based inference that deserves human review. |
+
+Harbor reports facts, not a risk score. Spawning a subprocess may be the entire purpose of a plugin; the useful question is whether that capability is visible, declared, attributable, and expected.
+
+## Install into DSH
+
+DSH is a separate package. Install the tested host version if you do not already have it:
+
+```sh
+npm install -g @deepseek-ai/dsh@0.1.1-rc.2
 ```
 
-Capabilities are a fixed set of thirteen — client injection, realm risks, realm copies, global hooks, LLM adapters, subprocesses, network egress, web routes, tool registration, MCP servers, foreign-config writes, credential handling, environment reads. Fixed, so that reports stay comparable and diffable between scans. The authoritative list is [SPEC.md](./SPEC.md) §2; the machine-readable source of truth is `src/scan/detectors.mjs`.
+For local development, install the current checkout into a Web profile and restart DSH once:
 
-The wording is deliberately neutral: **capability**, not risk. Spawning subprocesses is the whole point of some plugins. The report answers "what can this do", and leaves "should it" to you.
-
-## Versions
-
-harbor answers two version questions and keeps them apart.
-
-**Cross-profile drift** is purely local. The same plugin at different versions across profiles is a fact about this machine, so it is computed on every scan, for free. A `link:` or `file:` install is not counted as the "newest" baseline: a working tree running ahead of its published version is normal, not drift.
-
-**Upstream check** leaves the machine, so it is never part of the default scan. The CLI needs `harbor scan --check-updates`; the panel needs an explicit button press, and the text next to the button says so — it is the only action on that page that leaves your machine. Each result is one of five states:
-
-- **behind** — the registry has a newer version
-- **current** — the installed version matches the registry
-- **ahead** — the installed version is newer than the registry (a real state on a maintainer's machine)
-- **local** — a `link:` / `file:` install, which has no upstream to compare against and is never shown as "up to date"
-- **unknown** — the lookup failed
-
-The registry is read from your own `.npmrc` (including `@scope:registry` overrides), never hardcoded to npmjs. Results are cached on disk for six hours.
-
-## Installation
-
-The package is not on the registry yet, so install from a checkout:
-
-```bash
+```sh
 dsh plugin --profile web add link:/path/to/dsh-harbor
+dsh web
 ```
 
-`dsh plugin` forwards the rest of its arguments to pnpm inside the profile directory, and `link:` symlinks the profile dependency to this checkout, so rebuilds show up directly. Once `@zseven-w/dsh-harbor` is published, the registry form applies:
+For a registry install, use the prerelease `next` tag:
 
-```bash
-dsh plugin --profile web add @zseven-w/dsh-harbor@latest
+```sh
+dsh plugin --profile web add @zseven-w/dsh-harbor@next
+dsh web
 ```
 
-Restart DSH afterwards so the new profile layer is loaded.
+Open **Settings → DSH Harbor**. The panel mounts only in profiles with a Web server; the CLI remains usable in headless and CI environments.
 
-The panel appears in DSH's Web UI under **Settings** as the **DSH Harbor** section — the same mirror as the CLI: inventory with evidence, conflicts, versions, and the diff since the last scan. Its **Check for updates** button is the only action on that page that leaves your machine. The panel is part of the plugin's hub half, which mounts only in profiles with a web server; headless setups still get the full CLI.
+### Verify the installation
 
-## Usage
-
-```bash
-harbor scan                 # inventory, conflicts, and changes since last scan
-harbor scan --check-updates # + opt-in upstream check against the registry (networked)
-harbor manifest ./my-plugin # draft a dsh.capabilities block for your own plugin
+```sh
+curl http://127.0.0.1:3080/_dsh/dsh-harbor/ping
+pnpm --dir ~/.dsh/profiles/web exec harbor --version
 ```
 
-Add `--evidence` to print the `file:line` source of every capability, `--json` for the full machine-readable report, `--no-snapshot` to skip writing the diff baseline.
+A healthy ping reports four mounted Harbor routes. The package executable is profile-scoped: installing into `web` does not place `harbor` on your global shell `PATH`.
 
-The scanner is dependency-free and does not need DSH installed, so it also runs in CI.
+## CLI
 
-## For plugin authors
+```sh
+harbor scan
+harbor scan --evidence
+harbor scan --json --no-snapshot
+harbor scan --json --check-updates
+harbor manifest ./my-plugin
+```
 
-`harbor manifest` reads your plugin the same way it reads everyone else's and drafts a `dsh.capabilities` block for your `package.json`. Once declared, harbor's check becomes **declared vs detected**: capabilities you declared but never use are noise you can trim, and capabilities detected but undeclared are the ones worth explaining. harbor declares its own `dsh.capabilities` too, so the flow can be reproduced on the tool itself: run `harbor manifest .` in this repository.
+Invocation choices:
 
-The convention itself is written down in [SPEC.md](./SPEC.md) ([SPEC.zh.md](./SPEC.zh.md)). In one line: `dsh.capabilities` is a plain list in `package.json` stating what your plugin's code actually does. Declaring it is cheap and pays twice — audit tooling like harbor can reconcile your words against your code, and the people running your plugin can see you are not hiding anything. Self-check your own declaration at any time with `harbor manifest <dir>`.
+```sh
+# installed in the web profile
+pnpm --dir ~/.dsh/profiles/web exec harbor scan
 
-## Limits, stated plainly
+# source checkout
+node /path/to/dsh-harbor/src/cli.mjs scan
 
-harbor reads every plugin's source, which makes it the most privileged thing in the room. It appears in its own report.
+# one-off registry run after publication
+pnpm dlx @zseven-w/dsh-harbor@next scan
+```
 
-Once the upstream check is enabled, harbor itself has network-egress capability, and its `dsh.capabilities` declaration already lists it.
+`--help` and `--version` are side-effect free. Human-readable output strips terminal control sequences from untrusted package metadata; JSON preserves the original machine data. `--no-snapshot` prevents baseline writes.
+
+## Capability vocabulary
+
+| Surface | Capability ids |
+| --- | --- |
+| UI and host routes | `client-injection`, `web-routes` |
+| Agent and model surface | `tool-registration`, `llm-adapter`, `global-hook`, `mcp-server` |
+| Machine and data access | `subprocess`, `network-egress`, `env-read`, `credential-handling`, `foreign-config` |
+| Module-realm integrity | `realm-risk`, `realm-copy` |
+
+The full, stable definitions and declaration rules live in [SPEC.md](./SPEC.md) and [SPEC.zh.md](./SPEC.zh.md). Authors can draft the `capabilities` member to merge into an existing `dsh` object:
+
+```sh
+harbor manifest /path/to/my-plugin
+```
+
+Always review the draft. Detection is deliberately conservative and pattern based; dynamic calls can be missed, and examples or dead code can look live.
+
+## Version and snapshot semantics
+
+- **Cross-profile drift** compares actual installed registry artifacts. `link:` working trees and `file:` snapshots stay visible but do not define the registry baseline.
+- **Upstream checks** read your npm registry configuration, keep cache entries isolated by registry and package name, redact credentials from errors, and return `behind`, `current`, `ahead`, `local`, or `unknown`.
+- **Snapshots** live under `~/.config/dsh-harbor/` and track profile membership as well as artifact identity, so profile swaps and upgrades cannot disappear behind deduplication.
+
+## Trust model and limits
+
+- Harbor is a **read-only mirror**, not a sandbox, installer gate, or policy engine.
+- The default scan never contacts the network. The upstream check is the sole networked panel action.
+- Source, manifest, and freshness reads are bounded, regular-file-only, and no-follow; skipped or over-limit coverage is surfaced.
+- Runtime waterfall dispatch modes are not enumerable in the current host API, so Harbor marks that runtime evidence as unavailable instead of guessing.
+- Static analysis can produce false positives and false negatives. Evidence is for review, not blind enforcement.
+
+## Develop and verify
+
+```sh
+pnpm install
+pnpm run typecheck
+pnpm test
+pnpm run build:client
+npm run smoke:pack
+```
+
+The test runner is compatible with Node 20 and Windows. CI covers Node 20/24 on Ubuntu and Windows. `smoke:pack` packs the real payload, installs it with plain npm in an empty directory, imports the public entry, runs the installed CLI, and checks required files and modes.
+
+## Ecosystem
+
+- [DSH Android](https://github.com/ZSeven-W/dsh-android) — a live Android emulator or USB device inside a conversation
+- [DSH Crew](https://github.com/ZSeven-W/dsh-crew) — dispatch work to DSH agents from Claude Code, Codex, Antigravity, and Grok
+- [DSH iOS](https://github.com/ZSeven-W/dsh-ios) — a live iOS Simulator or USB-connected iPhone inside a conversation
+- [DSH Noema](https://github.com/ZSeven-W/dsh-noema) — durable, inspectable long-term memory for DSH
+- [DSH OpenPencil](https://github.com/ZSeven-W/dsh-openpencil) — inspect and edit real OpenPencil design documents inside a conversation
 
 ## License
 
-MIT
+[MIT](./LICENSE) — Copyright (c) 2026 ZSeven-W

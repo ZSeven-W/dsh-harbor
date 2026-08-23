@@ -11,6 +11,49 @@ import { CAPABILITIES } from './detectors.mjs';
 // Create a lookup table of capability id → full record.
 const CAPABILITY_MAP = Object.fromEntries(CAPABILITIES.map((c) => [c.id, c]));
 const KNOWN_IDS = new Set(CAPABILITIES.map((c) => c.id));
+const MAX_INVALID_ITEMS = 20;
+
+function valueType(value) {
+  if (Array.isArray(value)) return 'array';
+  if (value === null) return 'null';
+  return typeof value;
+}
+
+/**
+ * Validate the untrusted package.json declaration without ever handing a
+ * non-array to array methods. Valid string members in a mixed array remain
+ * useful for the ordinary reconciliation diff, but the declaration as a
+ * whole is still invalid and therefore always drift (fail closed).
+ */
+function normaliseDeclaration(raw) {
+  if (Array.isArray(raw) && raw.every((value) => typeof value === 'string')) {
+    return { declared: raw, invalidDeclaration: null };
+  }
+
+  const received = valueType(raw);
+  const invalidEntries = Array.isArray(raw)
+    ? raw.flatMap((value, index) => typeof value === 'string' ? [] : [{ index, type: valueType(value) }])
+    : [];
+  const declared = Array.isArray(raw) ? raw.filter((value) => typeof value === 'string') : [];
+  const invalidItemCount = invalidEntries.length;
+  const shownIndices = invalidEntries.slice(0, MAX_INVALID_ITEMS).map((item) => item.index).join(', ');
+  const summary = received === 'array'
+    ? `${invalidItemCount} non-string item${invalidItemCount === 1 ? '' : 's'} at index ${shownIndices}${invalidItemCount > MAX_INVALID_ITEMS ? ', …' : ''}`
+    : `received ${received}`;
+  const sentinel = `<invalid dsh.capabilities: expected string[], ${summary}>`;
+
+  return {
+    declared,
+    invalidDeclaration: {
+      expected: 'string[]',
+      received,
+      invalidItemCount,
+      invalidItems: invalidEntries.slice(0, MAX_INVALID_ITEMS),
+      message: `dsh.capabilities 必须是字符串数组；${summary}`,
+      sentinel,
+    },
+  };
+}
 
 /**
  * Reconcile declared capabilities against detected ones.
@@ -30,13 +73,13 @@ const KNOWN_IDS = new Set(CAPABILITIES.map((c) => c.id));
  * @returns {Object}
  */
 export function reconcile(report) {
-  const declared = report.declared.declaredCapabilities;
+  const rawDeclared = report.declared.declaredCapabilities;
 
   // Extract detected capability ids from the Findings map.
   const detectedIds = Object.keys(report.capabilities).sort();
 
   // Plugin did not declare any capabilities — it did not participate.
-  if (declared === null) {
+  if (rawDeclared === null) {
     return {
       declared: null,
       detected: detectedIds,
@@ -47,19 +90,23 @@ export function reconcile(report) {
     };
   }
 
+  const { declared, invalidDeclaration } = normaliseDeclaration(rawDeclared);
+
   const declaredSet = new Set(declared);
   const detectedSet = new Set(detectedIds);
 
   // Partition declared capabilities by their status.
   const undeclared = detectedIds.filter((id) => !declaredSet.has(id));
   const unused = declared.filter((id) => !detectedSet.has(id)).sort();
-  const unknown = declared.filter((id) => !KNOWN_IDS.has(id)).sort();
+  const unknown = declared.filter((id) => !KNOWN_IDS.has(id));
+  if (invalidDeclaration) unknown.push(invalidDeclaration.sentinel);
+  unknown.sort();
 
   // Drift exists if the author missed declaring any detected capability,
   // or made a typo/stale-version mistake in a declaration.
-  const hasDrift = undeclared.length > 0 || unknown.length > 0;
+  const hasDrift = undeclared.length > 0 || unknown.length > 0 || invalidDeclaration !== null;
 
-  return {
+  const result = {
     declared: declared.slice().sort(),
     detected: detectedIds,
     undeclared: undeclared.sort(),
@@ -67,10 +114,12 @@ export function reconcile(report) {
     unknown,
     status: hasDrift ? 'drift' : 'match',
   };
+  if (invalidDeclaration) result.invalidDeclaration = invalidDeclaration;
+  return result;
 }
 
 /**
- * Draft a capabilities declaration for the author to copy into package.json.
+ * Draft a capabilities declaration for the author to merge into package.json.
  *
  * Takes a report and generates both the JSON snippet and a checklist of notes
  * so the author can review what the scanner found before pasting.
@@ -82,17 +131,12 @@ export function draftManifest(report) {
   // Detected capabilities, sorted.
   const detected = Object.keys(report.capabilities).sort();
 
-  // Format the JSON snippet: a code block ready to paste.
-  const jsonLines = [
-    '"dsh": {',
-    '  "capabilities": [',
-    ...detected.map((id) => `    "${id}",`),
-  ];
-  // Remove trailing comma from the last entry.
-  jsonLines[jsonLines.length - 1] = jsonLines[jsonLines.length - 1].slice(0, -1);
-  jsonLines.push('  ]', '}');
-
-  const json = jsonLines.join('\n');
+  // Return a standalone, parseable object containing only the field that
+  // belongs inside package.json's existing `dsh` object. Emitting a complete
+  // `dsh` block invites authors to replace bundle/client metadata by mistake;
+  // hand-building the array also used to produce malformed JSON for the empty
+  // case because there was no final capability whose comma could be removed.
+  const json = JSON.stringify({ capabilities: detected }, null, 2);
 
   // Notes: one line per capability to let the author verify each.
   const notes = detected.map((id) => {

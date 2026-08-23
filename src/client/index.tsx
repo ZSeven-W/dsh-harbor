@@ -2,7 +2,7 @@
 // capability inventory with evidence, cross-plugin conflicts, and the diff
 // since the last scan. Talks only to the plugin's own loopback routes.
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 
 export const inject = ['slots', 'locale'];
@@ -23,7 +23,7 @@ const COPY = {
   zh: {
     label: 'DSH Harbor',
     title: 'DSH Harbor',
-    intro: '已安装第三方插件的能力清单：每项能力都带 file:line 证据，跨插件冲突与自上次扫描以来的变化一并列出。只读镜像——陈述事实，不下结论。',
+    intro: '已安装第三方插件的能力清单：源码检出项附 file:line，manifest、文件系统与运行时事实明确标注来源；跨插件冲突与扫描变化一并列出。只读镜像——陈述事实，不下结论。',
     rescan: '重新扫描',
     scanning: '扫描中…',
     loading: '加载中…',
@@ -31,18 +31,20 @@ const COPY = {
     clash: '撞车',
     orderSensitive: '顺序敏感',
     versions: '版本',
-    versionsAgree: '各 profile 版本一致',
-    latestPublished: (newest: string) => `已发布最新 ${newest}`,
+    versionsAgree: '可比较的 registry 安装未发现版本分歧；link/file 本地安装不参与此结论。',
+    localBaseline: (newest: string) => `本机已安装最高版本 ${newest}`,
     local: '本地',
     localFile: '本地 file',
     checkUpdates: '检查上游更新',
     checkingUpdates: '检查中…',
-    checkUpdatesHint: '这是本页唯一会离开你这台机器的动作',
+    checkUpdatesHint: '这是本页唯一会离开你这台机器的动作；registry 结果最多缓存 6 小时',
     upToDate: '已是最新',
     aheadOfRegistry: '本机比上游新',
     localInstall: '本地安装，无上游可比',
     lookupFailed: '查询失败',
-    checkedAt: (t: string, hosts: string) => `检查于 ${t} · ${hosts}`,
+    checkedAt: (t: string, hosts: string) => `请求完成于 ${t}${hosts ? ` · ${hosts}` : ''}`,
+    cached: '缓存',
+    noUpdateResults: '没有可检查的安装项。',
     changes: '变化',
     firstRun: '首次扫描，已建立基线。',
     noChanges: '自上次扫描以来无变化。',
@@ -55,11 +57,26 @@ const COPY = {
     filterNotDeclared: '未声明',
     filterMatch: '声明一致',
     installs: '安装位置',
-    claims: '工具 · 路由 · Provider',
-    tools: '工具', routes: '路由', providers: 'Provider', hooks: '消息钩子',
+    claims: '工具 · 路由 · Provider · 客户端模块',
+    tools: '工具', routes: '路由', providers: 'Provider', clientModules: '客户端模块', hooks: '消息钩子',
+    runtime: '运行时证据',
+    runtimeAvailable: '宿主注册表可探测',
+    runtimeUnavailable: '宿主注册表不可探测',
+    runtimeUnknown: '宿主注册表状态未知',
+    runtimeLegacy: '当前 Hub 未返回运行时证据；其余静态报告仍可正常查看。',
+    runtimeCollectedAt: (t: string) => `采集于 ${t}`,
+    runtimeEmpty: '未枚举到条目',
+    attribution: '运行时归属',
+    attributed: '已归属',
+    unattributed: '未归属',
+    attributionMissing: '当前 Hub 未返回归属结果。',
+    runtimeNotes: '备注',
+    runtimeKinds: { tool: '工具', provider: 'Provider', route: '路由' },
     caps: '能力',
     noCaps: '未检出能力。',
     bundled: '结论基于产物推断',
+    coverageSkipped: (n: number, detail: string) => `扫描覆盖缺口：跳过 ${n} 个文件${detail ? `（${detail}）` : ''}`,
+    coverageReasons: { nonRegular: '非普通文件', oversize: '超限', unreadable: '不可读' },
     recNotDeclared: '未声明 dsh.capabilities',
     recMatch: '声明与检出一致',
     recUnused: (list: string) => `（声明宽于实际：${list}）`,
@@ -86,19 +103,24 @@ const COPY = {
     },
     changeTypes: {
       added: '新增', removed: '移除', version: '版本变更',
+      'profile-move': '制品变更',
       'capability-added': '新增能力', 'capability-removed': '移除能力',
       'claims-changed': 'claims 变更',
     },
     staleHub: '本 DSH 实例还在跑旧版插件，缺少该接口 —— 重启 DSH 后再试',
     emptyResponse: (path: string, status: number) => `${path} → HTTP ${status}，响应为空`,
     badJson: (path: string, body: string) => `${path} → 非 JSON 响应: ${body}`,
+    httpError: (path: string, status: number, detail: string) => `${path} → HTTP ${status}${detail ? `：${detail}` : ''}`,
+    operationFailed: (path: string, detail: string) => `${path} 请求失败${detail ? `：${detail}` : ''}`,
+    missingReport: '/report 返回成功，但缺少 report 数据',
+    missingUpdates: '/updates 返回成功，但缺少 updates 数据',
     bannerHubStale: 'harbor 的扫描代码已更新，但运行中的 DSH 仍在使用启动时载入的旧版本。请重启 DSH，否则本页显示的结论可能不完整。',
     bannerPanelStale: '本页面用的是旧版界面代码，请刷新页面。',
   },
   en: {
     label: 'DSH Harbor',
     title: 'DSH Harbor',
-    intro: 'A capability inventory of your installed third-party plugins — every capability with file:line evidence, cross-plugin conflicts, and what changed since the last scan. Read-only: harbor states facts, never verdicts.',
+    intro: 'An inventory of installed third-party plugins: source findings carry file:line evidence, while manifest, filesystem, and runtime facts label their origin; conflicts and scan changes are included. Read-only: facts, never verdicts.',
     rescan: 'Rescan',
     scanning: 'Scanning…',
     loading: 'Loading…',
@@ -106,18 +128,20 @@ const COPY = {
     clash: 'clash',
     orderSensitive: 'order-sensitive',
     versions: 'Versions',
-    versionsAgree: 'All profiles agree',
-    latestPublished: (newest: string) => `latest published ${newest}`,
+    versionsAgree: 'No drift found among comparable registry installs; local link/file installs are not part of this conclusion.',
+    localBaseline: (newest: string) => `Highest installed version ${newest}`,
     local: 'local',
     localFile: 'local file',
     checkUpdates: 'Check for updates',
     checkingUpdates: 'Checking…',
-    checkUpdatesHint: 'The only action on this page that leaves your machine',
+    checkUpdatesHint: 'The only action on this page that leaves your machine; registry results are cached for up to 6 hours',
     upToDate: 'up to date',
     aheadOfRegistry: 'ahead of registry',
     localInstall: 'local install, no upstream',
     lookupFailed: 'lookup failed',
-    checkedAt: (t: string, hosts: string) => `Checked ${t} · ${hosts}`,
+    checkedAt: (t: string, hosts: string) => `Request completed ${t}${hosts ? ` · ${hosts}` : ''}`,
+    cached: 'cached',
+    noUpdateResults: 'No comparable installs to check.',
     changes: 'Changes',
     firstRun: 'First scan — baseline established.',
     noChanges: 'Nothing changed since the last scan.',
@@ -130,11 +154,26 @@ const COPY = {
     filterNotDeclared: 'Not declared',
     filterMatch: 'In sync',
     installs: 'Installed at',
-    claims: 'Tools · routes · providers',
-    tools: 'Tools', routes: 'Routes', providers: 'Providers', hooks: 'Message hooks',
+    claims: 'Tools · routes · providers · client modules',
+    tools: 'Tools', routes: 'Routes', providers: 'Providers', clientModules: 'Client modules', hooks: 'Message hooks',
+    runtime: 'Runtime evidence',
+    runtimeAvailable: 'host registries discoverable',
+    runtimeUnavailable: 'host registries not discoverable',
+    runtimeUnknown: 'host registry status unknown',
+    runtimeLegacy: 'This hub did not return runtime evidence; the rest of the static report remains available.',
+    runtimeCollectedAt: (t: string) => `Collected ${t}`,
+    runtimeEmpty: 'No entries enumerated',
+    attribution: 'Runtime attribution',
+    attributed: 'Attributed',
+    unattributed: 'Unattributed',
+    attributionMissing: 'This hub did not return attribution results.',
+    runtimeNotes: 'Notes',
+    runtimeKinds: { tool: 'Tool', provider: 'Provider', route: 'Route' },
     caps: 'Capabilities',
     noCaps: 'No capabilities detected.',
     bundled: 'Conclusions inferred from build output',
+    coverageSkipped: (n: number, detail: string) => `Coverage gap: skipped ${n} file${n === 1 ? '' : 's'}${detail ? ` (${detail})` : ''}`,
+    coverageReasons: { nonRegular: 'non-regular', oversize: 'oversize', unreadable: 'unreadable' },
     recNotDeclared: 'no dsh.capabilities declared',
     recMatch: 'declaration matches detection',
     recUnused: (list: string) => ` (declared but unused: ${list})`,
@@ -161,12 +200,17 @@ const COPY = {
     },
     changeTypes: {
       added: 'added', removed: 'removed', version: 'version',
+      'profile-move': 'artifact changed',
       'capability-added': 'capability added', 'capability-removed': 'capability removed',
       'claims-changed': 'claims changed',
     },
     staleHub: 'This DSH instance is still running an older build of the plugin and lacks this route — restart DSH and retry',
     emptyResponse: (path: string, status: number) => `${path} → HTTP ${status}, empty response`,
     badJson: (path: string, body: string) => `${path} → non-JSON response: ${body}`,
+    httpError: (path: string, status: number, detail: string) => `${path} → HTTP ${status}${detail ? `: ${detail}` : ''}`,
+    operationFailed: (path: string, detail: string) => `${path} request failed${detail ? `: ${detail}` : ''}`,
+    missingReport: '/report succeeded without report data',
+    missingUpdates: '/updates succeeded without updates data',
     bannerHubStale: "harbor's scanner has been updated, but the running DSH still uses the copy it loaded at boot. Restart DSH — until then this page may be quietly incomplete.",
     bannerPanelStale: 'This page is running an older build of the panel. Reload the page.',
   },
@@ -262,6 +306,12 @@ function fmtTime(iso?: string | null): string {
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleString();
 }
 
+function stringList(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string')
+    : [];
+}
+
 /**
  * Change details are rendered server-side in zh (e.g. "新增能力：客户端注入").
  * In the en UI, swap the capability labels via the fetched table and strip the
@@ -276,8 +326,25 @@ function localizeDetail(detail: string, type: string, zh: boolean, caps: any[] |
   }
   return d
     .replace(/新增能力：/g, '').replace(/移除能力：/g, '').replace(/claims 变更：/g, '')
+    .replace(/：制品变更（版本 ([^)]+)）/g, ': artifact changed (v$1)')
     .replace(/版本 /g, 'v').replace(/工具 /g, 'tool ').replace(/路由 /g, 'route ')
     .replace(/、/g, ', ').replace(/，/g, ', ');
+}
+
+const RUNTIME_NOTE_EN: Record<string, string> = {
+  '未提供宿主上下文（ctx），无法采集运行时证据': 'No host context (ctx) was provided, so runtime evidence cannot be collected.',
+  '该 ctx 未暴露任何宿主服务（tools / llm / webServer 均不可用），运行时证据不可采集': 'This ctx exposes no host services (tools / llm / webServer), so runtime evidence cannot be collected.',
+  '该 DSH 版本未暴露工具注册表，本项证据缺失': 'This DSH version does not expose the tool registry; evidence is unavailable for this item.',
+  '工具服务存在，但未暴露可枚举的注册表，本项证据缺失': 'The tool service exists but exposes no enumerable registry; evidence is unavailable for this item.',
+  '该 DSH 版本未暴露 LLM provider 注册表，本项证据缺失': 'This DSH version does not expose the LLM provider registry; evidence is unavailable for this item.',
+  'LLM 服务存在，但未暴露可枚举的 provider 列表，本项证据缺失': 'The LLM service exists but exposes no enumerable provider list; evidence is unavailable for this item.',
+  '该 DSH 版本未暴露路由注册表，本项证据缺失': 'This DSH version does not expose the route registry; evidence is unavailable for this item.',
+  'webServer 存在，但未暴露可枚举的路由表，本项证据缺失': 'webServer exists but exposes no enumerable route table; evidence is unavailable for this item.',
+  '宿主未提供可枚举且带 dispatch mode 的 waterfall 注册表，本项运行时证据缺失': 'The host exposes no enumerable waterfall registry with dispatch modes; runtime evidence is unavailable for this item.',
+};
+
+function localizeRuntimeNote(note: string, zh: boolean): string {
+  return zh ? note : (RUNTIME_NOTE_EN[note] ?? note);
 }
 
 function HarborPanel({ ctx }: { ctx: any }) {
@@ -301,7 +368,12 @@ function HarborPanel({ ctx }: { ctx: any }) {
   const [updates, setUpdates] = useState<any>(null);
   const [checking, setChecking] = useState(false);
   const [updateError, setUpdateError] = useState('');
-  // One open evidence pane at a time, keyed by "pluginDir\u0000capId".
+  // Sequence numbers make superseded async requests inert. In particular, a
+  // registry check that finishes after Rescan must not repopulate old results
+  // under the new report.
+  const reportRequestId = useRef(0);
+  const updatesRequestId = useRef(0);
+  // One open evidence pane at a time, keyed by "pluginIdentity\u0000capId".
   const [expanded, setExpanded] = useState<string | null>(null);
   const [filter, setFilter] = useState('all');
 
@@ -318,7 +390,13 @@ function HarborPanel({ ctx }: { ctx: any }) {
         ? `${copy.staleHub}（${path} → HTTP ${res.status}）`
         : copy.emptyResponse(path, res.status));
     }
-    try { return JSON.parse(text); } catch { throw new Error(copy.badJson(path, text.slice(0, 160))); }
+    let value: any;
+    try { value = JSON.parse(text); } catch { throw new Error(copy.badJson(path, text.slice(0, 160))); }
+    if (!res.ok) {
+      const detail = typeof value?.error === 'string' ? value.error : '';
+      throw new Error(copy.httpError(path, res.status, detail));
+    }
+    return value;
   }, [copy]);
   /** Every request carries the active locale: the panel is the authority on it
    * (DSH's setting may be unset), and the hub localizes its own strings from it. */
@@ -326,38 +404,58 @@ function HarborPanel({ ctx }: { ctx: any }) {
   const get = useCallback(async (path: string) => readJson(await fetch(withLang(path), { cache: 'no-store' }), path), [readJson, withLang]);
 
   const refresh = useCallback(async (force: boolean) => {
+    const requestId = ++reportRequestId.current;
+    // A new report invalidates any in-flight update comparison because its
+    // result was computed from the previous install inventory.
+    ++updatesRequestId.current;
     setBusy(true);
+    setChecking(false);
+    setNotice('');
+    // A requested scan replaces the visible report. Keeping the previous
+    // report under a failed refresh makes stale facts look like a successful
+    // new scan, so clear it (and its derived update results) up front.
+    setReport(null);
+    setFreshness(null);
+    setExpanded(null);
+    setUpdates(null);
+    setUpdateError('');
     // The report is the page; the capabilities table only decorates it. Fetch
     // them independently so a hub that lacks one route cannot blank the other.
     try {
       const r = await get(force ? '/report?refresh=1' : '/report');
-      if (r.ok) { setReport(r.report ?? null); setFreshness(r.freshness ?? null); setNotice(''); }
+      if (!r?.ok) throw new Error(copy.operationFailed('/report', String(r?.error ?? 'ok=false')));
+      if (r.report == null) throw new Error(copy.missingReport);
+      if (requestId !== reportRequestId.current) return;
+      setReport(r.report);
+      setFreshness(r.freshness ?? null);
     } catch (e: any) {
-      setNotice(String(e?.message ?? e));
+      if (requestId === reportRequestId.current) setNotice(String(e?.message ?? e));
     }
     try {
       const c = await get('/capabilities');
-      if (c.ok) setCaps(c.capabilities ?? []);
+      if (requestId === reportRequestId.current && c.ok) setCaps(c.capabilities ?? []);
     } catch { /* labels fall back to raw ids */ }
-    setBusy(false);
-  }, [get]);
+    if (requestId === reportRequestId.current) setBusy(false);
+  }, [copy, get]);
 
   /** The one networked action on this page. Runs only on an explicit click —
    * never from useEffect — and reuses get/withLang so it carries the locale.
    * If the running instance predates this route, readJson reports "restart DSH". */
   const checkUpdates = useCallback(async () => {
+    const requestId = ++updatesRequestId.current;
     setChecking(true);
     setUpdateError('');
     setUpdates(null);
     try {
       const r = await get('/updates');
-      if (r.ok) setUpdates(r.updates ?? null);
-      else setUpdateError(String(r.error ?? ''));
+      if (!r?.ok) throw new Error(copy.operationFailed('/updates', String(r?.error ?? 'ok=false')));
+      if (r.updates == null) throw new Error(copy.missingUpdates);
+      if (requestId === updatesRequestId.current) setUpdates(r.updates);
     } catch (e: any) {
-      setUpdateError(String(e?.message ?? e));
+      if (requestId === updatesRequestId.current) setUpdateError(String(e?.message ?? e));
     }
-    setChecking(false);
-  }, [get]);
+    if (requestId === updatesRequestId.current) setChecking(false);
+  }, [copy, get]);
 
   useEffect(() => {
     void refresh(false);
@@ -411,14 +509,27 @@ function HarborPanel({ ctx }: { ctx: any }) {
   const pluginCard = (p: any) => {
     const rec = p.reconciliation ?? { status: 'not-declared' };
     const capIds = Object.keys(p.capabilities ?? {});
+    // One realpath can now yield several provenance identities. Directory-only
+    // keys would make React reuse the wrong card and couple their evidence
+    // expanders, so the scan identity is authoritative when available.
+    const pluginKey = String(p.identity ?? p.dir ?? p.name ?? '(unknown)');
     const claimRows: Array<[string, string[]]> = [
-      [copy.tools, p.claims?.toolNames ?? []],
-      [copy.routes, p.claims?.routeBases ?? []],
-      [copy.providers, p.claims?.providerIds ?? []],
-      [copy.hooks, p.hooks ?? []],
+      [copy.tools, stringList(p.claims?.toolNames)],
+      [copy.routes, stringList(p.claims?.routeBases)],
+      [copy.providers, stringList(p.claims?.providerIds)],
+      [copy.clientModules, stringList(p.claims?.clientModuleIds)],
+      [copy.hooks, stringList(p.hooks)],
     ];
+    const skippedCount = Number.isFinite(p.coverage?.skippedFiles) ? Number(p.coverage.skippedFiles) : 0;
+    const skippedDetail = p.coverage?.skipped && typeof p.coverage.skipped === 'object'
+      ? Object.entries(copy.coverageReasons)
+        .map(([key, label]) => [label, Number(p.coverage.skipped[key] ?? 0)] as const)
+        .filter(([, count]) => count > 0)
+        .map(([label, count]) => `${label} ${count}`)
+        .join(' · ')
+      : '';
     return (
-      <div key={p.dir} style={S.block}>
+      <div key={pluginKey} style={S.block}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' as const }}>
           <span style={{ fontWeight: 600, fontSize: 13.5 }}>{p.name}</span>
           <span style={{ ...S.mono, fontSize: 11.5, opacity: 0.65 }}>@{p.version}</span>
@@ -435,6 +546,11 @@ function HarborPanel({ ctx }: { ctx: any }) {
         {!!p.description && <div style={{ fontSize: 11.5, opacity: 0.6, marginTop: -6 }}>{p.description}</div>}
         {p.coverage?.sourceAvailable === false && (
           <div style={{ fontSize: 11.5, opacity: 0.7, marginTop: -6 }}>ⓘ {copy.bundled}</div>
+        )}
+        {skippedCount > 0 && (
+          <div style={{ fontSize: 11.5, color: DRIFT, opacity: 0.95, marginTop: -6 }}>
+            ⚠ {copy.coverageSkipped(skippedCount, skippedDetail)}
+          </div>
         )}
 
         <div style={S.group}>{copy.installs}</div>
@@ -467,7 +583,7 @@ function HarborPanel({ ctx }: { ctx: any }) {
           ) : (
             <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 6 }}>
               {capIds.map((id) => {
-                const key = `${p.dir}\u0000${id}`;
+                const key = `${pluginKey}\u0000${id}`;
                 const open = expanded === key;
                 const tier = p.capabilities[id]?.tier;
                 return (
@@ -487,7 +603,7 @@ function HarborPanel({ ctx }: { ctx: any }) {
               })}
             </div>
           )}
-          {expanded && expanded.startsWith(`${p.dir}\u0000`) && evidenceBlock(p, expanded.slice(p.dir.length + 1))}
+          {expanded && expanded.startsWith(`${pluginKey}\u0000`) && evidenceBlock(p, expanded.slice(pluginKey.length + 1))}
         </div>
       </div>
     );
@@ -515,13 +631,48 @@ function HarborPanel({ ctx }: { ctx: any }) {
   const plugins = report?.plugins ?? [];
   const shown = plugins.filter(matches);
   const versionDrift = report?.versionDrift ?? [];
-  const profilesByIdentity = new Map((report?.plugins ?? []).map((p: any) => [p.identity, (p.installs ?? []).map((i: any) => i.profile)]));
+  const profilesByIdentity = new Map<string, string[]>((report?.plugins ?? []).map((p: any) => [
+    String(p.identity ?? ''),
+    (Array.isArray(p.installs) ? p.installs : [])
+      .map((i: any) => i?.profile)
+      .filter((profile: unknown): profile is string => typeof profile === 'string'),
+  ]));
   const updateResults = updates?.results ?? [];
   const sortedUpdateResults = [...updateResults].sort((a: any, b: any) => {
     const ai = UPDATE_STATUS_ORDER.indexOf(a.status);
     const bi = UPDATE_STATUS_ORDER.indexOf(b.status);
     return (ai < 0 ? UPDATE_STATUS_ORDER.length : ai) - (bi < 0 ? UPDATE_STATUS_ORDER.length : bi);
   });
+  // Runtime fields were added after the first hub shape. Treat absence as
+  // "not supplied by this hub", not `available: false`, so an old instance
+  // keeps rendering without manufacturing a negative observation.
+  const runtime = report?.runtime && typeof report.runtime === 'object' ? report.runtime : null;
+  const attribution = report?.attribution && typeof report.attribution === 'object' ? report.attribution : null;
+  const runtimeRows: Array<[string, string[]]> = runtime ? [
+    [copy.tools, stringList(runtime.tools)],
+    [copy.providers, stringList(runtime.providers)],
+    [copy.routes, stringList(runtime.routes)],
+  ] : [];
+  const attributed = attribution && Array.isArray(attribution.matched) ? attribution.matched : [];
+  const unattributed = attribution && Array.isArray(attribution.unattributed) ? attribution.unattributed : [];
+  const runtimeKind = (kind: unknown) => {
+    if (kind === 'tool' || kind === 'provider' || kind === 'route') return copy.runtimeKinds[kind];
+    return typeof kind === 'string' ? kind : '?';
+  };
+  const runtimeValues = (values: string[]) => (<>
+    {values.length === 0 ? (
+      <span style={{ fontSize: 11.5, opacity: 0.5 }}>{copy.runtimeEmpty}</span>
+    ) : (<>
+      {values.slice(0, MAX_CLAIM_ITEMS).map((value) => (
+        <span key={value} style={{ ...S.mono, fontSize: 11.5 }}>{value}</span>
+      ))}
+      {values.length > MAX_CLAIM_ITEMS && (
+        <span title={values.slice(MAX_CLAIM_ITEMS).join(', ')} style={{ fontSize: 11, opacity: 0.55 }}>
+          +{values.length - MAX_CLAIM_ITEMS}
+        </span>
+      )}
+    </>)}
+  </>);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13, lineHeight: 1.55 }}>
@@ -552,7 +703,12 @@ function HarborPanel({ ctx }: { ctx: any }) {
       )}
 
       {report === null && busy && <div style={{ opacity: 0.55 }}>{copy.loading}</div>}
-      {notice !== '' && <div style={{ fontSize: 12, opacity: 0.8, whiteSpace: 'pre-wrap' as const }}>{notice}</div>}
+      {notice !== '' && (
+        <div role="alert" style={{
+          border: '1px solid rgba(248,81,73,0.55)', color: CLASH, background: 'rgba(248,81,73,0.06)',
+          borderRadius: 8, padding: '7px 12px', fontSize: 12, whiteSpace: 'pre-wrap' as const,
+        }}>⚠ {notice}</div>
+      )}
 
       {report && (report.conflicts ?? []).length > 0 && (<>
         <div style={S.section}>{copy.conflicts}</div>
@@ -581,6 +737,75 @@ function HarborPanel({ ctx }: { ctx: any }) {
       </>)}
 
       {report && (<>
+        <div style={S.section}>{copy.runtime}</div>
+        {runtime === null ? (
+          <div style={{ fontSize: 12.5, opacity: 0.65 }}>{copy.runtimeLegacy}</div>
+        ) : (
+          <div style={{ ...S.block, gap: 7 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' as const }}>
+              <span style={{
+                fontSize: 11, padding: '1px 8px', borderRadius: 99, border: '1px solid rgba(128,128,128,0.35)',
+                opacity: runtime.available === true ? 0.9 : 0.7,
+              }}>
+                {runtime.available === true
+                  ? copy.runtimeAvailable
+                  : runtime.available === false ? copy.runtimeUnavailable : copy.runtimeUnknown}
+              </span>
+              {runtime.collectedAt && (
+                <span style={{ fontSize: 11, opacity: 0.55 }}>{copy.runtimeCollectedAt(fmtTime(runtime.collectedAt))}</span>
+              )}
+            </div>
+
+            {runtimeRows.map(([label, values]) => (
+              <div key={label} style={{ display: 'flex', gap: 7, flexWrap: 'wrap' as const, alignItems: 'baseline' }}>
+                <span style={{ fontSize: 11, opacity: 0.55, minWidth: 62 }}>{label}</span>
+                {runtimeValues(values)}
+              </div>
+            ))}
+
+            <div style={S.group}>{copy.attribution}</div>
+            {attribution === null ? (
+              <div style={{ fontSize: 11.5, opacity: 0.55, marginTop: -4 }}>{copy.attributionMissing}</div>
+            ) : attributed.length === 0 && unattributed.length === 0 ? (
+              <div style={{ fontSize: 11.5, opacity: 0.5, marginTop: -4 }}>{copy.runtimeEmpty}</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 3, marginTop: -4 }}>
+                {attributed.length > 0 && (
+                  <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' as const, alignItems: 'baseline' }}>
+                    <span style={{ fontSize: 11, opacity: 0.55, minWidth: 62 }}>{copy.attributed}</span>
+                    {attributed.map((item: any, i: number) => (
+                      <span key={`${item?.kind}\u0000${item?.key}\u0000${item?.plugin}\u0000${i}`} style={{ ...S.mono, fontSize: 11.5 }}>
+                        {runtimeKind(item?.kind)}:{String(item?.key ?? '?')} → {String(item?.plugin ?? '?')}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {unattributed.length > 0 && (
+                  <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' as const, alignItems: 'baseline' }}>
+                    <span style={{ fontSize: 11, opacity: 0.55, minWidth: 62 }}>{copy.unattributed}</span>
+                    {unattributed.map((item: any, i: number) => (
+                      <span key={`${item?.kind}\u0000${item?.key}\u0000${i}`} style={{ ...S.mono, fontSize: 11.5 }}>
+                        {runtimeKind(item?.kind)}:{String(item?.key ?? '?')}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {stringList(runtime.notes).length > 0 && (<>
+              <div style={S.group}>{copy.runtimeNotes}</div>
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 2, marginTop: -4 }}>
+                {stringList(runtime.notes).map((note, i) => (
+                  <div key={i} style={{ fontSize: 11.5, opacity: 0.65 }}>• {localizeRuntimeNote(note, zh)}</div>
+                ))}
+              </div>
+            </>)}
+          </div>
+        )}
+      </>)}
+
+      {report && (<>
         <div style={S.section}>{copy.versions}</div>
         {versionDrift.length === 0 ? (
           <div style={{ fontSize: 12.5, opacity: 0.55 }}>{copy.versionsAgree}</div>
@@ -590,7 +815,7 @@ function HarborPanel({ ctx }: { ctx: any }) {
               <div key={d.name} style={{ ...S.block, gap: 6 }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' as const }}>
                   <span style={{ fontWeight: 600, fontSize: 13 }}>{d.name}</span>
-                  <span style={{ fontSize: 11.5, opacity: 0.65 }}>{copy.latestPublished(d.newest)}</span>
+                  <span style={{ fontSize: 11.5, opacity: 0.65 }}>{copy.localBaseline(d.highestInstalled ?? d.newest ?? '?')}</span>
                 </div>
                 {(d.rows ?? []).map((row: any) => (
                   <div key={row.version} style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' as const }}>
@@ -611,7 +836,12 @@ function HarborPanel({ ctx }: { ctx: any }) {
           </button>
           <span style={{ fontSize: 11, opacity: 0.55 }}>{copy.checkUpdatesHint}</span>
         </div>
-        {updateError !== '' && <div style={{ fontSize: 12, opacity: 0.8, whiteSpace: 'pre-wrap' as const }}>{updateError}</div>}
+        {updateError !== '' && (
+          <div role="alert" style={{
+            border: '1px solid rgba(248,81,73,0.55)', color: CLASH, background: 'rgba(248,81,73,0.06)',
+            borderRadius: 8, padding: '7px 12px', fontSize: 12, whiteSpace: 'pre-wrap' as const,
+          }}>⚠ {updateError}</div>
+        )}
         {updates && sortedUpdateResults.length > 0 && (
           <div style={{ ...S.block, gap: 6 }}>
             {sortedUpdateResults.map((r: any, i: number) => {
@@ -622,14 +852,20 @@ function HarborPanel({ ctx }: { ctx: any }) {
                   <span style={{ ...S.mono, fontSize: 11.5, opacity: 0.75 }}>{r.installed}</span>
                   {profiles?.length ? <span style={{ fontSize: 11, opacity: 0.6 }}>[{profiles.join(', ')}]</span> : null}
                   {updateStatus(r)}
+                  {r.cached === true && (
+                    <span style={{ fontSize: 9.5, opacity: 0.6, border: '1px solid rgba(128,128,128,0.35)', borderRadius: 99, padding: '0 5px' }}>{copy.cached}</span>
+                  )}
                 </div>
               );
             })}
           </div>
         )}
+        {updates && sortedUpdateResults.length === 0 && (
+          <div style={{ fontSize: 12.5, opacity: 0.55 }}>{copy.noUpdateResults}</div>
+        )}
         {updates && (
           <div style={{ fontSize: 11, opacity: 0.55 }}>
-            {copy.checkedAt(fmtTime(updates.checkedAt), (updates.registryHosts ?? []).join(', '))}
+            {copy.checkedAt(fmtTime(updates.checkedAt), stringList(updates.registryHosts).join(', '))}
           </div>
         )}
       </>)}

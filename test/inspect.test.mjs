@@ -12,9 +12,11 @@
 // these files can leak into harbor's self-scan.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, symlinkSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { inspectPlugin } from '../src/scan/inspect.mjs';
 
 // A file containing one detectable tool registration: a quoted name next to a
@@ -249,4 +251,132 @@ test('a small source next to a small artifact never degrades (ratio below ×10)'
   assert.equal(report.coverage.sourceAvailable, true);
   assert.deepEqual(report.claims.toolNames, ['src_tool'], 'the dist copy stays excluded');
   assert.equal(report.coverage.bundledFiles, 0);
+});
+
+test('realm-copy counts plugin-owned packages but ignores a host scope symlink', { skip: process.platform === 'win32' }, (t) => {
+  const owned = makePkg(t, {
+    'src/index.mjs': 'export const x = 1;\n',
+    'node_modules/@deepseek-ai/dsh-agent/package.json': '{"name":"@deepseek-ai/dsh-agent"}',
+  });
+  assert.ok(scan(owned).capabilities['realm-copy'], 'a physical nested package is a second realm');
+
+  const host = mkdtempSync(join(tmpdir(), 'harbor-host-realm-'));
+  t.after(() => rmSync(host, { recursive: true, force: true }));
+  const hostScope = join(host, 'node_modules', '@deepseek-ai');
+  mkdirSync(join(hostScope, 'dsh-agent'), { recursive: true });
+  writeFileSync(join(hostScope, 'dsh-agent', 'package.json'), '{"name":"@deepseek-ai/dsh-agent"}');
+
+  const linked = makePkg(t, { 'src/index.mjs': 'export const x = 1;\n' });
+  mkdirSync(join(linked, 'node_modules'), { recursive: true });
+  symlinkSync(hostScope, join(linked, 'node_modules', '@deepseek-ai'), 'dir');
+  assert.equal(
+    scan(linked).capabilities['realm-copy'],
+    undefined,
+    'a link to the host packages shares the host realm and is not a nested copy',
+  );
+
+  const packageLinked = makePkg(t, { 'src/index.mjs': 'export const x = 1;\n' });
+  const localScope = join(packageLinked, 'node_modules', '@deepseek-ai');
+  mkdirSync(localScope, { recursive: true });
+  symlinkSync(join(hostScope, 'dsh-agent'), join(localScope, 'dsh-agent'), 'dir');
+  assert.equal(
+    scan(packageLinked).capabilities['realm-copy'],
+    undefined,
+    'an individual package link to the host is not a nested copy either',
+  );
+});
+
+test('URL literals enrich real egress but cannot create it', (t) => {
+  const onlyUrl = scan(makePkg(t, {
+    'src/constants.mjs': "export const docs = 'https://api.vendor.dev/v1';\n",
+  }));
+  assert.equal(onlyUrl.capabilities['network-egress'], undefined, 'data alone is not an outbound action');
+
+  const request = scan(makePkg(t, {
+    'src/request.mjs': "export async function go() { return fetch('https://api.vendor.dev/v1'); }\n",
+  }));
+  const finding = request.capabilities['network-egress'];
+  assert.ok(finding, 'a real request remains detected');
+  assert.ok(finding.details.some((detail) => detail.includes('api.vendor.dev')), 'host detail attaches to that behavior');
+});
+
+test('route claims belong to webServer.register owners, not fetch consumers', (t) => {
+  const report = scan(makePkg(t, {
+    'src/routes.mjs': "export const OWNER_ROUTE = '/_dsh/owner/report';\n",
+    'src/host.mjs': [
+      "import { OWNER_ROUTE } from './routes.mjs';",
+      "webServer.register({ kind: 'exact', path: OWNER_ROUTE, handler() {} });",
+    ].join('\n'),
+    'src/client.mjs': [
+      "const API = '/_dsh/foreign/report';",
+      "const request = { path: '/_dsh/foreign/report' };",
+      'export const load = () => fetch(API, request);',
+    ].join('\n'),
+  }));
+  assert.deepEqual(report.claims.routeBases, ['/_dsh/owner']);
+});
+
+test('client module claims require an executable loader call with a literal id', (t) => {
+  const report = scan(makePkg(t, {
+    'src/runtime.mjs': "window.__ModuleLoader__.load({ id: '@scope/real-client', factory: () => {} });\n",
+    'scripts/build-client.mjs': [
+      "const pluginId = pkg.name;",
+      "const header = 'window.__ModuleLoader__.load({ id: ' + JSON.stringify(pluginId) + ', factory: () => {';",
+      "const templated = `window.__ModuleLoader__.load({ id: ${JSON.stringify(pluginId)}, factory: () => {} })`;",
+    ].join('\n'),
+  }));
+  assert.deepEqual(report.claims.clientModuleIds, ['@scope/real-client']);
+});
+
+test('a declared dsh client claims its package name and keeps explicit runtime ids', (t) => {
+  const report = scan(makePkg(t, {
+    'src/runtime.mjs': "window.__ModuleLoader__.load({ id: '@scope/compat-client', factory: () => {} });\n",
+  }, {
+    name: '@scope/declared-client',
+    dsh: { client: { platform: 'web' } },
+  }));
+  assert.deepEqual(report.claims.clientModuleIds, [
+    '@scope/compat-client',
+    '@scope/declared-client',
+  ]);
+  assert.equal(report.declared.clientModuleId, '@scope/declared-client');
+});
+
+test('Harbor self-scan reports the declared client id, never its dynamic builder expression', () => {
+  const root = fileURLToPath(new URL('..', import.meta.url));
+  const report = inspectPlugin({ name: '@zseven-w/dsh-harbor', dir: root, installs: [] });
+  assert.deepEqual(report.claims.clientModuleIds, ['@zseven-w/dsh-harbor']);
+});
+
+test('source-looking symlinks never escape the plugin and skipped coverage is visible', { skip: process.platform === 'win32' }, (t) => {
+  const outside = mkdtempSync(join(tmpdir(), 'harbor-outside-source-'));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  const target = join(outside, 'outside.mjs');
+  writeFileSync(target, tool('outside_tool'));
+
+  const dir = makePkg(t, { 'src/inside.mjs': tool('inside_tool') });
+  symlinkSync(target, join(dir, 'src', 'linked.mjs'));
+  const report = scan(dir);
+  assert.deepEqual(report.claims.toolNames, ['inside_tool']);
+  assert.equal(report.coverage.skippedFiles, 1);
+  assert.equal(report.coverage.skipped.nonRegular, 1);
+});
+
+test('declared patch files obey the same regular-file boundary', { skip: process.platform === 'win32' }, (t) => {
+  const outside = mkdtempSync(join(tmpdir(), 'harbor-outside-patch-'));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  const secret = join(outside, 'secret.yml');
+  writeFileSync(secret, '- id: escaped-service\n');
+
+  const linked = makePkg(t, { 'src/index.mjs': 'export const x = 1;\n' }, {
+    dsh: { bundle: { patch: './cordis.patch.yml' } },
+  });
+  symlinkSync(secret, join(linked, 'cordis.patch.yml'));
+  assert.deepEqual(scan(linked).declared.patchIds, [], 'a patch symlink cannot read outside the plugin');
+
+  const fifo = makePkg(t, { 'src/index.mjs': 'export const x = 1;\n' }, {
+    dsh: { bundle: { patch: './cordis.patch.yml' } },
+  });
+  execFileSync('mkfifo', [join(fifo, 'cordis.patch.yml')]);
+  assert.deepEqual(scan(fifo).declared.patchIds, [], 'a patch FIFO is rejected before read');
 });

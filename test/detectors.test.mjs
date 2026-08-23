@@ -13,7 +13,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CAPABILITIES, byId } from '../src/scan/detectors.mjs';
+import { CAPABILITIES, byId, capabilityMatches } from '../src/scan/detectors.mjs';
 
 const get = (id) => {
   const entry = byId[id];
@@ -125,4 +125,27 @@ test('subprocess patterns keep their precision and the import gate', () => {
   const gated = join("import { spawn } from 'node:child_process';", '\n', SPAWN_CALL);
   assert.ok(entry.match.require.test(gated), 'import present → gate open');
   assert.equal(hits(entry.match.patterns, gated).length, 1, 'only the bare call site is evidence');
+});
+
+test('subprocess matching follows namespace and imported aliases only', () => {
+  const entry = get('subprocess');
+  const fixtures = [
+    join("import * as cp from 'node:child_process';", '\n', "cp.spawn('one');"),
+    join("import { spawn as launch } from 'child_process';", '\n', "launch('two');"),
+    join("const cp = require('node:child_process');", '\n', "cp.spawnSync('three');"),
+    join("const { execFile: runFile } = require('child_process');", '\n', "runFile('four');"),
+    join("const cp = require('child_process');", '\n', 'const launch = cp.spawn;', '\n', "launch('five');"),
+  ];
+  for (const fixture of fixtures) {
+    assert.equal(capabilityMatches(entry, fixture).length, 1, fixture);
+  }
+
+  const unrelated = join(
+    "import { execFile } from 'node:child_process';",
+    '\n',
+    "const obj = { spawn() {} };",
+    '\n',
+    "obj.spawn('not-a-process-binding');",
+  );
+  assert.equal(capabilityMatches(entry, unrelated).length, 0, 'an arbitrary object method stays invisible');
 });
