@@ -22,7 +22,7 @@ Bunların sonuncusu bir kapsam kararı değil, host ile ilgili bir gerçektir. D
 
 Son olarak harbor puan değil, gerçek bildirir. Çıktısı her zaman “ne algılandı ve kanıt nerede” şeklindedir — hiçbir zaman risk seviyesi veya kalite notu değildir. Bir bulgunun sizin için ne anlama geldiği harbor'ın değil, sizin değerlendirmenizdir.
 
-> **Durum: `0.1.0-rc.1`, sürüm adayı sağlamlaştırılıyor.** CLI, yalnızca loopback hub rotaları, DSH ayarlar paneli, profiller arası sürüm sapması ve isteğe bağlı upstream denetimi kullanılabilir. Canlı bir host runtime araçlarını, provider'ları ve rotaları sağlar; canlı host dışında runtime kanıtı açıkça `available: false` durumuna düşer. Algılayıcılar hâlâ sezgiseldir ve daha geniş ekosisteme göre ayarlanmaktadır; bu nedenle yokluğu kanıt saymak yerine kanıtları inceleyin.
+> **Durum: `0.1.0-rc.2`, sürüm adayı sağlamlaştırılıyor.** CLI, yalnızca loopback hub rotaları, DSH ayarlar paneli, profiller arası sürüm sapması ve isteğe bağlı upstream denetimi kullanılabilir. Canlı bir host runtime araçlarını, provider'ları ve rotaları sağlar; canlı host dışında runtime kanıtı açıkça `available: false` durumuna düşer. Algılayıcılar hâlâ sezgiseldir ve daha geniş ekosisteme göre ayarlanmaktadır; bu nedenle yokluğu kanıt saymak yerine kanıtları inceleyin.
 
 ## Neleri inceler
 

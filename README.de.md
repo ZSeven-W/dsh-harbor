@@ -22,7 +22,7 @@ Der letzte Punkt ist keine Entscheidung über den Funktionsumfang, sondern eine 
 
 Schließlich meldet harbor Fakten, keine Bewertungen. Seine Ausgabe lautet immer „Was wurde erkannt und wo befindet sich der Beleg?“ — niemals Risikostufe oder Qualitätsnote. Was ein Befund für dich bedeutet, entscheidest du und nicht harbor.
 
-> **Status: `0.1.0-rc.1`, Härtung des Release Candidates.** CLI, auf Loopback beschränkte Hub-Routen, DSH-Einstellungsbereich, profilübergreifende Abweichungen und die optionale Upstream-Prüfung stehen zur Verfügung. Ein aktiver Host liefert Laufzeit-Tools, -Provider und -Routen; außerhalb eines solchen Hosts werden Laufzeitbelege ausdrücklich auf `available: false` zurückgestuft. Die Detektoren arbeiten weiterhin heuristisch und werden anhand des breiteren Ökosystems kalibriert. Prüfe daher ihre Belege, anstatt das Ausbleiben eines Befunds als Beweis für das Nichtvorhandensein zu verstehen.
+> **Status: `0.1.0-rc.2`, Härtung des Release Candidates.** CLI, auf Loopback beschränkte Hub-Routen, DSH-Einstellungsbereich, profilübergreifende Abweichungen und die optionale Upstream-Prüfung stehen zur Verfügung. Ein aktiver Host liefert Laufzeit-Tools, -Provider und -Routen; außerhalb eines solchen Hosts werden Laufzeitbelege ausdrücklich auf `available: false` zurückgestuft. Die Detektoren arbeiten weiterhin heuristisch und werden anhand des breiteren Ökosystems kalibriert. Prüfe daher ihre Belege, anstatt das Ausbleiben eines Befunds als Beweis für das Nichtvorhandensein zu verstehen.
 
 ## Was untersucht wird
 

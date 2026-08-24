@@ -22,7 +22,7 @@ Những điều harbor chủ ý không làm cũng là một phần quan trọng 
 
 Cuối cùng, harbor báo cáo sự thật chứ không cho điểm. Đầu ra luôn là “đã phát hiện điều gì và bằng chứng ở đâu” — không bao giờ là mức độ rủi ro hay điểm chất lượng. Một phát hiện có ý nghĩa gì với bạn là phán đoán của bạn, không phải của harbor.
 
-> **Trạng thái: `0.1.0-rc.1`, đang củng cố bản release candidate.** CLI, các route hub chỉ dành cho loopback, bảng cài đặt DSH, độ lệch giữa các profile và kiểm tra upstream tùy chọn đều đã khả dụng. Một host đang hoạt động cung cấp runtime tools, providers và routes; bên ngoài host như vậy, bằng chứng runtime hạ cấp rõ ràng thành `available: false`. Các detector vẫn mang tính heuristic và đang được hiệu chỉnh theo hệ sinh thái rộng hơn, vì vậy hãy xem xét bằng chứng thay vì coi việc không phát hiện là bằng chứng cho sự vắng mặt.
+> **Trạng thái: `0.1.0-rc.2`, đang củng cố bản release candidate.** CLI, các route hub chỉ dành cho loopback, bảng cài đặt DSH, độ lệch giữa các profile và kiểm tra upstream tùy chọn đều đã khả dụng. Một host đang hoạt động cung cấp runtime tools, providers và routes; bên ngoài host như vậy, bằng chứng runtime hạ cấp rõ ràng thành `available: false`. Các detector vẫn mang tính heuristic và đang được hiệu chỉnh theo hệ sinh thái rộng hơn, vì vậy hãy xem xét bằng chứng thay vì coi việc không phát hiện là bằng chứng cho sự vắng mặt.
 
 ## Những gì được kiểm tra
 

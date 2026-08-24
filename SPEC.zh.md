@@ -1,7 +1,7 @@
 # dsh.capabilities — DSH 插件能力声明公约
 
 性质：社区公约（不属于 DSH 宿主 API）
-参考实现：dsh-harbor 0.1.0-rc.1
+参考实现：dsh-harbor 0.1.0-rc.2
 
 `dsh.capabilities` 让插件作者在 `package.json` 里声明：自己的代码实际
 使用了哪些能力。声明是对行为的事实陈述——不是权限申请，也不是安全边界。
@@ -35,7 +35,7 @@ harbor 自己 `package.json` 里的真实声明：
 ## 2. 能力词表
 
 词表以数据形式存在于 harbor 源码（`src/scan/detectors.mjs` 的
-`CAPABILITIES`）。每个 id 对应一种可观测行为。以下是 harbor 0.1.0-rc.1
+`CAPABILITIES`）。每个 id 对应一种可观测行为。以下是 harbor 0.1.0-rc.2
 检测的全部 13 个 id：
 
 | id | 该 id 代表的含义（检测所依据的行为） |
@@ -110,5 +110,5 @@ heuristic。这类结论仍然可用，但它描述的是打包后的整体，�
    长期有效。
 3. 旧声明永不成为错误。旧版 harbor 检测不到的 id 呈现为 `unused`——
    状态仍为 `match`；旧版 harbor 不认识的 id 呈现为 `unknown` drift——
-   被报告，但只是提示。（两条均已对照 harbor 0.1.0-rc.1 源码验证。）
+   被报告，但只是提示。（两条均已对照 harbor 0.1.0-rc.2 源码验证。）
 4. harbor 自己的声明（§1）是参考示例，必须始终对自身对账为 `match`。

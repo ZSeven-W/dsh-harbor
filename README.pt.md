@@ -22,7 +22,7 @@ O último ponto não é uma decisão de escopo, mas uma característica do host.
 
 Por fim, harbor relata fatos, não pontuações. Sua saída sempre diz “o que foi detectado e onde está a evidência” — nunca um nível de risco ou uma nota de qualidade. O significado de uma descoberta é uma decisão sua, não do harbor.
 
-> **Status: `0.1.0-rc.1`, reforço da versão candidata.** A CLI, as rotas do hub limitadas ao loopback, o painel de configurações do DSH, as divergências entre perfis e a verificação upstream opcional estão disponíveis. Um host ativo fornece ferramentas, providers e rotas de runtime; fora de um host ativo, as evidências de runtime são explicitamente rebaixadas para `available: false`. Os detectores continuam heurísticos e estão sendo calibrados com o ecossistema mais amplo; portanto, examine as evidências em vez de tratar a ausência de detecção como prova de inexistência.
+> **Status: `0.1.0-rc.2`, reforço da versão candidata.** A CLI, as rotas do hub limitadas ao loopback, o painel de configurações do DSH, as divergências entre perfis e a verificação upstream opcional estão disponíveis. Um host ativo fornece ferramentas, providers e rotas de runtime; fora de um host ativo, as evidências de runtime são explicitamente rebaixadas para `available: false`. Os detectores continuam heurísticos e estão sendo calibrados com o ecossistema mais amplo; portanto, examine as evidências em vez de tratar a ausência de detecção como prova de inexistência.
 
 ## O que ele examina
 

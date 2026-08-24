@@ -22,7 +22,7 @@ Esto último no es una decisión de alcance, sino una realidad del host. El runt
 
 Por último, harbor informa de hechos, no de puntuaciones. Su salida siempre indica «qué se ha detectado y dónde están las pruebas»; nunca asigna un nivel de riesgo ni una nota de calidad. El significado de un hallazgo lo decides tú, no harbor.
 
-> **Estado: `0.1.0-rc.1`, consolidación de la versión candidata.** Están disponibles la CLI, las rutas del hub limitadas al loopback, el panel de ajustes de DSH, las divergencias entre perfiles y la comprobación upstream opcional. Un host activo aporta herramientas, providers y rutas de runtime; fuera de uno, las pruebas de runtime pasan explícitamente a `available: false`. Los detectores siguen siendo heurísticos y se están calibrando con el ecosistema más amplio, así que revisa sus pruebas en vez de tratar una ausencia de detección como prueba de inexistencia.
+> **Estado: `0.1.0-rc.2`, consolidación de la versión candidata.** Están disponibles la CLI, las rutas del hub limitadas al loopback, el panel de ajustes de DSH, las divergencias entre perfiles y la comprobación upstream opcional. Un host activo aporta herramientas, providers y rutas de runtime; fuera de uno, las pruebas de runtime pasan explícitamente a `available: false`. Los detectores siguen siendo heurísticos y se están calibrando con el ecosistema más amplio, así que revisa sus pruebas en vez de tratar una ausencia de detección como prueba de inexistencia.
 
 ## Qué examina
 

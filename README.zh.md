@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; 当前插件版本: <code>0.1.0-rc.1</code> &middot; 已验证 DSH <code>0.1.1-rc.2</code></sub>
+  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; 当前插件版本: <code>0.1.0-rc.2</code> &middot; 已验证 DSH <code>0.1.1-rc.2</code></sub>
 </p>
 
 <p align="center">

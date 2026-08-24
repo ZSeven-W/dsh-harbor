@@ -22,7 +22,7 @@ Poin terakhir bukan keputusan tentang cakupan, melainkan kenyataan pada host. Ru
 
 Terakhir, harbor melaporkan fakta, bukan skor. Keluarannya selalu berupa “apa yang terdeteksi dan di mana buktinya”—bukan tingkat risiko dan bukan penilaian kualitas. Arti sebuah temuan bagi Anda merupakan penilaian Anda sendiri, bukan penilaian harbor.
 
-> **Status: `0.1.0-rc.1`, pematangan kandidat rilis.** CLI, rute hub khusus loopback, panel pengaturan DSH, perbedaan lintas profile, dan pemeriksaan upstream opsional telah tersedia. Host yang aktif menyumbangkan alat, Provider, dan rute runtime; tanpa host aktif, bukti runtime secara eksplisit turun menjadi `available: false`. Detektor masih bersifat heuristik dan terus dikalibrasi terhadap ekosistem yang lebih luas, jadi tinjau buktinya dan jangan menganggap tidak ditemukannya sesuatu sebagai bukti bahwa sesuatu itu tidak ada.
+> **Status: `0.1.0-rc.2`, pematangan kandidat rilis.** CLI, rute hub khusus loopback, panel pengaturan DSH, perbedaan lintas profile, dan pemeriksaan upstream opsional telah tersedia. Host yang aktif menyumbangkan alat, Provider, dan rute runtime; tanpa host aktif, bukti runtime secara eksplisit turun menjadi `available: false`. Detektor masih bersifat heuristik dan terus dikalibrasi terhadap ekosistem yang lebih luas, jadi tinjau buktinya dan jangan menganggap tidak ditemukannya sesuatu sebagai bukti bahwa sesuatu itu tidak ada.
 
 ## Apa yang diperiksa
 

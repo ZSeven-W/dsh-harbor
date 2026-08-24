@@ -1,7 +1,7 @@
 # dsh.capabilities — Declaration Convention for DSH Plugins
 
 Status: community convention (not part of the DSH host API)
-Reference implementation: dsh-harbor 0.1.0-rc.1
+Reference implementation: dsh-harbor 0.1.0-rc.2
 
 `dsh.capabilities` lets a plugin author state, in `package.json`, which
 capabilities the plugin's code actually uses. The declaration is a fact about
@@ -37,7 +37,7 @@ Real declaration from harbor's own `package.json`:
 
 The vocabulary lives as data in harbor's source (`CAPABILITIES` in
 `src/scan/detectors.mjs`). Each id names one observable behavior. This is
-the complete table harbor 0.1.0-rc.1 detects — 13 ids:
+the complete table harbor 0.1.0-rc.2 detects — 13 ids:
 
 | id | Behavior the id stands for (what detection looks for) |
 | --- | --- |
@@ -117,6 +117,6 @@ than your own authored behavior.
 3. Old declarations never become errors. An id an older harbor does not
    detect yet surfaces as `unused` — status stays `match`. An id an older
    harbor does not know surfaces as `unknown` drift — reported, advisory.
-   (Both behaviors verified against harbor 0.1.0-rc.1.)
+   (Both behaviors verified against harbor 0.1.0-rc.2.)
 4. harbor's own declaration (§1) is the reference example; it must keep
    reconciling to `match` against itself.

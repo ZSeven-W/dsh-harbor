@@ -22,7 +22,7 @@ Ce dernier point n'est pas une décision de périmètre, mais un fait lié à l'
 
 Enfin, harbor rapporte des faits, pas des scores. Sa sortie indique toujours « ce qui a été détecté et où se trouvent les preuves » — jamais un niveau de risque ni une note de qualité. C'est à vous, et non à harbor, de juger ce qu'un constat signifie.
 
-> **État : `0.1.0-rc.1`, consolidation de la version candidate.** La CLI, les routes hub en boucle locale, le panneau de réglages DSH, les écarts entre profils et la vérification amont facultative sont disponibles. Un hôte actif fournit les outils, providers et routes d'exécution ; sans hôte actif, les preuves d'exécution passent explicitement à `available: false`. Les détecteurs restent heuristiques et sont en cours d'étalonnage sur l'ensemble de l'écosystème ; examinez donc leurs preuves au lieu de considérer une absence de détection comme une preuve d'absence.
+> **État : `0.1.0-rc.2`, consolidation de la version candidate.** La CLI, les routes hub en boucle locale, le panneau de réglages DSH, les écarts entre profils et la vérification amont facultative sont disponibles. Un hôte actif fournit les outils, providers et routes d'exécution ; sans hôte actif, les preuves d'exécution passent explicitement à `available: false`. Les détecteurs restent heuristiques et sont en cours d'étalonnage sur l'ensemble de l'écosystème ; examinez donc leurs preuves au lieu de considérer une absence de détection comme une preuve d'absence.
 
 ## Ce qu'il examine
 

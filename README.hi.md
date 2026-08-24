@@ -22,7 +22,7 @@ harbor जानबूझकर क्या नहीं करता, यह �
 
 अंत में, harbor तथ्य बताता है, स्कोर नहीं। उसका आउटपुट हमेशा “क्या पहचाना गया और उसका साक्ष्य कहाँ है” होता है — न जोखिम स्तर, न गुणवत्ता ग्रेड। किसी निष्कर्ष का आपके लिए क्या अर्थ है, यह आपका निर्णय है, harbor का नहीं।
 
-> **स्थिति: `0.1.0-rc.1`, release candidate को मज़बूत किया जा रहा है।** CLI, केवल loopback वाले hub routes, DSH settings panel, cross-profile drift और वैकल्पिक upstream check उपलब्ध हैं। सक्रिय host runtime tools, providers और routes उपलब्ध कराता है; उसके बाहर runtime evidence साफ़ तौर पर `available: false` में बदल जाता है। Detectors अभी heuristic हैं और व्यापक ecosystem के अनुसार calibrate किए जा रहे हैं, इसलिए उनके evidence की समीक्षा करें और किसी चीज़ का न मिलना उसके न होने का प्रमाण न मानें।
+> **स्थिति: `0.1.0-rc.2`, release candidate को मज़बूत किया जा रहा है।** CLI, केवल loopback वाले hub routes, DSH settings panel, cross-profile drift और वैकल्पिक upstream check उपलब्ध हैं। सक्रिय host runtime tools, providers और routes उपलब्ध कराता है; उसके बाहर runtime evidence साफ़ तौर पर `available: false` में बदल जाता है। Detectors अभी heuristic हैं और व्यापक ecosystem के अनुसार calibrate किए जा रहे हैं, इसलिए उनके evidence की समीक्षा करें और किसी चीज़ का न मिलना उसके न होने का प्रमाण न मानें।
 
 ## यह क्या देखता है
 
