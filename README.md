@@ -125,7 +125,7 @@ Harbor reports facts, not a risk score. Spawning a subprocess may be the entire 
 DSH is a separate package. Install the tested host version if you do not already have it:
 
 ```sh
-npm install -g @deepseek-ai/dsh@0.1.1-rc.2
+npm install -g @deepseek-ai/dsh@latest
 ```
 
 For local development, install the current checkout into a Web profile and restart DSH once:

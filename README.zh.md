@@ -125,7 +125,7 @@ Harbor 只陈述事实，不给风险打分。起子进程可能正是某个插�
 DSH 是独立包。如果本机尚未安装，可安装本次验证使用的版本：
 
 ```sh
-npm install -g @deepseek-ai/dsh@0.1.1-rc.2
+npm install -g @deepseek-ai/dsh@latest
 ```
 
 本地开发时，把当前 checkout 加入 Web profile，并重启一次 DSH：
