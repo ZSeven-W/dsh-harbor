@@ -253,7 +253,7 @@ test('preflight: orchestrates checks per install and summarises per profile', as
     root: join(root, 'profiles'),
     listing: { tags: { next: '2.0.0' }, versions: ['2.0.0'] },
     ensureHostImpl: async (version) => ({ version, prefix, treeDir: tree, cached: true, installedAt: null }),
-    probeImpl: async (dir) => (dir.endsWith('stale')
+    probeImpl: async (dir) => (dir.endsWith(join('p', 'stale'))
       ? { status: 'fail', code: 'SyntaxError', message: 'no export', entry: dir, resolved: [] }
       : { status: 'ok', entry: dir, exports: ['apply'], resolved: ['@deepseek-ai/dsh-tools'] }),
     discover: () => plugins,
@@ -329,7 +329,7 @@ test('preflight: a missing non-host dependency is unresolvable, a missing host e
   const report = await preflight('2.0.0', {
     root: join(root, 'profiles'),
     ensureHostImpl: async (version) => ({ version, prefix, treeDir: tree, cached: true, installedAt: null }),
-    probeImpl: async (d) => (d.endsWith('/a')
+    probeImpl: async (d) => (d.endsWith(join('p', 'a'))
       ? { status: 'fail', code: 'ERR_MODULE_NOT_FOUND', message: "Cannot find package 'left-pad' imported from /x/index.js", entry: d, resolved: [] }
       : { status: 'fail', code: 'ERR_MODULE_NOT_FOUND', message: "Cannot find package '@deepseek-ai/dsh-gone' imported from /x/index.js", entry: d, resolved: [] }),
     plugins: [a, b],

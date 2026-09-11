@@ -7,7 +7,7 @@
 
 import { existsSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn as spawnProcess } from 'node:child_process';
 import { satisfies } from './semver.mjs';
 import { HOST_SCOPE, hostAnchorUrl } from './host.mjs';
@@ -53,7 +53,7 @@ export async function probeImport(pluginDir, manifest, treeDir, {
     try {
       const args = [
         '--no-warnings',
-        '--import', join(HERE, 'hook-register.mjs'),
+        '--import', pathToFileURL(join(HERE, 'hook-register.mjs')).href,
         join(HERE, 'probe-main.mjs'),
         entry,
       ];
