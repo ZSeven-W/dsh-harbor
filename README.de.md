@@ -22,7 +22,7 @@ Der letzte Punkt ist keine Entscheidung über den Funktionsumfang, sondern eine 
 
 Schließlich meldet harbor Fakten, keine Bewertungen. Seine Ausgabe lautet immer „Was wurde erkannt und wo befindet sich der Beleg?“ — niemals Risikostufe oder Qualitätsnote. Was ein Befund für dich bedeutet, entscheidest du und nicht harbor.
 
-> **Status: `0.1.0-rc.2`, Härtung des Release Candidates.** CLI, auf Loopback beschränkte Hub-Routen, DSH-Einstellungsbereich, profilübergreifende Abweichungen und die optionale Upstream-Prüfung stehen zur Verfügung. Ein aktiver Host liefert Laufzeit-Tools, -Provider und -Routen; außerhalb eines solchen Hosts werden Laufzeitbelege ausdrücklich auf `available: false` zurückgestuft. Die Detektoren arbeiten weiterhin heuristisch und werden anhand des breiteren Ökosystems kalibriert. Prüfe daher ihre Belege, anstatt das Ausbleiben eines Befunds als Beweis für das Nichtvorhandensein zu verstehen.
+> **Status: `0.1.0-rc.3`, Härtung des Release Candidates.** CLI, auf Loopback beschränkte Hub-Routen, DSH-Einstellungsbereich, profilübergreifende Abweichungen und die optionale Upstream-Prüfung stehen zur Verfügung. Ein aktiver Host liefert Laufzeit-Tools, -Provider und -Routen; außerhalb eines solchen Hosts werden Laufzeitbelege ausdrücklich auf `available: false` zurückgestuft. Die Detektoren arbeiten weiterhin heuristisch und werden anhand des breiteren Ökosystems kalibriert. Prüfe daher ihre Belege, anstatt das Ausbleiben eines Befunds als Beweis für das Nichtvorhandensein zu verstehen.
 
 ## Was untersucht wird
 
@@ -39,6 +39,18 @@ Schließlich meldet harbor Fakten, keine Bewertungen. Seine Ausgabe lautet immer
 Die Fähigkeiten bilden eine feste Menge aus dreizehn Einträgen — Client-Injektion, Realm-Risiken, Realm-Kopien, globale Hooks, LLM-Adapter, Unterprozesse, ausgehende Netzwerkzugriffe, Web-Routen, Tool-Registrierung, MCP-Server, Schreibzugriffe auf fremde Konfigurationen, Verarbeitung von Zugangsdaten und Auslesen der Umgebung. Die feste Menge sorgt dafür, dass Berichte zwischen Scans vergleichbar bleiben und Diffs möglich sind. Die maßgebliche Liste steht in [SPEC.md](./SPEC.md) §2; die maschinenlesbare Quelle der Wahrheit ist `src/scan/detectors.mjs`.
 
 Die Wortwahl ist bewusst neutral: **Fähigkeit**, nicht Risiko. Bei manchen Plugins ist das Starten von Unterprozessen ihr eigentlicher Zweck. Der Bericht beantwortet „Was kann es tun?“ und überlässt dir die Frage „Sollte es das tun?“.
+
+## Upgrade-Vorabprüfung
+
+Bevor du DSH auf eine neue Version hebst, installiert Harbor genau diese Version in seinen eigenen Cache, importiert dann jedes installierte Plugin in einem Kindprozess dagegen, prüft die Ids aus `dsh.client.inject` gegen den Client-Modulgraphen des Ziels und kontrolliert die Peer-Bereiche des Hosts. Die Antwort kommt pro Profile: startet nach dem Upgrade, oder blockiert — durch welches Plugin, mit dem echten Linkzeit-Fehler. Zusätzlich wird geprüft, ob `agent-presets.default` in `settings.yaml` noch unter den eingebauten Presets des Ziels existiert (DSH 0.1.2 hat `code` in `ptc` umbenannt, ohne den gespeicherten Wert zu migrieren; danach schlägt jede neue Session fehl).
+
+```sh
+harbor preflight --list                 # Upstream-dist-tags, aktuelle Versionen, lokal gecachte Host-Bäume
+harbor preflight --dsh next             # oder eine konkrete Version: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # maschinenlesbarer Vollbericht
+```
+
+Urteile gibt es pro Plugin (**blockiert den Start** / **lädt** / **nicht geprüft**) und pro Profile; Peer-Bereiche und tote Injects sind Hinweise und ändern nie ein Urteil. Exit-Code 3 bedeutet, dass mindestens ein Profile nicht starten würde. Alles läuft in Kindprozessen; das globale npm-Prefix und deine Profiles werden nie beschrieben. Der Resolve-Hook benötigt Node ≥ 20.6.
 
 ## Versionen
 
@@ -95,6 +107,7 @@ In den folgenden Beispielen steht `harbor` als Kurzform für eine der oben besch
 harbor scan                 # Bestand, Konflikte und Änderungen seit dem letzten Scan
 harbor scan --check-updates # + optionale Upstream-Prüfung gegen die Registry (vernetzt)
 harbor manifest ./my-plugin # entwirft einen dsh.capabilities-Block für dein eigenes Plugin
+harbor preflight --dsh next # Vorabprüfung: welche Profiles starten auf dieser DSH-Version noch
 ```
 
 Füge `--evidence` hinzu, um verfügbare `file:line`-Quellbelege auszugeben, `--json` für den vollständigen maschinenlesbaren Bericht und `--no-snapshot`, um das Schreiben der Diff-Basis zu überspringen. Fakten aus Manifest, Dateisystem oder Laufzeit können ohne Quellzeile vorliegen und werden entsprechend gekennzeichnet.

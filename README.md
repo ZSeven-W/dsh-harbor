@@ -6,11 +6,11 @@
 
 <p align="center">
   <strong>Evidence-first governance for the DeepSeek Harness plugins already installed on your machine.</strong><br />
-  <sub>Capability Inventory &bull; Declared vs Detected &bull; Runtime Attribution &bull; Conflict Detection &bull; Version Drift &bull; Change Timeline</sub>
+  <sub>Capability Inventory &bull; Declared vs Detected &bull; Runtime Attribution &bull; Conflict Detection &bull; Version Drift &bull; Change Timeline &bull; Upgrade Preflight</sub>
 </p>
 
 <p align="center">
-  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; Current plugin release: <code>0.1.0-rc.2</code> &middot; Tested with DSH <code>0.1.1-rc.2</code></sub>
+  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; Current plugin release: <code>0.1.0-rc.3</code> &middot; Tested with DSH <code>0.1.5-rc.2</code></sub>
 </p>
 
 <p align="center">
@@ -82,6 +82,22 @@ Snapshots track additions, removals, version transitions, profile moves, capabil
 
 </td>
 </tr>
+<tr>
+<td width="50%">
+
+### 🛫 Upgrade Preflight
+
+Before you move DSH to a new version, Harbor installs that exact version into its own cache, then import-probes every installed plugin against it in a child process, checks `dsh.client.inject` ids against the target's client module graph, and checks host peer ranges. The answer is per profile: boots after the upgrade, or blocked — by which plugin, with the real link-time error.
+
+</td>
+<td width="50%">
+
+### 🧷 One Settings Check
+
+The only user-settings check with a known upgrade casualty: when a built-in agent preset is renamed (`code` → `ptc` in DSH 0.1.2) the stored `agent-presets.default` is not migrated and every new session fails. Preflight reports the stale value against the target's preset list.
+
+</td>
+</tr>
 </table>
 
 ## How it works
@@ -102,7 +118,24 @@ Snapshots track additions, removals, version transitions, profile moves, capabil
        additions + removals + version/profile/capability/claim changes
 ```
 
-The CLI and the settings page consume the same scan core. The default path is offline. Only `harbor scan --check-updates` or the panel's **Check for updates** button contacts a registry.
+The CLI and the settings page consume the same scan core. The default path is offline. Only `harbor scan --check-updates`, `harbor preflight`, or the panel's **Check for updates** / **Upgrade preflight** actions contact a registry.
+
+### Upgrade preflight
+
+```sh
+harbor preflight --list                 # dist-tags, recent versions, locally cached host trees
+harbor preflight --dsh next             # or a concrete version: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json
+```
+
+What runs, in order:
+
+1. The target is resolved (a dist-tag needs one registry request) and `@deepseek-ai/dsh@<version>` is installed into `<state dir>/hosts/<version>` with `npm install -g --prefix`. A completed install is reused; the global npm prefix and your profiles are never written.
+2. Every installed third-party plugin's server entry is imported in a fresh `node` child. A `module.register` resolve hook rewrites `@deepseek-ai/*` imports to the target tree, so the plugin links against the version under evaluation while its own dependencies keep resolving from its real install. Missing packages and removed exports fail at link time and are reported verbatim — the DSH loader is fail-loud, so one such plugin blocks the whole profile.
+3. `dsh.client.inject` / `external` ids are checked against the packages in the target that declare a web client module (DSH ≥ 0.1.5 skips unknown ids silently, so this never errors on its own). Host peer ranges are matched with npm's prerelease rule.
+4. `agent-presets.default` from `settings.yaml` is checked against the target's built-in presets.
+
+Verdicts are per plugin (**blocks boot** / **loads** / **not probed**) and per profile; peer-range and dead-inject findings are advisories and never change a verdict. Exit code 3 means at least one profile would not boot. Node ≥ 20.6 is required for the resolve hook.
 
 ## Evidence you can inspect
 
@@ -161,6 +194,7 @@ harbor scan --evidence
 harbor scan --json --no-snapshot
 harbor scan --json --check-updates
 harbor manifest ./my-plugin
+harbor preflight --dsh next
 ```
 
 Invocation choices:

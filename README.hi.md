@@ -22,7 +22,7 @@ harbor जानबूझकर क्या नहीं करता, यह �
 
 अंत में, harbor तथ्य बताता है, स्कोर नहीं। उसका आउटपुट हमेशा “क्या पहचाना गया और उसका साक्ष्य कहाँ है” होता है — न जोखिम स्तर, न गुणवत्ता ग्रेड। किसी निष्कर्ष का आपके लिए क्या अर्थ है, यह आपका निर्णय है, harbor का नहीं।
 
-> **स्थिति: `0.1.0-rc.2`, release candidate को मज़बूत किया जा रहा है।** CLI, केवल loopback वाले hub routes, DSH settings panel, cross-profile drift और वैकल्पिक upstream check उपलब्ध हैं। सक्रिय host runtime tools, providers और routes उपलब्ध कराता है; उसके बाहर runtime evidence साफ़ तौर पर `available: false` में बदल जाता है। Detectors अभी heuristic हैं और व्यापक ecosystem के अनुसार calibrate किए जा रहे हैं, इसलिए उनके evidence की समीक्षा करें और किसी चीज़ का न मिलना उसके न होने का प्रमाण न मानें।
+> **स्थिति: `0.1.0-rc.3`, release candidate को मज़बूत किया जा रहा है।** CLI, केवल loopback वाले hub routes, DSH settings panel, cross-profile drift और वैकल्पिक upstream check उपलब्ध हैं। सक्रिय host runtime tools, providers और routes उपलब्ध कराता है; उसके बाहर runtime evidence साफ़ तौर पर `available: false` में बदल जाता है। Detectors अभी heuristic हैं और व्यापक ecosystem के अनुसार calibrate किए जा रहे हैं, इसलिए उनके evidence की समीक्षा करें और किसी चीज़ का न मिलना उसके न होने का प्रमाण न मानें।
 
 ## यह क्या देखता है
 
@@ -39,6 +39,18 @@ harbor जानबूझकर क्या नहीं करता, यह �
 क्षमताएँ तेरह का एक निश्चित समूह हैं — client injection, realm risks, realm copies, global hooks, LLM adapters, subprocesses, network egress, web routes, tool registration, MCP servers, बाहरी config में लेखन, credentials का प्रबंधन और environment reads। समूह निश्चित है ताकि अलग-अलग scan की reports की तुलना और diff किया जा सके। आधिकारिक सूची [SPEC.md](./SPEC.md) §2 में है; machine-readable source of truth `src/scan/detectors.mjs` है।
 
 शब्दावली जानबूझकर तटस्थ है: **क्षमता**, जोखिम नहीं। कुछ प्लगइन का पूरा उद्देश्य ही subprocesses चलाना होता है। रिपोर्ट “यह क्या कर सकता है” का उत्तर देती है और “क्या इसे ऐसा करना चाहिए” आप पर छोड़ती है।
+
+## अपग्रेड पूर्व-जाँच
+
+DSH को नए संस्करण पर ले जाने से पहले Harbor उसी सटीक संस्करण को अपने कैश में इंस्टॉल करता है, फिर हर इंस्टॉल किए गए प्लगइन को चाइल्ड प्रोसेस में उसके विरुद्ध import करके जाँचता है, `dsh.client.inject` के id को लक्ष्य के क्लाइंट मॉड्यूल ग्राफ़ से मिलाता है और होस्ट की peer रेंज जाँचता है। उत्तर profile के अनुसार मिलता है: अपग्रेड के बाद बूट होगा, या अवरुद्ध — किस प्लगइन से, असली लिंक-टाइम त्रुटि के साथ। यह `settings.yaml` में `agent-presets.default` को लक्ष्य के अंतर्निर्मित प्रीसेट से भी मिलाता है (DSH 0.1.2 ने `code` का नाम `ptc` कर दिया, संग्रहीत मान माइग्रेट नहीं हुआ, और उसके बाद हर नया सत्र विफल होता है)।
+
+```sh
+harbor preflight --list                 # अपस्ट्रीम dist-tags, हाल के संस्करण, स्थानीय रूप से कैश किए गए होस्ट ट्री
+harbor preflight --dsh next             # या कोई निश्चित संस्करण: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # मशीन-पठनीय पूर्ण रिपोर्ट
+```
+
+निर्णय प्लगइन के अनुसार (**बूट रोकता है** / **लोड होता है** / **जाँच नहीं हुई**) और profile के अनुसार दिए जाते हैं; peer रेंज और मृत inject केवल सलाह हैं और निर्णय नहीं बदलते। निकास कोड 3 का अर्थ है कि कम से कम एक profile बूट नहीं होगा। सब कुछ चाइल्ड प्रोसेस में चलता है; वैश्विक npm prefix और आपके profiles में कभी नहीं लिखा जाता। resolve हुक के लिए Node ≥ 20.6 चाहिए।
 
 ## संस्करण
 
@@ -95,6 +107,7 @@ pnpm dlx @zseven-w/dsh-harbor@next scan
 harbor scan                 # inventory, conflicts और पिछले scan के बाद के बदलाव
 harbor scan --check-updates # + registry के विरुद्ध वैकल्पिक upstream check (networked)
 harbor manifest ./my-plugin # अपने प्लगइन के लिए dsh.capabilities block का draft बनाएँ
+harbor preflight --dsh next # पूर्व-जाँच: उस DSH संस्करण पर कौन से profiles अभी भी बूट होते हैं
 ```
 
 उपलब्ध `file:line` source evidence दिखाने के लिए `--evidence`, पूरी machine-readable report के लिए `--json`, और diff baseline लिखना छोड़ने के लिए `--no-snapshot` जोड़ें। Manifest, filesystem या runtime से मिले तथ्यों में source line न हो सकती है और उन्हें उसी अनुसार label किया जाता है।

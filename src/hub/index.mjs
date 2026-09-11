@@ -5,6 +5,10 @@
 import { scan, CAPABILITIES, checkUpstream } from '../scan/index.mjs';
 import { collectRuntimeSurface, attributeSurface } from '../scan/runtime.mjs';
 import { fingerprintSource, readClientBuildId } from './freshness.mjs';
+import { createPreflightJobs, validTarget } from './preflight-job.mjs';
+import { listHostVersions, listCachedHosts } from '../preflight/index.mjs';
+import { installedHostVersion } from '../preflight/host.mjs';
+import { profilesDir } from '../scan/discover.mjs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -17,7 +21,10 @@ const ROUTE_PATHS = [
   ROUTE_BASE + '/report',
   ROUTE_BASE + '/capabilities',
   ROUTE_BASE + '/updates',
+  ROUTE_BASE + '/preflight/versions',
+  ROUTE_BASE + '/preflight',
 ];
+const MAX_BODY_BYTES = 4096;
 // Static scanning walks every plugin source tree. Runtime registries are not
 // cached: tools/providers/routes can change as fibers load or dispose.
 const REPORT_CACHE_TTL_MS = 60_000;
@@ -123,6 +130,27 @@ function sendJson(res, status, value, headers = {}) {
   res.end(body);
 }
 
+function readJsonBody(req) {
+  return new Promise((resolveBody) => {
+    let size = 0;
+    const chunks = [];
+    let failed = false;
+    req.on('data', (chunk) => {
+      const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk));
+      size += buffer.length;
+      if (size > MAX_BODY_BYTES) { failed = true; chunks.length = 0; return; }
+      chunks.push(buffer);
+    });
+    req.on('end', () => {
+      if (failed) return resolveBody({ error: 'body too large' });
+      const text = Buffer.concat(chunks).toString('utf8');
+      if (text === '') return resolveBody({ value: {} });
+      try { resolveBody({ value: JSON.parse(text) }); } catch { resolveBody({ error: 'invalid JSON body' }); }
+    });
+    req.on('error', () => resolveBody({ error: 'body read failed' }));
+  });
+}
+
 function errorMessage(error) {
   return typeof error?.message === 'string' ? error.message : String(error);
 }
@@ -158,6 +186,11 @@ export async function mountHub(ctx, dependencies = {}) {
   const readClientBuildIdFn = dependencies.readClientBuildId ?? readClientBuildId;
   const now = dependencies.now ?? Date.now;
   const rootDir = dependencies.rootDir ?? ROOT_DIR;
+  const listHostVersionsFn = dependencies.listHostVersions ?? listHostVersions;
+  const listCachedHostsFn = dependencies.listCachedHosts ?? listCachedHosts;
+  const currentHostVersionFn = dependencies.currentHostVersion
+    ?? (() => installedHostVersion(profilesDir()));
+  const preflightJobs = dependencies.preflightJobs ?? createPreflightJobs();
   const activeProfile = typeof dependencies.profile === 'string'
     ? dependencies.profile
     : profileFromContext(ctx);
@@ -194,12 +227,13 @@ export async function mountHub(ctx, dependencies = {}) {
     };
   };
 
-  const guard = (handler, { sameOrigin = false } = {}) => async (req, res) => {
+  const guard = (handler, { sameOrigin = false, methods = ['GET'] } = {}) => async (req, res) => {
     if (!isLoopbackRequest(req)) {
       return sendJson(res, 403, { ok: false, error: 'loopback only' });
     }
-    if (req.method !== 'GET') {
-      return sendJson(res, 405, { ok: false, error: 'GET only' }, { allow: 'GET' });
+    if (!methods.includes(req.method)) {
+      const allow = methods.join(', ');
+      return sendJson(res, 405, { ok: false, error: `${allow} only` }, { allow });
     }
     if (sameOrigin && !isSameOriginBrowserRequest(req)) {
       return sendJson(res, 403, { ok: false, error: 'same-origin browser request required' });
@@ -295,8 +329,40 @@ export async function mountHub(ctx, dependencies = {}) {
     }, { sameOrigin: true }),
   });
 
+  register({
+    kind: 'exact', path: ROUTE_BASE + '/preflight/versions',
+    handler: guard(async (req, res) => {
+      // Network only on an explicit panel action, like /updates.
+      const listing = await listHostVersionsFn();
+      let current = null;
+      try { current = currentHostVersionFn(); } catch { /* unknown */ }
+      return sendJson(res, 200, { ok: true, listing, cached: listCachedHostsFn(), current });
+    }, { sameOrigin: true }),
+  });
+
+  register({
+    kind: 'exact', path: ROUTE_BASE + '/preflight',
+    handler: guard(async (req, res) => {
+      if (req.method === 'GET') {
+        return sendJson(res, 200, { ok: true, job: preflightJobs.snapshot() });
+      }
+      // POST: start one job. The heavy work runs in a child process; this
+      // handler only records the request and returns immediately.
+      const body = await readJsonBody(req);
+      if (body.error) return sendJson(res, 400, { ok: false, error: body.error });
+      const target = body.value?.target;
+      if (!validTarget(target)) return sendJson(res, 400, { ok: false, error: 'target must be a version or dist-tag' });
+      try {
+        return sendJson(res, 202, { ok: true, job: preflightJobs.start(target) });
+      } catch (error) {
+        if (error?.code === 'BUSY') return sendJson(res, 409, { ok: false, error: errorMessage(error), job: preflightJobs.snapshot() });
+        throw error;
+      }
+    }, { sameOrigin: true, methods: ['GET', 'POST'] }),
+  });
+
   if (routeState.failed.length === 0 && routeState.mounted.length === ROUTE_PATHS.length) {
-    try { ctx?.logger?.info?.('dsh-harbor hub mounted (ping, report, capabilities, updates)'); } catch {}
+    try { ctx?.logger?.info?.('dsh-harbor hub mounted (ping, report, capabilities, updates, preflight)'); } catch {}
   } else {
     warn(`dsh-harbor: hub partially mounted (${routeState.mounted.length}/${ROUTE_PATHS.length} routes)`);
   }

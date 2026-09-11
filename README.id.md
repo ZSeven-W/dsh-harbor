@@ -22,7 +22,7 @@ Poin terakhir bukan keputusan tentang cakupan, melainkan kenyataan pada host. Ru
 
 Terakhir, harbor melaporkan fakta, bukan skor. Keluarannya selalu berupa “apa yang terdeteksi dan di mana buktinya”—bukan tingkat risiko dan bukan penilaian kualitas. Arti sebuah temuan bagi Anda merupakan penilaian Anda sendiri, bukan penilaian harbor.
 
-> **Status: `0.1.0-rc.2`, pematangan kandidat rilis.** CLI, rute hub khusus loopback, panel pengaturan DSH, perbedaan lintas profile, dan pemeriksaan upstream opsional telah tersedia. Host yang aktif menyumbangkan alat, Provider, dan rute runtime; tanpa host aktif, bukti runtime secara eksplisit turun menjadi `available: false`. Detektor masih bersifat heuristik dan terus dikalibrasi terhadap ekosistem yang lebih luas, jadi tinjau buktinya dan jangan menganggap tidak ditemukannya sesuatu sebagai bukti bahwa sesuatu itu tidak ada.
+> **Status: `0.1.0-rc.3`, pematangan kandidat rilis.** CLI, rute hub khusus loopback, panel pengaturan DSH, perbedaan lintas profile, dan pemeriksaan upstream opsional telah tersedia. Host yang aktif menyumbangkan alat, Provider, dan rute runtime; tanpa host aktif, bukti runtime secara eksplisit turun menjadi `available: false`. Detektor masih bersifat heuristik dan terus dikalibrasi terhadap ekosistem yang lebih luas, jadi tinjau buktinya dan jangan menganggap tidak ditemukannya sesuatu sebagai bukti bahwa sesuatu itu tidak ada.
 
 ## Apa yang diperiksa
 
@@ -39,6 +39,18 @@ Terakhir, harbor melaporkan fakta, bukan skor. Keluarannya selalu berupa “apa 
 Kemampuan terdiri dari tiga belas jenis tetap: injeksi klien, risiko realm, salinan realm, hook global, adaptor LLM, subproses, lalu lintas jaringan keluar, rute Web, pendaftaran alat, server MCP, penulisan konfigurasi eksternal, penanganan kredensial, dan pembacaan variabel lingkungan. Daftar ini tetap agar laporan dapat dibandingkan dan di-diff antar-pemindaian. Daftar resminya ada di [SPEC.md](./SPEC.md) §2; sumber kebenaran yang dapat dibaca mesin adalah `src/scan/detectors.mjs`.
 
 Istilah yang digunakan sengaja netral: **kemampuan**, bukan risiko. Menjalankan subproses merupakan tujuan utama beberapa plugin. Laporan menjawab “apa yang dapat dilakukannya” dan menyerahkan pertanyaan “apakah seharusnya dilakukan” kepada Anda.
+
+## Pemeriksaan pra-upgrade
+
+Sebelum memindahkan DSH ke versi baru, Harbor memasang versi persis itu ke cache miliknya sendiri, lalu meng-import setiap plugin terpasang di proses anak untuk mengujinya terhadap versi tersebut, memeriksa id `dsh.client.inject` terhadap graf modul klien target, dan memeriksa rentang peer host. Jawabannya per profile: bisa boot setelah upgrade, atau terblokir — oleh plugin mana, dengan error link-time yang sebenarnya. Ia juga memeriksa apakah `agent-presets.default` di `settings.yaml` masih ada di antara preset bawaan target (DSH 0.1.2 mengganti nama `code` menjadi `ptc` tanpa memigrasikan nilai tersimpan, sehingga setiap sesi baru gagal).
+
+```sh
+harbor preflight --list                 # dist-tag upstream, versi terbaru, pohon host yang di-cache lokal
+harbor preflight --dsh next             # atau versi spesifik: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # laporan lengkap yang dapat dibaca mesin
+```
+
+Putusan diberikan per plugin (**memblokir boot** / **bisa dimuat** / **tidak diuji**) dan per profile; rentang peer dan inject mati hanyalah saran dan tidak pernah mengubah putusan. Kode keluar 3 berarti setidaknya satu profile tidak akan boot. Semuanya berjalan di proses anak; prefix npm global dan profile Anda tidak pernah ditulis. Hook resolve memerlukan Node ≥ 20.6.
 
 ## Versi
 
@@ -95,6 +107,7 @@ Contoh di bawah menggunakan `harbor` sebagai singkatan untuk salah satu cara men
 harbor scan                 # inventaris, konflik, dan perubahan sejak pemindaian terakhir
 harbor scan --check-updates # + pemeriksaan upstream opsional terhadap registry (menggunakan jaringan)
 harbor manifest ./my-plugin # buat draf blok dsh.capabilities untuk plugin Anda sendiri
+harbor preflight --dsh next # pemeriksaan pra-upgrade: profile mana yang masih boot di versi DSH itu
 ```
 
 Tambahkan `--evidence` untuk menampilkan bukti sumber `file:line` yang tersedia, `--json` untuk laporan lengkap yang dapat dibaca mesin, dan `--no-snapshot` untuk tidak menulis acuan diff. Fakta yang berasal dari manifest, sistem berkas, atau runtime mungkin tidak memiliki baris sumber dan akan diberi label yang sesuai.

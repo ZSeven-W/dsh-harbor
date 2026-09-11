@@ -22,7 +22,7 @@ Những điều harbor chủ ý không làm cũng là một phần quan trọng 
 
 Cuối cùng, harbor báo cáo sự thật chứ không cho điểm. Đầu ra luôn là “đã phát hiện điều gì và bằng chứng ở đâu” — không bao giờ là mức độ rủi ro hay điểm chất lượng. Một phát hiện có ý nghĩa gì với bạn là phán đoán của bạn, không phải của harbor.
 
-> **Trạng thái: `0.1.0-rc.2`, đang củng cố bản release candidate.** CLI, các route hub chỉ dành cho loopback, bảng cài đặt DSH, độ lệch giữa các profile và kiểm tra upstream tùy chọn đều đã khả dụng. Một host đang hoạt động cung cấp runtime tools, providers và routes; bên ngoài host như vậy, bằng chứng runtime hạ cấp rõ ràng thành `available: false`. Các detector vẫn mang tính heuristic và đang được hiệu chỉnh theo hệ sinh thái rộng hơn, vì vậy hãy xem xét bằng chứng thay vì coi việc không phát hiện là bằng chứng cho sự vắng mặt.
+> **Trạng thái: `0.1.0-rc.3`, đang củng cố bản release candidate.** CLI, các route hub chỉ dành cho loopback, bảng cài đặt DSH, độ lệch giữa các profile và kiểm tra upstream tùy chọn đều đã khả dụng. Một host đang hoạt động cung cấp runtime tools, providers và routes; bên ngoài host như vậy, bằng chứng runtime hạ cấp rõ ràng thành `available: false`. Các detector vẫn mang tính heuristic và đang được hiệu chỉnh theo hệ sinh thái rộng hơn, vì vậy hãy xem xét bằng chứng thay vì coi việc không phát hiện là bằng chứng cho sự vắng mặt.
 
 ## Những gì được kiểm tra
 
@@ -39,6 +39,18 @@ Cuối cùng, harbor báo cáo sự thật chứ không cho điểm. Đầu ra l
 Các khả năng là một tập cố định gồm mười ba mục — client injection, rủi ro realm, bản sao realm, global hooks, bộ điều hợp LLM, subprocesses, network egress, web routes, đăng ký tools, máy chủ MCP, ghi config bên ngoài, xử lý thông tin xác thực và đọc environment. Tập này được cố định để các báo cáo luôn có thể so sánh và tạo diff giữa các lần quét. Danh sách chính thức nằm trong [SPEC.md](./SPEC.md) §2; nguồn chân lý dành cho máy đọc là `src/scan/detectors.mjs`.
 
 Cách diễn đạt được chủ ý giữ trung lập: **khả năng**, không phải rủi ro. Việc khởi chạy subprocesses chính là mục đích của một số plugin. Báo cáo trả lời “thứ này có thể làm gì” và để câu hỏi “nó có nên làm không” cho bạn.
+
+## Kiểm tra trước khi nâng cấp
+
+Trước khi đưa DSH lên phiên bản mới, Harbor cài đúng phiên bản đó vào bộ nhớ đệm riêng, rồi import từng plugin đã cài trong một tiến trình con để thăm dò với phiên bản đó, đối chiếu id trong `dsh.client.inject` với đồ thị mô-đun client của đích và kiểm tra các dải peer của host. Kết luận theo từng profile: khởi động được sau nâng cấp, hay bị chặn — bởi plugin nào, kèm lỗi liên kết thực tế. Nó cũng kiểm tra `agent-presets.default` trong `settings.yaml` có còn nằm trong các preset tích hợp của đích không (DSH 0.1.2 đổi tên `code` thành `ptc` mà không di trú giá trị đã lưu, sau đó mọi phiên mới đều thất bại).
+
+```sh
+harbor preflight --list                 # dist-tag thượng nguồn, phiên bản gần đây, cây host đã đệm cục bộ
+harbor preflight --dsh next             # hoặc một phiên bản cụ thể: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # báo cáo đầy đủ đọc được bằng máy
+```
+
+Phán quyết theo plugin (**chặn khởi động** / **tải được** / **chưa thăm dò**) và theo profile; dải peer và inject chết chỉ là khuyến cáo, không bao giờ thay đổi phán quyết. Mã thoát 3 nghĩa là ít nhất một profile sẽ không khởi động. Mọi thứ chạy trong tiến trình con; tiền tố npm toàn cục và các profile của bạn không bao giờ bị ghi. Hook phân giải cần Node ≥ 20.6.
 
 ## Phiên bản
 
@@ -95,6 +107,7 @@ Các ví dụ bên dưới dùng `harbor` làm cách viết tắt cho một tron
 harbor scan                 # danh mục, xung đột và các thay đổi kể từ lần quét gần nhất
 harbor scan --check-updates # + kiểm tra upstream tùy chọn với registry (qua mạng)
 harbor manifest ./my-plugin # phác thảo khối dsh.capabilities cho plugin của bạn
+harbor preflight --dsh next # kiểm tra trước: profile nào vẫn khởi động được trên phiên bản DSH đó
 ```
 
 Thêm `--evidence` để in bằng chứng nguồn `file:line` hiện có, `--json` để xuất báo cáo đầy đủ dành cho máy đọc và `--no-snapshot` để bỏ qua việc ghi mốc cơ sở cho diff. Các dữ kiện lấy từ manifest, filesystem hoặc runtime có thể không có dòng mã nguồn và sẽ được gắn nhãn tương ứng.

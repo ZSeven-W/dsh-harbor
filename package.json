@@ -1,7 +1,7 @@
 {
   "name": "@zseven-w/dsh-harbor",
-  "version": "0.1.0-rc.2",
-  "description": "A read-only mirror for installed DeepSeek Harness plugins: capability inventory with evidence, cross-plugin conflicts, and a diff of what changed since the last scan",
+  "version": "0.1.0-rc.3",
+  "description": "A read-only mirror for installed DeepSeek Harness plugins: capability inventory with evidence, cross-plugin conflicts, a diff of what changed since the last scan, and an upgrade preflight that tells you which profiles still boot on a newer DSH",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@10.34.5",
@@ -31,9 +31,8 @@
     },
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-renderer",
         "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-slots",
         "@deepseek-ai/dsh-client-ui-settings"
       ],
       "platform": "web"
@@ -43,6 +42,7 @@
       "env-read",
       "foreign-config",
       "network-egress",
+      "subprocess",
       "web-routes"
     ]
   },

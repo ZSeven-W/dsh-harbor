@@ -96,6 +96,7 @@ test('mountHub exposes four healthy routes and scopes report attribution to the 
 
   assert.deepEqual([...host.routes.keys()], [
     BASE + '/ping', BASE + '/report', BASE + '/capabilities', BASE + '/updates',
+    BASE + '/preflight/versions', BASE + '/preflight',
   ]);
   assert.equal(host.logs.info.length, 1);
   assert.equal(host.logs.warn.length, 0);
@@ -103,8 +104,8 @@ test('mountHub exposes four healthy routes and scopes report attribution to the 
   const ping = await invoke(host.routes, BASE + '/ping');
   assert.equal(ping.status, 200);
   assert.equal(ping.json.ok, true);
-  assert.equal(ping.json.routes.expected, 4);
-  assert.equal(ping.json.routes.mounted.length, 4);
+  assert.equal(ping.json.routes.expected, 6);
+  assert.equal(ping.json.routes.mounted.length, 6);
 
   const report = await invoke(host.routes, BASE + '/report');
   assert.equal(report.status, 200);
@@ -189,7 +190,7 @@ test('partial registration makes ping unhealthy and never emits the green mount 
     path: BASE + '/capabilities', error: 'collision for test',
   }]);
   assert.equal(host.logs.info.length, 0);
-  assert.ok(host.logs.warn.some((line) => line.includes('partially mounted (3/4 routes)')));
+  assert.ok(host.logs.warn.some((line) => line.includes('partially mounted (5/6 routes)')));
   dispose();
 });
 
@@ -247,6 +248,7 @@ test('dispose unregisters mounted routes in reverse order and is idempotent', as
   dispose();
   dispose();
   assert.deepEqual(host.disposed, [
+    BASE + '/preflight', BASE + '/preflight/versions',
     BASE + '/updates', BASE + '/capabilities', BASE + '/report', BASE + '/ping',
   ]);
   assert.equal(host.routes.size, 0);

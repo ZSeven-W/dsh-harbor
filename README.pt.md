@@ -22,7 +22,7 @@ O último ponto não é uma decisão de escopo, mas uma característica do host.
 
 Por fim, harbor relata fatos, não pontuações. Sua saída sempre diz “o que foi detectado e onde está a evidência” — nunca um nível de risco ou uma nota de qualidade. O significado de uma descoberta é uma decisão sua, não do harbor.
 
-> **Status: `0.1.0-rc.2`, reforço da versão candidata.** A CLI, as rotas do hub limitadas ao loopback, o painel de configurações do DSH, as divergências entre perfis e a verificação upstream opcional estão disponíveis. Um host ativo fornece ferramentas, providers e rotas de runtime; fora de um host ativo, as evidências de runtime são explicitamente rebaixadas para `available: false`. Os detectores continuam heurísticos e estão sendo calibrados com o ecossistema mais amplo; portanto, examine as evidências em vez de tratar a ausência de detecção como prova de inexistência.
+> **Status: `0.1.0-rc.3`, reforço da versão candidata.** A CLI, as rotas do hub limitadas ao loopback, o painel de configurações do DSH, as divergências entre perfis e a verificação upstream opcional estão disponíveis. Um host ativo fornece ferramentas, providers e rotas de runtime; fora de um host ativo, as evidências de runtime são explicitamente rebaixadas para `available: false`. Os detectores continuam heurísticos e estão sendo calibrados com o ecossistema mais amplo; portanto, examine as evidências em vez de tratar a ausência de detecção como prova de inexistência.
 
 ## O que ele examina
 
@@ -39,6 +39,18 @@ Por fim, harbor relata fatos, não pontuações. Sua saída sempre diz “o que 
 As capacidades formam um conjunto fixo de treze itens — injeção no cliente, riscos de realm, cópias de realm, hooks globais, adaptadores de LLM, subprocessos, saída de rede, rotas web, registro de ferramentas, servidores MCP, gravações em configurações externas, manipulação de credenciais e leitura do ambiente. O conjunto é fixo para que os relatórios permaneçam comparáveis e possam ser diferenciados entre verificações. A lista oficial está em [SPEC.md](./SPEC.md) §2; a fonte de verdade legível por máquina é `src/scan/detectors.mjs`.
 
 A terminologia é deliberadamente neutra: **capacidade**, não risco. Criar subprocessos é justamente a finalidade de alguns plugins. O relatório responde “o que isto pode fazer” e deixa “deveria fazer isso?” para você.
+
+## Pré-verificação de upgrade
+
+Antes de mover o DSH para uma versão nova, o Harbor instala exatamente essa versão no seu próprio cache, importa cada plugin instalado num processo filho para sondá-lo contra ela, confere os id de `dsh.client.inject` com o grafo de módulos cliente do alvo e verifica os intervalos peer do host. A resposta é por profile: inicia após o upgrade, ou bloqueado — por qual plugin, com o erro real de ligação. Também confere se `agent-presets.default` em `settings.yaml` ainda existe entre os presets embutidos do alvo (o DSH 0.1.2 renomeou `code` para `ptc` sem migrar o valor guardado, e depois toda sessão nova falha).
+
+```sh
+harbor preflight --list                 # dist-tags upstream, versões recentes, árvores host em cache local
+harbor preflight --dsh next             # ou uma versão concreta: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # relatório completo legível por máquina
+```
+
+Os veredictos são por plugin (**bloqueia a inicialização** / **carrega** / **não sondado**) e por profile; intervalos peer e injects mortos são avisos e nunca mudam um veredicto. Código de saída 3 significa que pelo menos um profile não iniciaria. Tudo roda em processos filhos; o prefixo global do npm e os seus profiles nunca são escritos. O hook de resolução exige Node ≥ 20.6.
 
 ## Versões
 
@@ -95,6 +107,7 @@ Os exemplos abaixo usam `harbor` como abreviação de uma das formas de execuç�
 harbor scan                 # inventário, conflitos e mudanças desde a última verificação
 harbor scan --check-updates # + verificação upstream opcional no registro (usa a rede)
 harbor manifest ./my-plugin # prepara um bloco dsh.capabilities para o seu próprio plugin
+harbor preflight --dsh next # pré-verificação: quais profiles ainda iniciam nessa versão do DSH
 ```
 
 Adicione `--evidence` para exibir as evidências de origem `file:line` disponíveis, `--json` para obter o relatório completo legível por máquina e `--no-snapshot` para não gravar a linha de base do diff. Fatos derivados do manifesto, do sistema de arquivos ou do runtime podem não ter uma linha de código-fonte e são identificados dessa forma.

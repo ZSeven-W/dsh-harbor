@@ -22,7 +22,7 @@ harbor 只做一件事：為已安裝的外掛維護一本持續更新、有證�
 
 最後，harbor 報告事實，不給評分。它的輸出始終是「偵測到了什麼，以及證據在哪裡」——絕不是風險等級，也不是品質評分。一項發現對你意味著什麼，由你判斷，而不是由 harbor 決定。
 
-> **狀態：`0.1.0-rc.2`，候選版本強化中。** CLI、僅限回環的 hub 路由、DSH 設定面板、跨 profile 漂移，以及選擇性啟用的上游檢查均已可用。運作中的宿主會提供執行期工具、Provider 與路由；沒有運作中宿主時，執行期證據會明確降級為 `available: false`。偵測器仍採用啟發式方法，並持續針對更廣泛的生態系校準，因此請檢視證據，不要把「未偵測到」視為「不存在」的證明。
+> **狀態：`0.1.0-rc.3`，候選版本強化中。** CLI、僅限回環的 hub 路由、DSH 設定面板、跨 profile 漂移，以及選擇性啟用的上游檢查均已可用。運作中的宿主會提供執行期工具、Provider 與路由；沒有運作中宿主時，執行期證據會明確降級為 `available: false`。偵測器仍採用啟發式方法，並持續針對更廣泛的生態系校準，因此請檢視證據，不要把「未偵測到」視為「不存在」的證明。
 
 ## 它會查看什麼
 
@@ -39,6 +39,18 @@ harbor 只做一件事：為已安裝的外掛維護一本持續更新、有證�
 能力是一組固定的十三個項目——用戶端注入、realm 風險、realm 副本、全域 hook、LLM 轉接器、子程序、網路連出、Web 路由、工具註冊、MCP 伺服器、外部設定寫入、憑證處理、環境變數讀取。採用固定集合，才能讓不同掃描的報告持續可比較、可做 diff。權威清單請見 [SPEC.md](./SPEC.md) §2；機器可讀的事實來源是 `src/scan/detectors.mjs`。
 
 措辭刻意保持中性：稱為「能力」，而不是「風險」。對某些外掛而言，啟動子程序正是它們存在的目的。報告回答「它能做什麼」，至於「它該不該這麼做」，則留給你判斷。
+
+## 升級預檢
+
+把 DSH 升到新版本之前，Harbor 先把那個精確版本裝進自己的快取目錄，在子程序裡逐個對已安裝外掛程式做 import 探針，把 `dsh.client.inject` 的 id 對照目標版本的用戶端模組圖核對，再核對宿主 peer 範圍。結論按 profile 給：升級後能啟動，或者起不來——被哪個外掛程式拖垮、真實的連結期錯誤原文。它同時檢查 `settings.yaml` 裡的 `agent-presets.default` 是否還是目標版本的內建預設（DSH 0.1.2 把 `code` 改名為 `ptc`，舊值不會遷移，之後每次新建工作階段都失敗）。
+
+```sh
+harbor preflight --list                 # 上游 dist-tags、最近版本、本機已快取的宿主樹
+harbor preflight --dsh next             # 也可以指定具體版本：--dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # 機器可讀的完整報告
+```
+
+判決按外掛程式（**拖垮啟動** / **可載入** / **未探測**）和按 profile 給出；peer 範圍與失效的 inject 只是提示，不改變判決。結束碼 3 表示至少一個 profile 升級後起不來。整個過程在子程序裡完成，全域 npm 前綴和你的 profile 永遠不會被寫入；解析鉤子需要 Node ≥ 20.6。
 
 ## 版本
 
@@ -95,6 +107,7 @@ pnpm dlx @zseven-w/dsh-harbor@next scan
 harbor scan                 # 清單、衝突，以及自上次掃描以來的變化
 harbor scan --check-updates # 加上選擇性啟用的 registry 上游檢查（會連網）
 harbor manifest ./my-plugin # 為你自己的外掛起草 dsh.capabilities 區塊
+harbor preflight --dsh next # 升級預檢：升級到該 DSH 版本後，哪些 profile 還能啟動
 ```
 
 加上 `--evidence` 可列印現有的 `file:line` 來源證據，`--json` 可取得完整的機器可讀報告，`--no-snapshot` 則可略過寫入 diff 基準。從 manifest、檔案系統或執行期取得的事實可能沒有來源行，系統會據實標示。

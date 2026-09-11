@@ -3,6 +3,8 @@
 //
 //   harbor scan [--json] [--evidence] [--no-snapshot] [--check-updates]
 //   harbor manifest [dir]     draft a dsh.capabilities block for your own plugin
+//   harbor preflight [--dsh <version|tag>] [--json] [--list]
+//                             would the installed plugins still load on that DSH?
 //
 // Output is deliberately plain: capabilities, evidence, conflicts, changes.
 // No scores, no severity colours for capabilities — a subprocess is a fact,
@@ -10,6 +12,7 @@
 
 import { scan, inspectPlugin, draftManifest, reconcile, byId, checkUpstream } from './scan/index.mjs';
 import { readJson } from './scan/discover.mjs';
+import { preflight, listHostVersions, listCachedHosts } from './preflight/index.mjs';
 import { join, resolve } from 'node:path';
 
 const PACKAGE = readJson(new URL('../package.json', import.meta.url)) ?? {};
@@ -42,17 +45,22 @@ const USAGE = `dsh-harbor ${VERSION}
 用法:
   harbor [scan] [--json] [--evidence] [--no-snapshot] [--check-updates]
   harbor manifest [dir]
+  harbor preflight [--dsh <版本|dist-tag>] [--json] [--list]
   harbor --help | --version
 
 命令:
   scan             扫描已安装插件（默认命令）
   manifest [dir]   为插件起草待合并的 dsh.capabilities 字段
+  preflight        升级预检：把目标版本的 DSH 装进隔离目录，逐个插件做 import 探针、
+                   client inject 核对、peer 范围核对，回答"升级后 profile 还能不能起来"
 
 选项:
   --json           输出完整 JSON 报告
   --evidence       显示每条能力的 file:line 出处
   --no-snapshot    不读取或写入扫描快照
   --check-updates  显式联网检查上游版本
+  --dsh <目标>     preflight 的目标 DSH 版本或 dist-tag（默认 latest；dist-tag 需联网解析）
+  --list           preflight 只列出上游 dist-tags、最近版本和本机已缓存的宿主树
   -h, --help       显示帮助，不执行扫描
   -v, --version    显示版本，不执行扫描`;
 
@@ -62,18 +70,38 @@ function parseArgs(args) {
   if (args.includes('--help') || args.includes('-h')) return { action: 'help' };
   if (args.includes('--version') || args.includes('-v')) return { action: 'version' };
 
+  // `--dsh <value>` takes the next token; fold it into `--dsh=<value>` so the
+  // positional/option split below stays trivial.
+  const folded = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--dsh' && i + 1 < args.length && !args[i + 1].startsWith('-')) {
+      folded.push(`--dsh=${args[i + 1]}`);
+      i++;
+    } else {
+      folded.push(args[i]);
+    }
+  }
+  args = folded;
+
   const positionals = args.filter((arg) => !arg.startsWith('-'));
   const commandToken = positionals[0];
   const command = commandToken ?? 'scan';
-  if (command !== 'scan' && command !== 'manifest') {
+  if (command !== 'scan' && command !== 'manifest' && command !== 'preflight') {
     return { error: `未知命令: ${terminalSafe(command)}`, exitCode: 2 };
   }
 
   const allowedOptions = command === 'scan'
     ? new Set(['--json', '--evidence', '--no-snapshot', '--check-updates'])
-    : new Set();
-  const unknownOption = args.find((arg) => arg.startsWith('-') && !allowedOptions.has(arg));
+    : command === 'preflight'
+      ? new Set(['--json', '--list'])
+      : new Set();
+  if (command === 'preflight' && args.includes('--dsh')) return { error: '--dsh 需要一个版本或 dist-tag', exitCode: 2 };
+  const unknownOption = args.find((arg) => arg.startsWith('-') && !allowedOptions.has(arg)
+    && !(command === 'preflight' && arg.startsWith('--dsh=')));
   if (unknownOption) return { error: `未知选项: ${terminalSafe(unknownOption)}`, exitCode: 2 };
+  const dshOption = args.find((arg) => arg.startsWith('--dsh='));
+  const target = dshOption === undefined ? undefined : dshOption.slice('--dsh='.length);
+  if (target === '') return { error: '--dsh 需要一个版本或 dist-tag', exitCode: 2 };
 
   if (command === 'scan' && positionals.length > 1) {
     return { error: `scan 不接受位置参数: ${terminalList(positionals.slice(1), ' ')}`, exitCode: 2 };
@@ -81,11 +109,15 @@ function parseArgs(args) {
   if (command === 'manifest' && positionals.length > 2) {
     return { error: `manifest 只接受一个目录: ${terminalList(positionals.slice(1), ' ')}`, exitCode: 2 };
   }
+  if (command === 'preflight' && positionals.length > 1) {
+    return { error: `preflight 不接受位置参数: ${terminalList(positionals.slice(1), ' ')}`, exitCode: 2 };
+  }
 
   return {
     action: command,
     dir: command === 'manifest' ? positionals[1] : undefined,
-    flags: new Set(args.filter((arg) => arg.startsWith('--')).map((arg) => arg.slice(2))),
+    target,
+    flags: new Set(args.filter((arg) => arg.startsWith('--') && !arg.startsWith('--dsh=')).map((arg) => arg.slice(2))),
   };
 }
 
@@ -259,6 +291,8 @@ async function main(args = process.argv.slice(2)) {
     return 0;
   }
 
+  if (invocation.action === 'preflight') return runPreflight(invocation, flag);
+
   const dir = resolve(invocation.dir ?? process.cwd());
   const pkg = readJson(join(dir, 'package.json'));
   if (!pkg) {
@@ -288,6 +322,71 @@ async function main(args = process.argv.slice(2)) {
   }
   console.log('\n合并前请自行核对：检测是模式匹配，可能多报（如注释、示例代码）或漏报（如动态调用）。');
   return 0;
+}
+
+const VERDICT_MARK = {
+  'blocks-boot': '✖ 拖崩启动',
+  ok: '✓ 可加载',
+  unknown: '? 未探测',
+};
+
+async function runPreflight(invocation, flag) {
+  if (flag('list')) {
+    const listing = await listHostVersions();
+    const cached = listCachedHosts();
+    if (flag('json')) {
+      await writeStdout(`${JSON.stringify({ listing, cached }, null, 2)}\n`);
+      return 0;
+    }
+    console.log(`@deepseek-ai/dsh 上游（${terminalSafe(listing.registry ?? 'registry')}）`);
+    for (const [tag, version] of Object.entries(listing.tags)) console.log(`  ${terminalSafe(tag, 40).padEnd(8)} → ${terminalSafe(version, 60)}`);
+    console.log(`  最近版本: ${terminalList(listing.versions, ', ')}`);
+    console.log(cached.length ? '本机已缓存的宿主树:' : '本机已缓存的宿主树: 无');
+    for (const c of cached) console.log(`  ${terminalSafe(c.version, 60)}  ${terminalSafe(c.prefix)}`);
+    return 0;
+  }
+
+  const target = invocation.target ?? 'latest';
+  // Progress always goes to stderr, JSON or not: stdout stays a clean report
+  // for machine callers, and the hub streams stderr into the panel log.
+  const progress = (line) => console.error(`  · ${terminalSafe(line, 300)}`);
+  const report = await preflight(target, { onLog: progress });
+  if (flag('json')) {
+    await writeStdout(`${JSON.stringify(report, null, 2)}\n`);
+    return report.summary.allProfilesBoot ? 0 : 3;
+  }
+
+  const t = report.target;
+  console.log(`\ndsh-harbor 升级预检 — 目标 DSH ${terminalSafe(t.version, 60)}${t.requested !== t.version ? `（${terminalSafe(t.requested, 40)}）` : ''}，当前 ${terminalSafe(report.current.version ?? '未知', 60)}`);
+  console.log(`宿主树: ${terminalSafe(report.host.prefix)}${report.host.cached ? '（缓存）' : '（本次安装）'}，${terminalSafe(report.host.packages, 20)} 个官方包，${terminalSafe(report.host.clientModules, 20)} 个 web 客户端模块`);
+  const order = { 'blocks-boot': 0, unknown: 1, ok: 2 };
+  const rows = [...report.plugins].sort((a, b) => (order[a.verdict] ?? 9) - (order[b.verdict] ?? 9) || a.name.localeCompare(b.name));
+  for (const p of rows) {
+    const advisory = p.advisories.length ? `  ⚠ ${terminalSafe(p.advisories.length, 20)} 条声明过期` : '';
+    console.log(`\n${terminalSafe(VERDICT_MARK[p.verdict] ?? p.verdict, 40)}  ${terminalSafe(p.name, 180)}@${terminalSafe(p.version ?? '?', 60)}  [${terminalList(p.profiles, ', ', 200)}]${advisory}`);
+    if (p.import.status === 'fail') console.log(`    import 失败 ${terminalSafe(p.import.code, 60)}: ${terminalSafe(p.import.message, 400)}`);
+    else if (p.import.status === 'ok') console.log(`    import 通过，链接到 ${terminalSafe(p.import.resolved.length, 20)} 个宿主包`);
+    else console.log(`    import 跳过: ${terminalSafe(p.import.reason ?? '', 200)}`);
+    const dead = p.advisories.filter((a) => a.kind === 'dead-inject');
+    if (dead.length) console.log(`    client ${terminalList(dead.map((a) => `${a.field}:${a.id}`), ', ', 300)} 在目标宿主中不存在（0.1.5 起加载器静默跳过）`);
+    const ranges = p.advisories.filter((a) => a.kind === 'peer-range');
+    if (ranges.length) console.log(`    peer 范围不含目标版本: ${terminalList(ranges.map((a) => `${a.name} ${a.range}`), ', ', 400)}`);
+    const missing = p.advisories.filter((a) => a.kind === 'peer-missing');
+    if (missing.length) console.log(`    peer 目标宿主未提供: ${terminalList(missing.map((a) => a.name), ', ', 400)}`);
+  }
+  const ap = report.settings.agentPresets;
+  if (ap.status === 'invalid') {
+    console.log(`\n⚠ 用户设置 agent-presets.default = "${terminalSafe(ap.wanted, 60)}" 不在目标版本的预设里（可用: ${terminalList(ap.available, ', ')}）；升级后新建会话会报 agent-preset/not-found`);
+  }
+  const c = report.summary.counts;
+  console.log('\nprofile 结论:');
+  for (const [profile, state] of Object.entries(report.summary.profiles)) {
+    console.log(state.boots
+      ? `  ✓ ${terminalSafe(profile, 120)} 升级后可以启动`
+      : `  ✖ ${terminalSafe(profile, 120)} 升级后起不来（${terminalList(state.blockedBy, ', ', 300)}）`);
+  }
+  console.log(`\n合计: 拖崩 ${terminalSafe(c['blocks-boot'], 20)} · 可加载 ${terminalSafe(c.ok, 20)} · 未探测 ${terminalSafe(c.unknown, 20)} · 带过期声明 ${terminalSafe(c.withAdvisories, 20)}`);
+  return report.summary.allProfilesBoot ? 0 : 3;
 }
 
 try {

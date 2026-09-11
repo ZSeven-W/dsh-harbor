@@ -22,7 +22,7 @@ Ce dernier point n'est pas une décision de périmètre, mais un fait lié à l'
 
 Enfin, harbor rapporte des faits, pas des scores. Sa sortie indique toujours « ce qui a été détecté et où se trouvent les preuves » — jamais un niveau de risque ni une note de qualité. C'est à vous, et non à harbor, de juger ce qu'un constat signifie.
 
-> **État : `0.1.0-rc.2`, consolidation de la version candidate.** La CLI, les routes hub en boucle locale, le panneau de réglages DSH, les écarts entre profils et la vérification amont facultative sont disponibles. Un hôte actif fournit les outils, providers et routes d'exécution ; sans hôte actif, les preuves d'exécution passent explicitement à `available: false`. Les détecteurs restent heuristiques et sont en cours d'étalonnage sur l'ensemble de l'écosystème ; examinez donc leurs preuves au lieu de considérer une absence de détection comme une preuve d'absence.
+> **État : `0.1.0-rc.3`, consolidation de la version candidate.** La CLI, les routes hub en boucle locale, le panneau de réglages DSH, les écarts entre profils et la vérification amont facultative sont disponibles. Un hôte actif fournit les outils, providers et routes d'exécution ; sans hôte actif, les preuves d'exécution passent explicitement à `available: false`. Les détecteurs restent heuristiques et sont en cours d'étalonnage sur l'ensemble de l'écosystème ; examinez donc leurs preuves au lieu de considérer une absence de détection comme une preuve d'absence.
 
 ## Ce qu'il examine
 
@@ -39,6 +39,18 @@ Enfin, harbor rapporte des faits, pas des scores. Sa sortie indique toujours « 
 Les capacités forment un ensemble fixe de treize éléments — injection côté client, risques liés au realm, copies de realm, hooks globaux, adaptateurs LLM, sous-processus, sorties réseau, routes web, enregistrement d'outils, serveurs MCP, écritures dans des configurations externes, gestion des identifiants et lecture de l'environnement. Cet ensemble est fixe afin que les rapports restent comparables et que leurs différences puissent être calculées d'une analyse à l'autre. La liste de référence se trouve dans [SPEC.md](./SPEC.md) §2 ; la source de vérité lisible par machine est `src/scan/detectors.mjs`.
 
 Le vocabulaire est délibérément neutre : **capacité**, et non risque. Le lancement de sous-processus est précisément la raison d'être de certains plugins. Le rapport répond à la question « que peut-il faire ? » et vous laisse décider « devrait-il le faire ? ».
+
+## Pré-vérification de mise à niveau
+
+Avant de passer DSH à une nouvelle version, Harbor installe cette version exacte dans son propre cache, puis importe chaque plugin installé dans un processus enfant pour le sonder contre elle, vérifie les id de `dsh.client.inject` par rapport au graphe des modules client de la cible et contrôle les plages peer de l'hôte. La réponse est donnée par profile : démarre après la mise à niveau, ou bloqué — par quel plugin, avec l'erreur réelle de liaison. Elle vérifie aussi que `agent-presets.default` dans `settings.yaml` existe encore parmi les presets intégrés de la cible (DSH 0.1.2 a renommé `code` en `ptc` sans migrer la valeur stockée, et chaque nouvelle session échoue ensuite).
+
+```sh
+harbor preflight --list                 # dist-tags amont, versions récentes, arbres hôte en cache local
+harbor preflight --dsh next             # ou une version précise : --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # rapport complet lisible par machine
+```
+
+Les verdicts sont donnés par plugin (**bloque le démarrage** / **se charge** / **non sondé**) et par profile ; les plages peer et les inject morts sont des avis et ne changent jamais un verdict. Le code de sortie 3 signifie qu'au moins un profile ne démarrerait pas. Tout s'exécute dans des processus enfants ; le préfixe npm global et vos profiles ne sont jamais écrits. Le hook de résolution requiert Node ≥ 20.6.
 
 ## Versions
 
@@ -95,6 +107,7 @@ Dans les exemples ci-dessous, `harbor` sert de raccourci pour l'une des formes d
 harbor scan                 # inventaire, conflits et changements depuis la dernière analyse
 harbor scan --check-updates # + vérification amont facultative dans le registre (réseau)
 harbor manifest ./my-plugin # prépare un bloc dsh.capabilities pour votre propre plugin
+harbor preflight --dsh next # pré-vérification : quels profiles démarrent encore sur cette version de DSH
 ```
 
 Ajoutez `--evidence` pour afficher les preuves sources `file:line` disponibles, `--json` pour obtenir le rapport complet lisible par machine et `--no-snapshot` pour éviter d'écrire la base de référence des différences. Les faits issus du manifeste, du système de fichiers ou de l'exécution peuvent ne pas avoir de ligne source et sont étiquetés en conséquence.

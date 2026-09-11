@@ -6,11 +6,11 @@
 
 <p align="center">
   <strong>给本机已安装 DeepSeek Harness 插件的一本证据优先事实台账。</strong><br />
-  <sub>能力清单 &bull; 声明与检出对账 &bull; 运行时归属 &bull; 冲突检测 &bull; 版本漂移 &bull; 变化时间线</sub>
+  <sub>能力清单 &bull; 声明与检出对账 &bull; 运行时归属 &bull; 冲突检测 &bull; 版本漂移 &bull; 变化时间线 &bull; 升级预检</sub>
 </p>
 
 <p align="center">
-  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; 当前插件版本: <code>0.1.0-rc.2</code> &middot; 已验证 DSH <code>0.1.1-rc.2</code></sub>
+  <sub>npm: <code>@zseven-w/dsh-harbor</code> &middot; 当前插件版本: <code>0.1.0-rc.3</code> &middot; 已验证 DSH <code>0.1.5-rc.2</code></sub>
 </p>
 
 <p align="center">
@@ -82,6 +82,22 @@ Harbor 扫描所有 DSH profile 中已安装的第三方 bundle，并使用固�
 
 </td>
 </tr>
+<tr>
+<td width="50%">
+
+### 🛫 升级预检
+
+把 DSH 升到新版本之前，Harbor 先把那个精确版本装进自己的缓存目录，在子进程里逐个对已安装插件做 import 探针，把 `dsh.client.inject` 的 id 对照目标版本的客户端模块图核对，再核对宿主 peer 范围。结论按 profile 给：升级后能启动，或者起不来——被哪个插件拖崩、真实的链接期报错原文。
+
+</td>
+<td width="50%">
+
+### 🧷 一项设置检查
+
+唯一一条有真实升级事故的用户设置检查：内置 Agent 预设改名（DSH 0.1.2 把 `code` 改成 `ptc`）时，设置里的 `agent-presets.default` 不会迁移，之后每次新建会话都失败。预检把过期值对照目标版本的预设列表报出来。
+
+</td>
+</tr>
 </table>
 
 ## 工作原理
@@ -102,7 +118,24 @@ Harbor 扫描所有 DSH profile 中已安装的第三方 bundle，并使用固�
        新增 + 移除 + 版本/profile/能力/claims 变化
 ```
 
-CLI 与设置面板使用同一套扫描核心。默认路径完全离线；只有 `harbor scan --check-updates` 或面板的「检查上游更新」按钮会联系 registry。
+CLI 与设置面板使用同一套扫描核心。默认路径完全离线；只有 `harbor scan --check-updates`、`harbor preflight`，或面板的「检查上游更新」「升级预检」动作会联系 registry。
+
+### 升级预检
+
+```sh
+harbor preflight --list                 # 上游 dist-tags、最近版本、本机已缓存的宿主树
+harbor preflight --dsh next             # 也可以给具体版本：--dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json
+```
+
+按顺序发生的事：
+
+1. 解析目标（dist-tag 需要一次 registry 请求），用 `npm install -g --prefix` 把 `@deepseek-ai/dsh@<version>` 装进 `<状态目录>/hosts/<version>`。装完的树会复用；全局 npm 前缀和你的 profile 永远不会被写。
+2. 每个已安装第三方插件的服务端入口在一个全新的 `node` 子进程里 import 一次。`module.register` 解析钩子把 `@deepseek-ai/*` 的导入改写到目标树，插件因此链接到待评估的版本，而它自己的依赖仍从真实安装位置解析。缺包和被删的导出在链接期就失败，原文照报——DSH 加载器是 fail-loud 的，一个这样的插件就会拖崩整个 profile。
+3. `dsh.client.inject` / `external` 的 id 对照目标树里声明了 web 客户端模块的包核对（DSH ≥ 0.1.5 会静默跳过未知 id，所以它自己从不报错）。宿主 peer 范围按 npm 的 prerelease 规则匹配。
+4. `settings.yaml` 里的 `agent-presets.default` 对照目标版本的内置预设核对。
+
+判决按插件（**拖崩启动** / **可加载** / **未探测**）和按 profile 给出；peer 范围与死 inject 属于提示，永远不改变判决。退出码 3 表示至少一个 profile 升级后起不来。解析钩子需要 Node ≥ 20.6。
 
 ## 可以直接核对的证据
 
@@ -161,6 +194,7 @@ harbor scan --evidence
 harbor scan --json --no-snapshot
 harbor scan --json --check-updates
 harbor manifest ./my-plugin
+harbor preflight --dsh next
 ```
 
 可选运行方式：

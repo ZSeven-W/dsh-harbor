@@ -116,6 +116,33 @@ const COPY = {
     missingUpdates: '/updates 返回成功，但缺少 updates 数据',
     bannerHubStale: 'harbor 的扫描代码已更新，但运行中的 DSH 仍在使用启动时载入的旧版本。请重启 DSH，否则本页显示的结论可能不完整。',
     bannerPanelStale: '本页面用的是旧版界面代码，请刷新页面。',
+    preflight: '升级预检',
+    preflightIntro: '把目标版本的 DSH 装进 Harbor 自己的缓存目录，逐个对已安装插件做 import 探针、client inject 核对和 peer 范围核对，回答"升级到这个版本后，哪个 profile 还能起来"。全部在子进程里完成，不碰真实 profile。',
+    preflightTarget: '目标版本',
+    preflightRun: '开始预检',
+    preflightRunning: '预检中…',
+    preflightLoadVersions: '获取上游版本',
+    preflightLoadingVersions: '获取中…',
+    preflightVersionsHint: '联网读取 @deepseek-ai/dsh 的 dist-tags；首次预检某个版本需要下载约 240 个包',
+    preflightCurrent: (v: string) => `当前宿主 ${v}`,
+    preflightCachedHosts: (n: number) => `本机已缓存 ${n} 个宿主树`,
+    preflightLog: '进度',
+    preflightBusy: '已有一个预检在运行',
+    preflightProfiles: 'profile 结论',
+    preflightBoots: '升级后可以启动',
+    preflightBlocked: (by: string) => `升级后起不来：${by}`,
+    preflightVerdict: { 'blocks-boot': '✖ 拖崩启动', ok: '✓ 可加载', unknown: '? 未探测' },
+    preflightAdvisories: (n: number) => `${n} 条声明过期`,
+    preflightImportFail: '入口 import 失败',
+    preflightImportOk: (n: number) => `入口 import 通过，链接到 ${n} 个宿主包`,
+    preflightImportSkipped: '没有可探测的服务端入口',
+    preflightDeadInject: '目标宿主没有这些客户端模块（0.1.5 起加载器静默跳过）',
+    preflightPeerRange: 'peer 范围不含目标版本',
+    preflightPeerMissing: '目标宿主未提供',
+    preflightSettings: (wanted: string, available: string) => `用户设置 agent-presets.default = "${wanted}" 不在目标版本的预设里（可用：${available}）；升级后新建会话会报 agent-preset/not-found`,
+    preflightSummary: (blocks: number, ok: number, adv: number) => `拖崩 ${blocks} · 可加载 ${ok} · 带过期声明 ${adv}`,
+    preflightFinished: (t: string, host: string, cached: boolean) => `完成于 ${t} · 宿主树 ${host}${cached ? '（缓存）' : '（本次安装）'}`,
+    preflightNoPlugins: '没有可预检的第三方插件。',
   },
   en: {
     label: 'DSH Harbor',
@@ -213,6 +240,33 @@ const COPY = {
     missingUpdates: '/updates succeeded without updates data',
     bannerHubStale: "harbor's scanner has been updated, but the running DSH still uses the copy it loaded at boot. Restart DSH — until then this page may be quietly incomplete.",
     bannerPanelStale: 'This page is running an older build of the panel. Reload the page.',
+    preflight: 'Upgrade preflight',
+    preflightIntro: 'Installs the target DSH version into Harbor\'s own cache, then import-probes every installed plugin against it and checks client inject ids and host peer ranges — answering "which profiles still boot after this upgrade". Everything runs in child processes; real profiles are never touched.',
+    preflightTarget: 'Target',
+    preflightRun: 'Run preflight',
+    preflightRunning: 'Running…',
+    preflightLoadVersions: 'Load upstream versions',
+    preflightLoadingVersions: 'Loading…',
+    preflightVersionsHint: 'Reads @deepseek-ai/dsh dist-tags from the registry; the first preflight of a version downloads ~240 packages',
+    preflightCurrent: (v: string) => `current host ${v}`,
+    preflightCachedHosts: (n: number) => `${n} host tree(s) cached locally`,
+    preflightLog: 'Progress',
+    preflightBusy: 'A preflight is already running',
+    preflightProfiles: 'Per profile',
+    preflightBoots: 'boots after upgrade',
+    preflightBlocked: (by: string) => `would not boot: ${by}`,
+    preflightVerdict: { 'blocks-boot': '✖ blocks boot', ok: '✓ loads', unknown: '? not probed' },
+    preflightAdvisories: (n: number) => `${n} stale declaration(s)`,
+    preflightImportFail: 'entry import failed',
+    preflightImportOk: (n: number) => `entry imports; links ${n} host package(s)`,
+    preflightImportSkipped: 'no server entry to probe',
+    preflightDeadInject: 'client modules the target host does not ship (silently skipped since 0.1.5)',
+    preflightPeerRange: 'peer range excludes the target',
+    preflightPeerMissing: 'not shipped by the target host',
+    preflightSettings: (wanted: string, available: string) => `agent-presets.default = "${wanted}" is not a preset of the target (available: ${available}); new sessions would fail with agent-preset/not-found`,
+    preflightSummary: (blocks: number, ok: number, adv: number) => `blocks boot ${blocks} · loads ${ok} · with stale declarations ${adv}`,
+    preflightFinished: (t: string, host: string, cached: boolean) => `finished ${t} · host tree ${host}${cached ? ' (cached)' : ' (installed now)'}`,
+    preflightNoPlugins: 'No third-party plugins to preflight.',
   },
 };
 
@@ -347,6 +401,152 @@ function localizeRuntimeNote(note: string, zh: boolean): string {
   return zh ? note : (RUNTIME_NOTE_EN[note] ?? note);
 }
 
+/**
+ * Upgrade preflight card. Two explicit actions, both networked and both
+ * click-only: load the upstream version list, and start one preflight job.
+ * While a job runs the card polls the hub; the job itself is a child process
+ * of the hub, so closing this page does not cancel it and reopening shows it.
+ */
+function PreflightSection({ copy, get, post, fmtTime }: { copy: any; get: (path: string) => Promise<any>; post: (path: string, body: any) => Promise<any>; fmtTime: (t: string) => string }) {
+  const [versions, setVersions] = useState<any>(null);
+  const [loadingVersions, setLoadingVersions] = useState(false);
+  const [target, setTarget] = useState('latest');
+  const [job, setJob] = useState<any>(null);
+  const [error, setError] = useState('');
+  const pollTimer = useRef<any>(null);
+
+  const poll = useCallback(async () => {
+    try {
+      const r = await get('/preflight');
+      if (!r?.ok) throw new Error(String(r?.error ?? 'ok=false'));
+      setJob(r.job);
+      if (r.job?.status === 'running') pollTimer.current = setTimeout(() => void poll(), 1500);
+    } catch (e: any) {
+      setError(String(e?.message ?? e));
+    }
+  }, [get]);
+
+  // On mount: show a job that is already running or finished in the hub.
+  // No network beyond the loopback route; the registry is only contacted on click.
+  useEffect(() => {
+    void poll();
+    return () => { if (pollTimer.current) clearTimeout(pollTimer.current); };
+  }, [poll]);
+
+  const loadVersions = useCallback(async () => {
+    setLoadingVersions(true);
+    setError('');
+    try {
+      const r = await get('/preflight/versions');
+      if (!r?.ok) throw new Error(String(r?.error ?? 'ok=false'));
+      setVersions(r);
+    } catch (e: any) {
+      setError(String(e?.message ?? e));
+    }
+    setLoadingVersions(false);
+  }, [get]);
+
+  const run = useCallback(async () => {
+    setError('');
+    try {
+      const r = await post('/preflight', { target });
+      if (!r?.ok) throw new Error(String(r?.error ?? 'ok=false'));
+      setJob(r.job);
+      if (pollTimer.current) clearTimeout(pollTimer.current);
+      pollTimer.current = setTimeout(() => void poll(), 1200);
+    } catch (e: any) {
+      setError(String(e?.message ?? e));
+    }
+  }, [post, poll, target]);
+
+  const running = job?.status === 'running';
+  const report = job?.status === 'done' ? job.report : null;
+  const tagOptions = versions?.listing?.tags
+    ? Object.entries(versions.listing.tags).map(([tag, v]: any) => ({ value: tag, label: `${tag} → ${v}` }))
+    : [{ value: 'latest', label: 'latest' }, { value: 'next', label: 'next' }];
+  const versionOptions = (versions?.listing?.versions ?? []).map((v: string) => ({ value: v, label: v }));
+  const options = [...tagOptions, ...versionOptions.filter((o: any) => !tagOptions.some((t: any) => t.value === o.value))];
+  const verdictColor = (v: string) => v === 'blocks-boot' ? CLASH : v === 'ok' ? '#3fb950' : undefined;
+  const order: Record<string, number> = { 'blocks-boot': 0, unknown: 1, ok: 2 };
+
+  return (<>
+    <div style={S.section}>{copy.preflight}</div>
+    <div style={{ fontSize: 12, opacity: 0.7, lineHeight: 1.5 }}>{copy.preflightIntro}</div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
+      <span style={{ fontSize: 12.5 }}>{copy.preflightTarget}</span>
+      <CustomSelect value={target} onChange={setTarget} options={options} minWidth={180} />
+      <button style={S.btn} disabled={running} onClick={() => void run()}>{running ? copy.preflightRunning : copy.preflightRun}</button>
+      <button style={S.btn} disabled={loadingVersions} onClick={() => void loadVersions()}>{loadingVersions ? copy.preflightLoadingVersions : copy.preflightLoadVersions}</button>
+      <span style={{ fontSize: 11, opacity: 0.55 }}>{copy.preflightVersionsHint}</span>
+    </div>
+    {versions && (
+      <div style={{ fontSize: 11.5, opacity: 0.65 }}>
+        {copy.preflightCurrent(versions.current ?? '?')} · {copy.preflightCachedHosts((versions.cached ?? []).length)}
+      </div>
+    )}
+    {error !== '' && (
+      <div role="alert" style={{ border: '1px solid rgba(248,81,73,0.55)', color: CLASH, background: 'rgba(248,81,73,0.06)', borderRadius: 8, padding: '7px 12px', fontSize: 12, whiteSpace: 'pre-wrap' as const }}>⚠ {error}</div>
+    )}
+    {job?.status === 'failed' && (
+      <div role="alert" style={{ border: '1px solid rgba(248,81,73,0.55)', color: CLASH, background: 'rgba(248,81,73,0.06)', borderRadius: 8, padding: '7px 12px', fontSize: 12, whiteSpace: 'pre-wrap' as const }}>⚠ {job.error}</div>
+    )}
+    {(running || (job?.log?.length > 0 && !report)) && (
+      <div style={{ ...S.block, gap: 4 }}>
+        <div style={{ fontSize: 12, fontWeight: 600 }}>{copy.preflightLog} · {job?.target}</div>
+        <div style={{ ...S.mono, fontSize: 11, opacity: 0.75, maxHeight: 160, overflow: 'auto', whiteSpace: 'pre-wrap' as const }}>
+          {(job?.log ?? []).slice(-40).join('\n')}
+        </div>
+      </div>
+    )}
+    {report && (
+      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 8 }}>
+        <div style={{ ...S.block, gap: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 600 }}>{copy.preflightProfiles} · DSH {report.target?.version}</div>
+          {Object.entries(report.summary?.profiles ?? {}).map(([profile, state]: any) => (
+            <div key={profile} style={{ fontSize: 12.5, display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' as const }}>
+              <span style={{ color: state.boots ? '#3fb950' : CLASH }}>{state.boots ? '✓' : '✖'}</span>
+              <span style={{ fontWeight: 600 }}>{profile}</span>
+              <span style={{ opacity: 0.75 }}>{state.boots ? copy.preflightBoots : copy.preflightBlocked((state.blockedBy ?? []).join(', '))}</span>
+            </div>
+          ))}
+          {report.settings?.agentPresets?.status === 'invalid' && (
+            <div style={{ fontSize: 12, color: DRIFT }}>⚠ {copy.preflightSettings(report.settings.agentPresets.wanted, (report.settings.agentPresets.available ?? []).join(', '))}</div>
+          )}
+          <div style={{ fontSize: 11.5, opacity: 0.6 }}>
+            {copy.preflightSummary(report.summary?.counts?.['blocks-boot'] ?? 0, report.summary?.counts?.ok ?? 0, report.summary?.counts?.withAdvisories ?? 0)}
+          </div>
+        </div>
+        {(report.plugins ?? []).length === 0 && <div style={{ opacity: 0.55 }}>{copy.preflightNoPlugins}</div>}
+        {[...(report.plugins ?? [])].sort((a: any, b: any) => (order[a.verdict] ?? 9) - (order[b.verdict] ?? 9) || String(a.name).localeCompare(String(b.name))).map((p: any) => {
+          const dead = (p.advisories ?? []).filter((a: any) => a.kind === 'dead-inject');
+          const ranges = (p.advisories ?? []).filter((a: any) => a.kind === 'peer-range');
+          const missing = (p.advisories ?? []).filter((a: any) => a.kind === 'peer-missing');
+          return (
+            <div key={p.identity ?? `${p.name}@${p.version}`} style={{ ...S.block, gap: 5, ...(p.verdict === 'blocks-boot' ? { borderColor: 'rgba(248,81,73,0.55)', background: 'rgba(248,81,73,0.06)' } : {}) }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' as const }}>
+                <span style={{ fontSize: 12.5, color: verdictColor(p.verdict), whiteSpace: 'nowrap' as const }}>{copy.preflightVerdict[p.verdict] ?? p.verdict}</span>
+                <span style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</span>
+                <span style={{ ...S.mono, fontSize: 11.5, opacity: 0.65 }}>@{p.version ?? '?'}</span>
+                <span style={{ fontSize: 11, opacity: 0.6 }}>{(p.profiles ?? []).join(', ')}</span>
+                {(p.advisories ?? []).length > 0 && <span style={{ fontSize: 11, color: DRIFT }}>⚠ {copy.preflightAdvisories(p.advisories.length)}</span>}
+              </div>
+              {p.import?.status === 'fail' && (
+                <div style={{ ...S.mono, fontSize: 11.5, color: CLASH, whiteSpace: 'pre-wrap' as const, wordBreak: 'break-all' as const }}>{copy.preflightImportFail} · {p.import.code}: {p.import.message}</div>
+              )}
+              {p.import?.status === 'ok' && <div style={{ fontSize: 11.5, opacity: 0.7 }}>{copy.preflightImportOk((p.import.resolved ?? []).length)}</div>}
+              {p.import?.status === 'skipped' && <div style={{ fontSize: 11.5, opacity: 0.7 }}>{copy.preflightImportSkipped}</div>}
+              {dead.length > 0 && <div style={{ fontSize: 11.5, opacity: 0.8 }}>{copy.preflightDeadInject}: <span style={S.mono}>{dead.map((a: any) => a.id).join(', ')}</span></div>}
+              {ranges.length > 0 && <div style={{ fontSize: 11.5, opacity: 0.8 }}>{copy.preflightPeerRange}: <span style={S.mono}>{ranges.map((a: any) => `${a.name} ${a.range}`).join(', ')}</span></div>}
+              {missing.length > 0 && <div style={{ fontSize: 11.5, opacity: 0.8 }}>{copy.preflightPeerMissing}: <span style={S.mono}>{missing.map((a: any) => a.name).join(', ')}</span></div>}
+            </div>
+          );
+        })}
+        <div style={{ fontSize: 11, opacity: 0.5 }}>{copy.preflightFinished(fmtTime(report.finishedAt), report.host?.prefix ?? '', !!report.host?.cached)}</div>
+      </div>
+    )}
+  </>);
+}
+
 function HarborPanel({ ctx }: { ctx: any }) {
   const locale = useSyncExternalStore(
     (notify: () => void) => ctx.on('locale/change', notify),
@@ -402,6 +602,9 @@ function HarborPanel({ ctx }: { ctx: any }) {
    * (DSH's setting may be unset), and the hub localizes its own strings from it. */
   const withLang = useCallback((path: string) => `${API}${path}${path.includes('?') ? '&' : '?'}lang=${locale === 'zh' ? 'zh' : 'en'}`, [locale]);
   const get = useCallback(async (path: string) => readJson(await fetch(withLang(path), { cache: 'no-store' }), path), [readJson, withLang]);
+  const post = useCallback(async (path: string, body: any) => readJson(await fetch(withLang(path), {
+    method: 'POST', cache: 'no-store', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body ?? {}),
+  }), path), [readJson, withLang]);
 
   const refresh = useCallback(async (force: boolean) => {
     const requestId = ++reportRequestId.current;
@@ -871,6 +1074,8 @@ function HarborPanel({ ctx }: { ctx: any }) {
       </>)}
 
       {report && (<>
+        <PreflightSection copy={copy} get={get} post={post} fmtTime={fmtTime} />
+
         <div style={S.section}>{copy.changes}</div>
         {report.snapshot?.firstRun ? (
           <div style={{ fontSize: 12.5, opacity: 0.75 }}>{copy.firstRun}</div>

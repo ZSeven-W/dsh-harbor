@@ -22,7 +22,7 @@ Bunların sonuncusu bir kapsam kararı değil, host ile ilgili bir gerçektir. D
 
 Son olarak harbor puan değil, gerçek bildirir. Çıktısı her zaman “ne algılandı ve kanıt nerede” şeklindedir — hiçbir zaman risk seviyesi veya kalite notu değildir. Bir bulgunun sizin için ne anlama geldiği harbor'ın değil, sizin değerlendirmenizdir.
 
-> **Durum: `0.1.0-rc.2`, sürüm adayı sağlamlaştırılıyor.** CLI, yalnızca loopback hub rotaları, DSH ayarlar paneli, profiller arası sürüm sapması ve isteğe bağlı upstream denetimi kullanılabilir. Canlı bir host runtime araçlarını, provider'ları ve rotaları sağlar; canlı host dışında runtime kanıtı açıkça `available: false` durumuna düşer. Algılayıcılar hâlâ sezgiseldir ve daha geniş ekosisteme göre ayarlanmaktadır; bu nedenle yokluğu kanıt saymak yerine kanıtları inceleyin.
+> **Durum: `0.1.0-rc.3`, sürüm adayı sağlamlaştırılıyor.** CLI, yalnızca loopback hub rotaları, DSH ayarlar paneli, profiller arası sürüm sapması ve isteğe bağlı upstream denetimi kullanılabilir. Canlı bir host runtime araçlarını, provider'ları ve rotaları sağlar; canlı host dışında runtime kanıtı açıkça `available: false` durumuna düşer. Algılayıcılar hâlâ sezgiseldir ve daha geniş ekosisteme göre ayarlanmaktadır; bu nedenle yokluğu kanıt saymak yerine kanıtları inceleyin.
 
 ## Neleri inceler
 
@@ -39,6 +39,18 @@ Son olarak harbor puan değil, gerçek bildirir. Çıktısı her zaman “ne alg
 Yetenekler on üç öğelik sabit bir kümedir — client injection, realm riskleri, realm kopyaları, global hooks, LLM adaptörleri, subprocesses, ağ egress'i, web rotaları, tool kaydı, MCP sunucuları, harici config yazımları, kimlik bilgisi işleme ve environment okumaları. Kümenin sabit olması, raporların taramalar arasında karşılaştırılabilir ve diff edilebilir kalmasını sağlar. Yetkili liste [SPEC.md](./SPEC.md) §2'de, makinece okunabilir doğruluk kaynağı ise `src/scan/detectors.mjs` dosyasındadır.
 
 Kullanılan ifade özellikle tarafsızdır: risk değil, **yetenek**. Bazı eklentilerin tüm amacı subprocess başlatmaktır. Rapor “bu ne yapabilir” sorusunu yanıtlar, “yapmalı mı” sorusunu size bırakır.
+
+## Yükseltme ön kontrolü
+
+DSH'yi yeni bir sürüme taşımadan önce Harbor tam olarak o sürümü kendi önbelleğine kurar, ardından kurulu her eklentiyi bir alt süreçte ona karşı import ederek yoklar, `dsh.client.inject` id'lerini hedefin istemci modül grafiğiyle karşılaştırır ve ana makinenin peer aralıklarını denetler. Yanıt profile başına verilir: yükseltmeden sonra açılır ya da engellenir — hangi eklenti yüzünden, gerçek bağlama zamanı hatasıyla birlikte. Ayrıca `settings.yaml` içindeki `agent-presets.default` değerinin hedefin yerleşik ön ayarları arasında hâlâ bulunup bulunmadığını kontrol eder (DSH 0.1.2, `code` adını `ptc` yaptı, kayıtlı değer taşınmadı ve sonrasında her yeni oturum başarısız oluyor).
+
+```sh
+harbor preflight --list                 # yukarı akış dist-tag'leri, son sürümler, yerelde önbelleklenmiş ana makine ağaçları
+harbor preflight --dsh next             # ya da belirli bir sürüm: --dsh 0.1.5-rc.2
+harbor preflight --dsh 0.1.5-rc.2 --json   # makine tarafından okunabilir tam rapor
+```
+
+Kararlar eklenti başına (**açılışı engeller** / **yüklenir** / **yoklanmadı**) ve profile başına verilir; peer aralıkları ile ölü inject'ler yalnızca uyarıdır ve kararı değiştirmez. Çıkış kodu 3, en az bir profile'ın açılmayacağı anlamına gelir. Her şey alt süreçlerde çalışır; küresel npm öneki ve profile'larınız asla yazılmaz. Çözümleme kancası Node ≥ 20.6 gerektirir.
 
 ## Sürümler
 
@@ -95,6 +107,7 @@ Aşağıdaki örneklerde `harbor`, yukarıdaki çalıştırma biçimlerinden bir
 harbor scan                 # envanter, çakışmalar ve son taramadan bu yana değişiklikler
 harbor scan --check-updates # + registry'ye karşı isteğe bağlı upstream denetimi (ağ üzerinden)
 harbor manifest ./my-plugin # kendi eklentiniz için bir dsh.capabilities bloğu taslağı oluşturun
+harbor preflight --dsh next # ön kontrol: o DSH sürümünde hangi profile'lar hâlâ açılıyor
 ```
 
 Mevcut `file:line` kaynak kanıtlarını yazdırmak için `--evidence`, makinece okunabilir tam rapor için `--json` ve diff referansının yazılmasını atlamak için `--no-snapshot` ekleyin. Manifest, dosya sistemi veya runtime kaynaklı gerçeklerin kaynak satırı olmayabilir; bunlar uygun şekilde etiketlenir.
