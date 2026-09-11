@@ -4,7 +4,10 @@
 //   harbor scan [--json] [--evidence] [--no-snapshot] [--check-updates]
 //   harbor manifest [dir]     draft a dsh.capabilities block for your own plugin
 //   harbor preflight [--dsh <version|tag>] [--json] [--list]
-//                             would the installed plugins still load on that DSH?
+//                    [--plugin <dir>]... [--pack <npm spec>]...
+//                             would the installed plugins (or the given ones) still load on that DSH?
+//   harbor host-diff --from <version> --to <version> [--json]
+//                             what did DSH remove/add between two versions (packages, client modules, exports)?
 //
 // Output is deliberately plain: capabilities, evidence, conflicts, changes.
 // No scores, no severity colours for capabilities — a subprocess is a fact,
@@ -13,6 +16,7 @@
 import { scan, inspectPlugin, draftManifest, reconcile, byId, checkUpstream } from './scan/index.mjs';
 import { readJson } from './scan/discover.mjs';
 import { preflight, listHostVersions, listCachedHosts } from './preflight/index.mjs';
+import { hostDiff, renderHostDiffMarkdown } from './preflight/host-diff.mjs';
 import { join, resolve } from 'node:path';
 
 const PACKAGE = readJson(new URL('../package.json', import.meta.url)) ?? {};
@@ -46,6 +50,8 @@ const USAGE = `dsh-harbor ${VERSION}
   harbor [scan] [--json] [--evidence] [--no-snapshot] [--check-updates]
   harbor manifest [dir]
   harbor preflight [--dsh <版本|dist-tag>] [--json] [--list]
+  harbor preflight --dsh <目标> --plugin <目录> [--plugin ...] | --pack <npm 包> [--pack ...]
+  harbor host-diff --from <版本> --to <版本> [--json]
   harbor --help | --version
 
 命令:
@@ -61,6 +67,9 @@ const USAGE = `dsh-harbor ${VERSION}
   --check-updates  显式联网检查上游版本
   --dsh <目标>     preflight 的目标 DSH 版本或 dist-tag（默认 latest；dist-tag 需联网解析）
   --list           preflight 只列出上游 dist-tags、最近版本和本机已缓存的宿主树
+  host-diff        两个 DSH 版本之间的契约差异：删掉/新增的包、web 客户端模块、内置预设、每个包的导出
+  --plugin <目录>   预检指定目录里的插件（可重复），不再扫描 profile；给 CI 用
+  --pack <npm 包>   从 registry 拉取该包（name 或 name@version）做预检（可重复）
   -h, --help       显示帮助，不执行扫描
   -v, --version    显示版本，不执行扫描`;
 
@@ -73,9 +82,10 @@ function parseArgs(args) {
   // `--dsh <value>` takes the next token; fold it into `--dsh=<value>` so the
   // positional/option split below stays trivial.
   const folded = [];
+  const VALUE_OPTIONS = new Set(['--dsh', '--plugin', '--pack', '--from', '--to']);
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--dsh' && i + 1 < args.length && !args[i + 1].startsWith('-')) {
-      folded.push(`--dsh=${args[i + 1]}`);
+    if (VALUE_OPTIONS.has(args[i]) && i + 1 < args.length && !args[i + 1].startsWith('-')) {
+      folded.push(`${args[i]}=${args[i + 1]}`);
       i++;
     } else {
       folded.push(args[i]);
@@ -86,7 +96,7 @@ function parseArgs(args) {
   const positionals = args.filter((arg) => !arg.startsWith('-'));
   const commandToken = positionals[0];
   const command = commandToken ?? 'scan';
-  if (command !== 'scan' && command !== 'manifest' && command !== 'preflight') {
+  if (command !== 'scan' && command !== 'manifest' && command !== 'preflight' && command !== 'host-diff') {
     return { error: `未知命令: ${terminalSafe(command)}`, exitCode: 2 };
   }
 
@@ -94,11 +104,26 @@ function parseArgs(args) {
     ? new Set(['--json', '--evidence', '--no-snapshot', '--check-updates'])
     : command === 'preflight'
       ? new Set(['--json', '--list'])
-      : new Set();
+      : command === 'host-diff'
+        ? new Set(['--json'])
+        : new Set();
   if (command === 'preflight' && args.includes('--dsh')) return { error: '--dsh 需要一个版本或 dist-tag', exitCode: 2 };
+  if (command === 'preflight' && args.includes('--plugin')) return { error: '--plugin 需要一个目录', exitCode: 2 };
+  if (command === 'preflight' && args.includes('--pack')) return { error: '--pack 需要一个 npm 包名', exitCode: 2 };
   const unknownOption = args.find((arg) => arg.startsWith('-') && !allowedOptions.has(arg)
-    && !(command === 'preflight' && arg.startsWith('--dsh=')));
+    && !(command === 'preflight' && /^--(dsh|plugin|pack)=/.test(arg))
+    && !(command === 'host-diff' && /^--(from|to)=/.test(arg)));
   if (unknownOption) return { error: `未知选项: ${terminalSafe(unknownOption)}`, exitCode: 2 };
+  if (command === 'host-diff') {
+    const from = args.find((a) => a.startsWith('--from='))?.slice(7);
+    const to = args.find((a) => a.startsWith('--to='))?.slice(5);
+    if (!from || !to) return { error: 'host-diff 需要 --from <版本> 和 --to <版本>', exitCode: 2 };
+    if (positionals.length > 1) return { error: `host-diff 不接受位置参数: ${terminalList(positionals.slice(1), ' ')}`, exitCode: 2 };
+    return { action: 'host-diff', from, to, flags: new Set(args.filter((arg) => arg === '--json').map((arg) => arg.slice(2))) };
+  }
+  const pluginDirs = args.filter((arg) => arg.startsWith('--plugin=')).map((arg) => arg.slice('--plugin='.length));
+  const packs = args.filter((arg) => arg.startsWith('--pack=')).map((arg) => arg.slice('--pack='.length));
+  if (pluginDirs.some((d) => d === '') || packs.some((p) => p === '')) return { error: '--plugin/--pack 的值不能为空', exitCode: 2 };
   const dshOption = args.find((arg) => arg.startsWith('--dsh='));
   const target = dshOption === undefined ? undefined : dshOption.slice('--dsh='.length);
   if (target === '') return { error: '--dsh 需要一个版本或 dist-tag', exitCode: 2 };
@@ -117,7 +142,9 @@ function parseArgs(args) {
     action: command,
     dir: command === 'manifest' ? positionals[1] : undefined,
     target,
-    flags: new Set(args.filter((arg) => arg.startsWith('--') && !arg.startsWith('--dsh=')).map((arg) => arg.slice(2))),
+    pluginDirs,
+    packs,
+    flags: new Set(args.filter((arg) => arg.startsWith('--') && !/^--(dsh|plugin|pack)=/.test(arg)).map((arg) => arg.slice(2))),
   };
 }
 
@@ -292,6 +319,14 @@ async function main(args = process.argv.slice(2)) {
   }
 
   if (invocation.action === 'preflight') return runPreflight(invocation, flag);
+  if (invocation.action === 'host-diff') {
+    const progress = (line) => console.error(`  · ${terminalSafe(line, 300)}`);
+    const diff = await hostDiff(invocation.from, invocation.to, { onLog: progress });
+    if (flag('json')) { await writeStdout(`${JSON.stringify(diff, null, 2)}\n`); return diff.summary.breaking ? 3 : 0; }
+    // Markdown carries registry-controlled names; keep the terminal boundary.
+    for (const line of renderHostDiffMarkdown(diff).split('\n')) console.log(terminalSafe(line, 400));
+    return diff.summary.breaking ? 3 : 0;
+  }
 
   const dir = resolve(invocation.dir ?? process.cwd());
   const pkg = readJson(join(dir, 'package.json'));
@@ -328,6 +363,7 @@ const VERDICT_MARK = {
   'blocks-boot': '✖ 拖崩启动',
   ok: '✓ 可加载',
   unknown: '? 未探测',
+  unresolvable: '? 无法解析',
 };
 
 async function runPreflight(invocation, flag) {
@@ -350,7 +386,14 @@ async function runPreflight(invocation, flag) {
   // Progress always goes to stderr, JSON or not: stdout stays a clean report
   // for machine callers, and the hub streams stderr into the panel log.
   const progress = (line) => console.error(`  · ${terminalSafe(line, 300)}`);
-  const report = await preflight(target, { onLog: progress });
+  const explicit = invocation.pluginDirs.length > 0 || invocation.packs.length > 0;
+  const report = await preflight(target, {
+    onLog: progress,
+    ...(explicit ? {
+      plugins: invocation.pluginDirs.map((d) => resolve(d)),
+      packs: invocation.packs,
+    } : {}),
+  });
   if (flag('json')) {
     await writeStdout(`${JSON.stringify(report, null, 2)}\n`);
     return report.summary.allProfilesBoot ? 0 : 3;
@@ -359,12 +402,13 @@ async function runPreflight(invocation, flag) {
   const t = report.target;
   console.log(`\ndsh-harbor 升级预检 — 目标 DSH ${terminalSafe(t.version, 60)}${t.requested !== t.version ? `（${terminalSafe(t.requested, 40)}）` : ''}，当前 ${terminalSafe(report.current.version ?? '未知', 60)}`);
   console.log(`宿主树: ${terminalSafe(report.host.prefix)}${report.host.cached ? '（缓存）' : '（本次安装）'}，${terminalSafe(report.host.packages, 20)} 个官方包，${terminalSafe(report.host.clientModules, 20)} 个 web 客户端模块`);
-  const order = { 'blocks-boot': 0, unknown: 1, ok: 2 };
+  const order = { 'blocks-boot': 0, unresolvable: 1, unknown: 2, ok: 3 };
   const rows = [...report.plugins].sort((a, b) => (order[a.verdict] ?? 9) - (order[b.verdict] ?? 9) || a.name.localeCompare(b.name));
   for (const p of rows) {
     const advisory = p.advisories.length ? `  ⚠ ${terminalSafe(p.advisories.length, 20)} 条声明过期` : '';
     console.log(`\n${terminalSafe(VERDICT_MARK[p.verdict] ?? p.verdict, 40)}  ${terminalSafe(p.name, 180)}@${terminalSafe(p.version ?? '?', 60)}  [${terminalList(p.profiles, ', ', 200)}]${advisory}`);
-    if (p.import.status === 'fail') console.log(`    import 失败 ${terminalSafe(p.import.code, 60)}: ${terminalSafe(p.import.message, 400)}`);
+    if (p.import.status === 'fail' && p.verdict === 'unresolvable') console.log(`    无法探测（插件自身依赖或获取失败，不是宿主问题）${terminalSafe(p.import.code, 60)}: ${terminalSafe(p.import.message, 400)}`);
+    else if (p.import.status === 'fail') console.log(`    import 失败 ${terminalSafe(p.import.code, 60)}: ${terminalSafe(p.import.message, 400)}`);
     else if (p.import.status === 'ok') console.log(`    import 通过，链接到 ${terminalSafe(p.import.resolved.length, 20)} 个宿主包`);
     else console.log(`    import 跳过: ${terminalSafe(p.import.reason ?? '', 200)}`);
     const dead = p.advisories.filter((a) => a.kind === 'dead-inject');
@@ -379,13 +423,15 @@ async function runPreflight(invocation, flag) {
     console.log(`\n⚠ 用户设置 agent-presets.default = "${terminalSafe(ap.wanted, 60)}" 不在目标版本的预设里（可用: ${terminalList(ap.available, ', ')}）；升级后新建会话会报 agent-preset/not-found`);
   }
   const c = report.summary.counts;
-  console.log('\nprofile 结论:');
-  for (const [profile, state] of Object.entries(report.summary.profiles)) {
-    console.log(state.boots
-      ? `  ✓ ${terminalSafe(profile, 120)} 升级后可以启动`
-      : `  ✖ ${terminalSafe(profile, 120)} 升级后起不来（${terminalList(state.blockedBy, ', ', 300)}）`);
+  if (report.subjects === 'profiles') {
+    console.log('\nprofile 结论:');
+    for (const [profile, state] of Object.entries(report.summary.profiles)) {
+      console.log(state.boots
+        ? `  ✓ ${terminalSafe(profile, 120)} 升级后可以启动`
+        : `  ✖ ${terminalSafe(profile, 120)} 升级后起不来（${terminalList(state.blockedBy, ', ', 300)}）`);
+    }
   }
-  console.log(`\n合计: 拖崩 ${terminalSafe(c['blocks-boot'], 20)} · 可加载 ${terminalSafe(c.ok, 20)} · 未探测 ${terminalSafe(c.unknown, 20)} · 带过期声明 ${terminalSafe(c.withAdvisories, 20)}`);
+  console.log(`\n合计: 拖崩 ${terminalSafe(c['blocks-boot'], 20)} · 可加载 ${terminalSafe(c.ok, 20)} · 无法解析 ${terminalSafe(c.unresolvable ?? 0, 20)} · 未探测 ${terminalSafe(c.unknown, 20)} · 带过期声明 ${terminalSafe(c.withAdvisories, 20)}`);
   return report.summary.allProfilesBoot ? 0 : 3;
 }
 

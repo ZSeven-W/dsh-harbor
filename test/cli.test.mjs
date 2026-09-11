@@ -252,3 +252,22 @@ test('CLI: large --json report is complete and --check-updates is opt-in', (t) =
   assert.equal(checkedReport.upstream.results.length, 1);
   assert.equal(checkedReport.upstream.results[0].status, 'local');
 });
+
+test('cli: preflight and host-diff argument validation', () => {
+  const run = (...args) => spawnSync(process.execPath, [CLI, ...args], { encoding: 'utf8' });
+  assert.equal(run('preflight', '--dsh').status, 2);
+  assert.match(run('preflight', '--dsh').stderr, /--dsh 需要/);
+  assert.equal(run('preflight', '--plugin').status, 2);
+  assert.equal(run('preflight', '--pack').status, 2);
+  assert.equal(run('preflight', 'extra').status, 2);
+  assert.equal(run('preflight', '--bogus').status, 2);
+  assert.equal(run('host-diff').status, 2);
+  assert.match(run('host-diff').stderr, /--from/);
+  assert.equal(run('host-diff', '--from', '1.0.0').status, 2);
+  assert.equal(run('host-diff', '--from', '1.0.0', '--to', '2.0.0', '--evidence').status, 2);
+  const help = run('--help');
+  assert.equal(help.status, 0);
+  assert.match(help.stdout, /preflight/);
+  assert.match(help.stdout, /host-diff/);
+  assert.match(help.stdout, /--pack/);
+});

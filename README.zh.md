@@ -135,7 +135,40 @@ harbor preflight --dsh 0.1.5-rc.2 --json
 3. `dsh.client.inject` / `external` 的 id 对照目标树里声明了 web 客户端模块的包核对（DSH ≥ 0.1.5 会静默跳过未知 id，所以它自己从不报错）。宿主 peer 范围按 npm 的 prerelease 规则匹配。
 4. `settings.yaml` 里的 `agent-presets.default` 对照目标版本的内置预设核对。
 
-判决按插件（**拖崩启动** / **可加载** / **未探测**）和按 profile 给出；peer 范围与死 inject 属于提示，永远不改变判决。退出码 3 表示至少一个 profile 升级后起不来。解析钩子需要 Node ≥ 20.6。
+判决按插件（**拖崩启动** / **可加载** / **无法解析** / **未探测**）和按 profile 给出；peer 范围与死 inject 属于提示，永远不改变判决。"无法解析"指插件自己的依赖找不到，是打包问题不是宿主问题。退出码 3 表示至少一个 profile 升级后起不来。解析钩子需要 Node ≥ 20.6。
+
+不在 profile 里的场景（CI，或者你没装过的包）可以显式指定对象：
+
+```sh
+harbor preflight --dsh next --plugin .                        # 当前仓库（先构建）
+harbor preflight --dsh next --pack @scope/some-plugin@1.2.3   # 从 registry 拉取，依赖以禁脚本方式安装
+```
+
+### 两个 DSH 版本之间的契约差异
+
+```sh
+harbor host-diff --from 0.1.1-rc.2 --to 0.1.5-rc.1
+```
+
+把两个版本都装进缓存，报告插件可能依赖的所有变动：新增/删除的包、新增/删除的 web 客户端模块、内置预设，以及在子进程里 import 每个官方包入口后得到的逐包导出名增减。这是 release notes 里没有的机器可读 changelog；让插件在 0.1.5 上崩掉的 `settingsNamespace` 删除，在这里就是 `@deepseek-ai/dsh-settings` 的一条导出删除。有任何删除时退出码为 3。
+
+### GitHub Action
+
+插件作者可以在每个 PR 和每晚对 `next` dist-tag 跑同一套预检：
+
+```yaml
+- uses: actions/checkout@v4
+- run: pnpm install --frozen-lockfile && pnpm run build   # 探测的是构建后的服务端入口
+- uses: ZSeven-W/dsh-harbor@v0.1.0-rc.3
+  with:
+    dsh: next        # 版本或 dist-tag，默认 latest
+```
+
+插件会拖崩启动时 job 以退出码 3 失败；过期声明只告警（`fail-on-advisories: true` 可改成失败）；同时写 job summary 并上传 JSON 报告。目标宿主树按 DSH 版本缓存。
+
+### 生态看板与发版监控
+
+本仓库还跑两个定时 workflow：每小时检查一次 `@deepseek-ai/dsh` 的 dist-tags，任何标签移动都提交一份 `host-diff`；每晚对 npm 上所有声明了 `dsh.bundle` 或 `dsh.client` 的包（撰写时约 4,500 个）按当前 `next` 做 import 探针，增量进行——只重探 latest 版本变了的插件，DSH dist-tag 移动时才做全量。结果发布为静态页面和 `board/` 下的 JSON 索引。探测会在一次性的 CI runner 里执行每个包的模块顶层代码；这个扫描永远不会在用户机器上跑，本机预检只碰用户自己安装的插件。
 
 ## 可以直接核对的证据
 

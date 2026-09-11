@@ -2,13 +2,15 @@
 // hook-register.mjs; never loaded inside the running DSH host, where it would
 // redirect the host's own imports.
 //
-// Every `@deepseek-ai/*` specifier is resolved as if it were imported from a
-// file inside the target host tree, so the plugin under test links against the
-// DSH version being evaluated while its own dependencies keep resolving from
-// its real install location. Each redirected specifier is reported back to
-// the main thread over the MessagePort handed in at registration, so the
-// probe can list which host packages the plugin actually touched. (Hooks run
-// on Node's loader thread; a port is the supported channel, stderr is not.)
+// Two rules, mirroring how a real profile resolves:
+//   1. `@deepseek-ai/*` always resolves from the target host tree, so the
+//      plugin links against the DSH version being evaluated.
+//   2. Any other bare specifier resolves from the plugin first; if that fails
+//      it is retried from the host tree, because a profile hoists the host's
+//      own dependencies (react, pi-ai, …) next to the plugin and plugins
+//      legitimately import them as peers.
+// Each host-resolved specifier is reported back over the MessagePort handed in
+// at registration (hooks run on Node's loader thread; a port is the channel).
 
 let hostAnchor = null;
 let port = null;
@@ -20,14 +22,28 @@ export function initialize(data) {
   seen = new Set();
 }
 
+function report(specifier, url, via) {
+  if (!seen || seen.has(specifier)) return;
+  seen.add(specifier);
+  try { port?.postMessage({ harborResolve: specifier, url, via }); } catch { /* best effort */ }
+}
+
+const isBare = (s) => !s.startsWith('.') && !s.startsWith('/') && !s.startsWith('node:') && !s.startsWith('file:') && !s.startsWith('data:');
+
 export async function resolve(specifier, context, nextResolve) {
-  if (hostAnchor && specifier.startsWith('@deepseek-ai/')) {
+  if (!hostAnchor) return nextResolve(specifier, context);
+  if (specifier.startsWith('@deepseek-ai/')) {
     const resolved = await nextResolve(specifier, { ...context, parentURL: hostAnchor });
-    if (seen && !seen.has(specifier)) {
-      seen.add(specifier);
-      try { port?.postMessage({ harborResolve: specifier, url: resolved.url }); } catch { /* reporting is best effort */ }
-    }
+    report(specifier, resolved.url, 'host');
     return resolved;
   }
-  return nextResolve(specifier, context);
+  try {
+    return await nextResolve(specifier, context);
+  } catch (error) {
+    if (error?.code !== 'ERR_MODULE_NOT_FOUND' || !isBare(specifier)) throw error;
+    let resolved;
+    try { resolved = await nextResolve(specifier, { ...context, parentURL: hostAnchor }); } catch { throw error; }
+    report(specifier, resolved.url, 'host-fallback');
+    return resolved;
+  }
 }

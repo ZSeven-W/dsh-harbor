@@ -1,0 +1,117 @@
+name: Ecosystem board
+
+# Probe every npm-published DSH plugin against a DSH version and publish the
+# compatibility board to GitHub Pages. Nightly runs are incremental (only
+# plugins whose latest version changed); the release watcher starts a full run
+# when a DSH dist-tag moves.
+
+on:
+  schedule:
+    - cron: '37 2 * * *'
+  workflow_dispatch:
+    inputs:
+      dsh:
+        description: DSH version or dist-tag to probe
+        default: next
+      full:
+        description: Re-probe every plugin, not only changed ones
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ecosystem-board
+  cancel-in-progress: false
+
+env:
+  SHARDS: 16
+
+jobs:
+  enumerate:
+    runs-on: ubuntu-latest
+    outputs:
+      dsh: ${{ steps.resolve.outputs.dsh }}
+      shards: ${{ steps.resolve.outputs.shards }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Enumerate npm plugins (incremental)
+        run: node scripts/board/enumerate.mjs
+      - name: Resolve the DSH target
+        id: resolve
+        run: |
+          target="${{ inputs.dsh || 'next' }}"
+          if [[ "$target" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then v="$target"; else v="$(npm view "@deepseek-ai/dsh@$target" version | tail -n1)"; fi
+          echo "dsh=$v" >> "$GITHUB_OUTPUT"
+          echo "shards=$(node -e 'process.stdout.write(JSON.stringify([...Array(Number(process.env.SHARDS)).keys()]))')" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: registry
+          path: board/registry.json
+
+  probe:
+    needs: enumerate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.enumerate.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: registry
+          path: board
+      - uses: actions/cache@v4
+        with:
+          path: ~/.config/dsh-harbor/hosts/${{ needs.enumerate.outputs.dsh }}
+          key: dsh-harbor-host-${{ runner.os }}-${{ needs.enumerate.outputs.dsh }}
+      - name: Probe shard ${{ matrix.shard }} against DSH ${{ needs.enumerate.outputs.dsh }}
+        run: node scripts/board/run.mjs --dsh "${{ needs.enumerate.outputs.dsh }}" --shard ${{ matrix.shard }} --shards ${{ env.SHARDS }} ${{ inputs.full == true && '--full' || '' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ matrix.shard }}
+          path: board/results/${{ needs.enumerate.outputs.dsh }}/shard-${{ matrix.shard }}.json
+
+  publish:
+    needs: [enumerate, probe]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: registry
+          path: board
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: results-*
+          path: board/results/${{ needs.enumerate.outputs.dsh }}
+          merge-multiple: true
+      - name: Aggregate and render
+        run: node scripts/board/aggregate.mjs
+      - name: Commit board data
+        run: |
+          git config user.name 'dsh-harbor bot'
+          git config user.email 'dsh-harbor-bot@users.noreply.github.com'
+          git add board/registry.json board/results board/index.json
+          git diff --cached --quiet || (git commit -m "board: DSH ${{ needs.enumerate.outputs.dsh }} probe results" && git pull --rebase && git push)
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: board/site
+      - id: deploy
+        uses: actions/deploy-pages@v4

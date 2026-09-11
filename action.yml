@@ -1,0 +1,110 @@
+# DSH Harbor upgrade preflight as a GitHub Action.
+#
+#   - uses: ZSeven-W/dsh-harbor@v0.1.0-rc.3
+#     with:
+#       dsh: next          # version or dist-tag; default latest
+#
+# Checks out nothing itself: run it after actions/checkout in the plugin
+# repository. The plugin under test is `path` (default: the repository root),
+# probed exactly as `harbor preflight --plugin <path> --dsh <dsh>` would on a
+# developer machine. The target DSH host tree is cached per version with
+# actions/cache so only the first run of a version pays the npm install.
+name: DSH Harbor upgrade preflight
+description: Will this DSH plugin still load on the given DSH version? Import probe, client inject check, host peer check.
+branding:
+  icon: anchor
+  color: blue
+inputs:
+  dsh:
+    description: Target DSH version or dist-tag (latest, next, alpha, or 0.1.5-rc.2)
+    required: false
+    default: latest
+  path:
+    description: Directory of the plugin to preflight (must contain package.json and its built entry)
+    required: false
+    default: .
+  harbor-version:
+    description: '@zseven-w/dsh-harbor version to run'
+    required: false
+    default: 0.1.0-rc.3
+  fail-on-advisories:
+    description: Also fail when the plugin declares client modules or peer ranges the target does not ship
+    required: false
+    default: 'false'
+outputs:
+  verdict:
+    description: blocks-boot | ok | unknown | unresolvable
+    value: ${{ steps.run.outputs.verdict }}
+  dsh-version:
+    description: The concrete DSH version the preflight ran against
+    value: ${{ steps.run.outputs.dsh_version }}
+  report:
+    description: Path of the JSON report
+    value: ${{ steps.run.outputs.report }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve the target DSH version
+      id: resolve
+      shell: bash
+      env:
+        TARGET: ${{ inputs.dsh }}
+      run: |
+        set -euo pipefail
+        if [[ "$TARGET" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+          version="$TARGET"
+        else
+          version="$(npm view "@deepseek-ai/dsh@$TARGET" version 2>/dev/null | tail -n1)"
+        fi
+        [ -n "$version" ] || { echo "::error::could not resolve DSH target '$TARGET'"; exit 1; }
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        echo "state=$HOME/.config/dsh-harbor" >> "$GITHUB_OUTPUT"
+    - name: Cache the target host tree
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.resolve.outputs.state }}/hosts/${{ steps.resolve.outputs.version }}
+        key: dsh-harbor-host-${{ runner.os }}-${{ steps.resolve.outputs.version }}
+    - name: Run preflight
+      id: run
+      shell: bash
+      env:
+        PLUGIN_PATH: ${{ inputs.path }}
+        DSH_VERSION: ${{ steps.resolve.outputs.version }}
+        HARBOR_VERSION: ${{ inputs.harbor-version }}
+        FAIL_ON_ADVISORIES: ${{ inputs.fail-on-advisories }}
+      run: |
+        set -uo pipefail
+        report="$RUNNER_TEMP/dsh-harbor-preflight.json"
+        npx -y "@zseven-w/dsh-harbor@$HARBOR_VERSION" preflight --dsh "$DSH_VERSION" --plugin "$PLUGIN_PATH" --json > "$report" 2> "$RUNNER_TEMP/preflight.log"
+        status=$?
+        cat "$RUNNER_TEMP/preflight.log" | sed 's/^/  /' || true
+        if ! [ -s "$report" ]; then echo "::error::preflight produced no report (exit $status)"; exit 1; fi
+        node - "$report" "$FAIL_ON_ADVISORIES" <<'JS' >> "$GITHUB_STEP_SUMMARY"
+        const fs = require('node:fs');
+        const [, , file, failOnAdvisories] = process.argv;
+        const r = JSON.parse(fs.readFileSync(file, 'utf8'));
+        const p = r.plugins[0] ?? {};
+        const mark = { 'blocks-boot': '❌ blocks boot', ok: '✅ loads', unknown: '❔ not probed', unresolvable: '❔ unresolvable' }[p.verdict] ?? p.verdict;
+        const out = [`### DSH Harbor preflight — ${p.name ?? '?'}@${p.version ?? '?'} on DSH ${r.target.version}`, '', `**${mark}**`, ''];
+        if (p.import?.status === 'fail') out.push('```', `${p.import.code}: ${p.import.message}`, '```', '');
+        if (p.import?.status === 'ok') out.push(`Entry imports; links ${p.import.resolved.length} host package(s).`, '');
+        for (const a of p.advisories ?? []) {
+          if (a.kind === 'dead-inject') out.push(`- ⚠ client module not shipped by the target: \`${a.id}\``);
+          if (a.kind === 'peer-range') out.push(`- ⚠ peer range excludes the target: \`${a.name} ${a.range}\` (target has ${a.installed})`);
+          if (a.kind === 'peer-missing') out.push(`- ⚠ peer not shipped by the target: \`${a.name}\``);
+        }
+        process.stdout.write(out.join('\n') + '\n');
+        fs.appendFileSync(process.env.GITHUB_OUTPUT, `verdict=${p.verdict}\ndsh_version=${r.target.version}\nreport=${file}\n`);
+        const advisories = (p.advisories ?? []).length;
+        if (p.verdict === 'blocks-boot') { console.error(`::error::${p.name} blocks boot on DSH ${r.target.version}: ${p.import?.message ?? ''}`); process.exitCode = 3; }
+        else if (failOnAdvisories === 'true' && advisories > 0) { console.error(`::error::${p.name} has ${advisories} stale declaration(s) for DSH ${r.target.version}`); process.exitCode = 4; }
+        else if (advisories > 0) console.error(`::warning::${p.name} has ${advisories} stale declaration(s) for DSH ${r.target.version}`);
+        JS
+    - name: Upload report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dsh-harbor-preflight-${{ steps.resolve.outputs.version }}
+        path: ${{ runner.temp }}/dsh-harbor-preflight.json
+        if-no-files-found: ignore
+        retention-days: 14

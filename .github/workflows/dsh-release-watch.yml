@@ -1,0 +1,95 @@
+name: DSH release watch
+
+# Every hour: did @deepseek-ai/dsh publish a new version or move a dist-tag?
+# If so, commit the new state, produce the contract diff against the previous
+# `latest`/`next`, and kick off a full ecosystem board run for the new version.
+
+on:
+  schedule:
+    - cron: '7 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: dsh-release-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.watch.outputs.changed }}
+      targets: ${{ steps.watch.outputs.targets }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Compare dist-tags with committed state
+        id: watch
+        run: |
+          set -uo pipefail
+          before="$(cat board/state/dsh-versions.json 2>/dev/null || echo '{}')"
+          change="$(node scripts/watch-dsh.mjs --write)" || true
+          echo "$change"
+          changed="$(node -e 'const c=JSON.parse(process.argv[1]);process.stdout.write(String(c.changed))' "$change")"
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          # Targets to diff and board: every tag that moved, as from→to pairs.
+          node -e '
+            const c = JSON.parse(process.argv[1]);
+            const pairs = c.tagMoves.filter((m) => m.from && m.to && m.from !== m.to).map((m) => ({ tag: m.tag, from: m.from, to: m.to }));
+            process.stdout.write(`targets=${JSON.stringify(pairs)}\n`);
+          ' "$change" >> "$GITHUB_OUTPUT"
+      - name: Commit the new state
+        if: steps.watch.outputs.changed == 'true'
+        run: |
+          git config user.name 'dsh-harbor bot'
+          git config user.email 'dsh-harbor-bot@users.noreply.github.com'
+          git add board/state/dsh-versions.json
+          git commit -m "board: DSH dist-tags moved" && git push
+
+  diff:
+    needs: watch
+    if: needs.watch.outputs.changed == 'true' && needs.watch.outputs.targets != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: ${{ fromJSON(needs.watch.outputs.targets) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.config/dsh-harbor/hosts
+          key: dsh-harbor-hosts-${{ runner.os }}-${{ matrix.target.from }}-${{ matrix.target.to }}
+          restore-keys: dsh-harbor-hosts-${{ runner.os }}-
+      - name: Contract diff ${{ matrix.target.from }} → ${{ matrix.target.to }}
+        run: |
+          mkdir -p board/host-diffs
+          node src/cli.mjs host-diff --from "${{ matrix.target.from }}" --to "${{ matrix.target.to }}" --json > "board/host-diffs/${{ matrix.target.from }}..${{ matrix.target.to }}.json" || true
+          node -e '
+            const { renderHostDiffMarkdown } = await import("./src/preflight/host-diff.mjs");
+            const fs = await import("node:fs");
+            const d = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+            const md = renderHostDiffMarkdown(d);
+            fs.writeFileSync(process.argv[1].replace(/\.json$/, ".md"), md + "\n");
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md + "\n");
+          ' "board/host-diffs/${{ matrix.target.from }}..${{ matrix.target.to }}.json"
+      - name: Commit the diff
+        run: |
+          git config user.name 'dsh-harbor bot'
+          git config user.email 'dsh-harbor-bot@users.noreply.github.com'
+          git pull --rebase
+          git add board/host-diffs
+          git commit -m "board: contract diff DSH ${{ matrix.target.from }} → ${{ matrix.target.to }} (${{ matrix.target.tag }})" && git push
+      - name: Start the ecosystem board for ${{ matrix.target.to }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run board.yml -f dsh="${{ matrix.target.to }}" -f full=true

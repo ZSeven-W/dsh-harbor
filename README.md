@@ -135,7 +135,40 @@ What runs, in order:
 3. `dsh.client.inject` / `external` ids are checked against the packages in the target that declare a web client module (DSH ≥ 0.1.5 skips unknown ids silently, so this never errors on its own). Host peer ranges are matched with npm's prerelease rule.
 4. `agent-presets.default` from `settings.yaml` is checked against the target's built-in presets.
 
-Verdicts are per plugin (**blocks boot** / **loads** / **not probed**) and per profile; peer-range and dead-inject findings are advisories and never change a verdict. Exit code 3 means at least one profile would not boot. Node ≥ 20.6 is required for the resolve hook.
+Verdicts are per plugin (**blocks boot** / **loads** / **unresolvable** / **not probed**) and per profile; peer-range and dead-inject findings are advisories and never change a verdict. *Unresolvable* means the plugin's own dependency could not be found — a packaging problem, not a host problem. Exit code 3 means at least one profile would not boot. Node ≥ 20.6 is required for the resolve hook.
+
+Outside a profile — in CI, or for a package you have not installed — name the subjects explicitly:
+
+```sh
+harbor preflight --dsh next --plugin .                        # this repository (build it first)
+harbor preflight --dsh next --pack @scope/some-plugin@1.2.3   # fetched from the registry, deps installed with scripts disabled
+```
+
+### Contract diff between two DSH versions
+
+```sh
+harbor host-diff --from 0.1.1-rc.2 --to 0.1.5-rc.1
+```
+
+Installs both versions into the cache and reports what a plugin could have depended on that moved: packages added/removed, web client modules added/removed, built-in presets, and — by importing each official package's entry in a child — every export name added or removed per package. This is the machine-readable changelog the release notes do not carry; the `settingsNamespace` removal that broke plugins on 0.1.5 shows up here as an export removal in `@deepseek-ai/dsh-settings`. Exit code 3 when anything was removed.
+
+### GitHub Action
+
+Plugin authors can run the same preflight on every pull request and every night against the `next` dist-tag:
+
+```yaml
+- uses: actions/checkout@v4
+- run: pnpm install --frozen-lockfile && pnpm run build   # the built server entry is what gets probed
+- uses: ZSeven-W/dsh-harbor@v0.1.0-rc.3
+  with:
+    dsh: next        # version or dist-tag; default latest
+```
+
+The job fails with exit code 3 when the plugin would block boot, warns on stale declarations (`fail-on-advisories: true` turns those into failures), writes a job summary, and uploads the JSON report. The target host tree is cached per DSH version.
+
+### Ecosystem board and release watch
+
+This repository also runs two scheduled workflows: an hourly watch on `@deepseek-ai/dsh` dist-tags that commits a `host-diff` for every tag move, and a nightly board that import-probes every npm package declaring `dsh.bundle` or `dsh.client` (about 4,500 at the time of writing) against the current `next`, incrementally — only plugins whose latest version changed are re-probed, and a full run happens when a DSH dist-tag moves. Results are published as a static page and a JSON index under `board/`. Probing executes each package's module top level in a disposable CI runner; that scan never runs on a user's machine, where preflight only touches plugins the user installed.
 
 ## Evidence you can inspect
 
