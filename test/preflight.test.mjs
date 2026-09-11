@@ -335,6 +335,21 @@ test('preflight: a missing non-host dependency is unresolvable, a missing host e
     plugins: [a, b],
   });
   assert.deepEqual(report.plugins.map((p) => [p.name, p.verdict]), [['a', 'unresolvable'], ['b', 'blocks-boot']]);
+
+  const c = join(root, 'p', 'c');
+  const d = join(root, 'p', 'd');
+  writePkg(c, { name: 'c', version: '1.0.0', main: 'index.ts' });
+  writePkg(d, { name: 'd', version: '1.0.0', main: 'index.js' });
+  const second = await preflight('2.0.0', {
+    root: join(root, 'profiles'),
+    ensureHostImpl: async (version) => ({ version, prefix, treeDir: tree, cached: true, installedAt: null }),
+    probeImpl: async (dir) => (dir.endsWith(join('p', 'c'))
+      ? { status: 'fail', code: 'ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING', message: 'Stripping types is currently unsupported for files under node_modules', entry: dir, resolved: [] }
+      : { status: 'fail', code: 'PROBE_TIMEOUT', message: 'import did not settle within 20s', entry: dir, resolved: [] }),
+    plugins: [c, d],
+  });
+  assert.deepEqual(second.plugins.map((p) => [p.name, p.verdict]), [['c', 'unresolvable'], ['d', 'unknown']]);
+  assert.equal(second.summary.allProfilesBoot, true);
 });
 
 test('pack: packPlugin drives npm pack + tar + a scripts-free dependency install (fake spawn)', async (t) => {

@@ -40,9 +40,18 @@ const HOST_IMPORT_FAILURE = /@deepseek-ai\//;
  * dependency is missing from disk — common for packed-from-registry probes
  * and for broken installs — is reported as `unresolvable`, not as blocking.
  */
+// Failure codes that say nothing about the host: the package cannot load
+// from node_modules on any DSH (TypeScript entry under node_modules), or the
+// probe could not reach a conclusion (top-level side effects that never
+// settle). Both stay out of the boot verdict.
+const NOT_A_HOST_VERDICT = new Set(['ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING', 'ERR_UNKNOWN_FILE_EXTENSION']);
+const PROBE_INCONCLUSIVE = new Set(['PROBE_TIMEOUT', 'SPAWN_FAILED', 'PROBE_NO_REPORT']);
+
 function verdictFor(row) {
   if (row.import.status === 'fail') {
     const text = `${row.import.code} ${row.import.message}`;
+    if (PROBE_INCONCLUSIVE.has(row.import.code)) return 'unknown';
+    if (NOT_A_HOST_VERDICT.has(row.import.code)) return 'unresolvable';
     if (row.import.code === 'ERR_MODULE_NOT_FOUND' && !HOST_IMPORT_FAILURE.test(text)) return 'unresolvable';
     return 'blocks-boot';
   }
