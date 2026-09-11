@@ -1,0 +1,6656 @@
+{
+  "dsh": "0.1.5-rc.2",
+  "shard": 10,
+  "shards": 16,
+  "results": {
+    "@aaub-software/dsh-semgrep-sast": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@agenticcontrolplane/dsh": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@aiwayds/dsh-llm-net-retry": {
+      "version": "0.4.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@alib8b8/dsh-plugin-aflare": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@arcaneorion/dsh-model-channel-manager": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@benz-ai-x/dsh-md-preview": {
+      "version": "0.10.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 4
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@caesarloo/dsh-config-git-backup": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subprocess",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@ch4acko3/dsh-markdown-render": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.8"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@claude2dsh/plugin": {
+      "version": "0.2.0-rc.5",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-hook-protocol",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-persistence",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subagent",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/cordis",
+          "range": "4.0.1",
+          "installed": "4.0.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-attachment",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-brand",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-code-runtime",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-hook-protocol",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-hooks-claude-code",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-sandbox",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-scope",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-persistence",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-shell",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subagent",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subprocess",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-timeout",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-user-approval",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@cromus-ai/dsh-plugin": {
+      "version": "1.0.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "unknown",
+      "import": {
+        "status": "skipped",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@deads-inc/dsh-web-search-brave": {
+      "version": "1.0.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-launch-environment",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@domencai/dsh-memory": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subprocess",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@dsh-enhanced/credentials-keychain": {
+      "version": "0.1.24",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/schemastery",
+          "range": "3.18.1",
+          "installed": "3.18.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@dsh-pi/fff": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@dsh-undo/client-rollback-button": {
+      "version": "0.1.0-rc.8",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@dshworks/dsh-watch": {
+      "version": "0.2.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6 || ^0.1.1-rc.1 || ^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6 || ^0.1.1-rc.1 || ^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@elementor-i/dsh-agentmemory": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.0.1-rc.1 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": ">=0.0.1-rc.1 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@falser101/mascot": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.5"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": ">=0.1.0-rc.5"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.1.0-rc.5"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@forgeax/dsh-game": {
+      "version": "0.1.0-rc.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 6
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-mcp-client",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@gelomen/glm-vision-plugin": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-launch-environment",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@goodandready/dsh-image-gen": {
+      "version": "0.10.16",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-attachment",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@goodandready/dsh-voice": {
+      "version": "0.8.22",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@helibeiqi/dsh-compaction-pro": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-compaction",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-compaction-basic",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@honlnk/dsh-input-assist": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/schemastery",
+          "range": "3.18.1",
+          "installed": "3.18.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@huanlin/dsh-plugin-better-sidebar-plugin-office": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:35:54.445Z"
+    },
+    "@huanx/kilo-zen2dsh": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@hy-sde-org/dsh-tool-debug": {
+      "version": "0.1.2-rc.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-timeout",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/schemastery",
+          "range": "3.18.1",
+          "installed": "3.18.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@iceriverlin/dsh-session-upload": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@jetecho/dsh-csv-and-image-preview": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@jojoman2024/dsh-mnemon": {
+      "version": "0.3.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "^0.1.0-rc.6 || ^0.1.1-rc.1"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@kazecreator/dsh-memory": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@kevinsales/dsh-insurance-product-analyst": {
+      "version": "1.8.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@kkabuka/dsh-session-nav": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.7 || ^0.1.1-rc.1"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.7 || ^0.1.1-rc.1"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@lemoncat7/dsh-access-gate": {
+      "version": "0.1.0-alpha.6",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@lijian-ui/dsh-im-gateway": {
+      "version": "0.2.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "0.1.1-rc.2 || 0.1.0-rc.8 || 0.1.0-rc.7 || 0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "0.1.1-rc.2 || 0.1.0-rc.8 || 0.1.0-rc.7 || 0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "0.1.1-rc.2 || 0.1.0-rc.8 || 0.1.0-rc.7 || 0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-user-approval",
+          "range": "0.1.1-rc.2 || 0.1.0-rc.8 || 0.1.0-rc.7 || 0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-user-questions",
+          "range": "0.1.1-rc.2 || 0.1.0-rc.8 || 0.1.0-rc.7 || 0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@liyuk/dsh-neonforge": {
+      "version": "0.2.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@lovstudio/dsh-inject-system-prompt": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@lynn123411/dsh-smooth-stream": {
+      "version": "1.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-store"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-store",
+          "range": "*"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "*"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@max-null/dsh-memory": {
+      "version": "0.6.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 14
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-domain",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-json",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@mingworkbench/capability-pack": {
+      "version": "0.9.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@mokuyoaxis/dsh-iris": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-renderer",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-session",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@musitoolbox/dsh-remote": {
+      "version": "0.4.0-beta.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@noob-stupid/dsh-plugin-console": {
+      "version": "0.3.33",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@opdsh/unity-plugin": {
+      "version": "0.1.5",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 14
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.2-alpha.5 || >=0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill-filesystem",
+          "range": ">=0.1.2-alpha.5 || >=0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subprocess",
+          "range": ">=0.1.2-alpha.5 || >=0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.2-alpha.5 || >=0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@parallel-web/dsh-web-search": {
+      "version": "0.1.0-rc.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/cordis",
+          "range": "4.0.1",
+          "installed": "4.0.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-launch-environment",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/schemastery",
+          "range": "3.18.1",
+          "installed": "3.18.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@pymodel/dsh-tavily": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web-search-deepseek",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-launch-environment",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@rooode/dsh-plugin-quickbar": {
+      "version": "0.1.9",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@sharelights/dsh-typing-insight": {
+      "version": "1.0.0-rc.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@softspark/dsh-codex": {
+      "version": "1.6.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-attachment",
+          "range": "0.1.1-rc.2 || 0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "0.1.1-rc.2 || 0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "0.1.1-rc.2 || 0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@starpivot/dsh-file-drop": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:36:35.732Z"
+    },
+    "@superfish058/dsh-llm-proxy": {
+      "version": "1.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 5
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@telosmaylx/dsh-session-notify": {
+      "version": "0.1.20",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@toddzheng024/vapor-audio": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@token-budget/dsh-plugin": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@ttmouse/dsh-chat-history": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@voidqr/dsh-tab-nav": {
+      "version": "0.2.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@waterwx/dsh-novel-forge": {
+      "version": "1.0.0-alpha",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 9
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.2-alpha.3"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@welsione/dsh-model-router": {
+      "version": "0.0.10",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 5
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": ">=0.0.1-rc.1 <0.1.0 || >=0.1.0-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.0.1-rc.1 <0.1.0 || >=0.1.0-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": ">=0.0.1-rc.1 <0.1.0 || >=0.1.0-rc.1 <0.2.0-0"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": ">=0.0.1-rc.1 <0.1.0 || >=0.1.0-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@wisdoverse/dsh-skills-manager": {
+      "version": "1.0.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": ">=0.1.1-rc.2 <0.1.2 || >=0.1.2-alpha.3 <0.2.0-0 || >=0.1.3-alpha.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.1-rc.2 <0.1.2 || >=0.1.2-alpha.3 <0.2.0-0 || >=0.1.3-alpha.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": ">=0.1.1-rc.2 <0.1.2 || >=0.1.2-alpha.3 <0.2.0-0 || >=0.1.3-alpha.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.1-rc.2 <0.1.2 || >=0.1.2-alpha.3 <0.2.0-0 || >=0.1.3-alpha.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@wsgsety/dsh-plugin-manager": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@xiaoso/dsh-turn-navigator": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@yadsh/dsh-kv-persist": {
+      "version": "0.2.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.1-rc.2 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@young1839/dsh-design-office": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@zaimokuza/dsh-acp-adapter": {
+      "version": "0.1.0-rc.10",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-llm' does not provide an export named 'CallId'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/cordis",
+          "range": "4.0.1",
+          "installed": "4.0.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-attachment",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-commands",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-tool",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": ">=0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "@ziduup/dsh-programming-mode": {
+      "version": "0.3.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "acryl-development-canvas": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/cordis",
+          "range": "4.0.1",
+          "installed": "4.0.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-session-controller",
+          "range": "0.1.5-alpha.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-renderer",
+          "range": "0.1.5-alpha.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-session",
+          "range": "0.1.5-alpha.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "0.1.5-alpha.1"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-store",
+          "range": "0.1.5-alpha.1"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "0.1.5-alpha.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "0.1.5-alpha.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "bgjobs": {
+      "version": "0.1.72",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": ">=0.1.0-rc.1 <0.1.1-0 || >=0.1.1-rc.1 <0.1.2-0 || >=0.1.2-alpha.0 <0.2.0-0"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "cot-lint": {
+      "version": "0.2.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 8
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "deepseek-ippt": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.0.1-rc.1 <0.2.0-0"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": ">=0.0.1-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": ">=0.0.1-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-workspace",
+          "range": ">=0.0.1-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dock-media": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dsh-activity-report": {
+      "version": "0.1.0-alpha.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 5
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-query",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-domain",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-compaction",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dsh-agent-plugins-market": {
+      "version": "0.6.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-hooks-claude-code",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-mcp-client",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dsh-agnes": {
+      "version": "0.6.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-shell",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dsh-aliyun-mcp": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dsh-api-client": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:18.746Z"
+    },
+    "dsh-arch-doc": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 8
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill-filesystem",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-arxiv-ml-search": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-auth-everying": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 14
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-atomic-write",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-attachment",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm-pi-ai",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-atomic-write",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm-pi-ai",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/schemastery",
+          "range": "3.18.1",
+          "installed": "3.18.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-backstory": {
+      "version": "0.8.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING",
+        "message": "Stripping types is currently unsupported for files under node_modules, for \"file:///tmp/dsh-harbor-board-10/dsh-backstory_0.8.2/node_modules/dsh-backstory/src/index.ts\""
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-bench": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-bloub-mood": {
+      "version": "2.4.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-browser-playwright": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.0-rc.2 <0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.2 <0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-cache-miss": {
+      "version": "0.1.6",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.6 <0.3.0-0"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.1.0-rc.6 <0.3.0-0"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": ">=0.1.0-rc.6 <0.3.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": ">=0.1.0-rc.6 <0.3.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-case": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-chat-scroll-nav": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-chrome": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "unknown",
+      "import": {
+        "status": "skipped",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-claude-move": {
+      "version": "0.4.6",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-client-ui-obsidian-memory": {
+      "version": "0.3.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.5"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-sidebar",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.1.0-rc.5"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-code-intel": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-fs",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-jobs",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-codex-migrate": {
+      "version": "2.0.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 4
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-web-react"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-coding-workspace": {
+      "version": "0.9.20",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "external",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "0.0.1-rc.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-query",
+          "range": "0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-community-plugins": {
+      "version": "0.1.5",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-compressor": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-context-lens": {
+      "version": "0.2.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-convo-cost": {
+      "version": "1.0.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-cron": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-d1": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-debrief": {
+      "version": "0.10.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-deepseek-web": {
+      "version": "1.0.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-design-playbook": {
+      "version": "0.22.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "unknown",
+      "import": {
+        "status": "skipped",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-mcp-client",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:37:52.998Z"
+    },
+    "dsh-devtools-time-machine": {
+      "version": "1.0.0-rc.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-disk-manager": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.0.1-rc.1 <0.1.0 || >=0.1.0-rc.1 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-done-badge": {
+      "version": "0.4.6",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-dual-plugin-guide": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh",
+          "range": "0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-element-inspector": {
+      "version": "0.7.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": ">=0.1.0-rc.8 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-modules",
+          "range": ">=0.1.0-rc.8 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.8 <0.2.0-0"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": ">=0.1.0-rc.8 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings-plugins",
+          "range": ">=0.1.0-rc.8 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.0-rc.8 <0.2.0-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-eval": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "unresolvable",
+      "import": {
+        "code": "ERR_MODULE_NOT_FOUND",
+        "message": "Cannot find module '/tmp/dsh-harbor-board-10/dsh-eval_0.3.0/node_modules/dsh-eval/lib/benchmark.js' imported from /tmp/dsh-harbor-board-10/dsh-eval_0.3.0/node_modules/dsh-eval/lib/index.js"
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-cmdline",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm-retry",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-f1-skin": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-fetch-file": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-llm' does not provide an export named 'CallId'"
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-file-review-tab-012a1": {
+      "version": "0.4.2-alpha.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 4
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-atomic-write",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.5 <0.2.0"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": ">=0.1.0-rc.5 <0.2.0"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.1.0-rc.5 <0.2.0"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-registry",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-flykit": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-session-controller",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-store",
+          "range": "0.1.2-rc.1"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-chat",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-model-selection",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "0.1.2-rc.1"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-renderer",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-session",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "0.1.2-rc.1"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-token-meter",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-fund-research": {
+      "version": "0.4.10",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 14
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-generative-ui": {
+      "version": "0.0.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 9
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.5-rc.1"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-gitflow": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-shell",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-gov": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-token-meter",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-gui-customization": {
+      "version": "0.6.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-hermes-memory": {
+      "version": "1.1.10",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.6 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-hotswap": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-icon-custom": {
+      "version": "0.7.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-image-pathify": {
+      "version": "0.1.9",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 10
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-attachment",
+          "range": ">=0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-insight": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-jenkins": {
+      "version": "0.1.53",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-cordis-client-runner",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-kanban-flow": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-kirocrew": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-latex-guard": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-lifeline": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-projection",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:22.619Z"
+    },
+    "dsh-livebench-panel": {
+      "version": "0.2.18",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-llm-rate-limit": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-brand",
+          "range": "^0.1.0-rc.8",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.8",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.8",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.0-rc.8",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-timeout",
+          "range": "^0.1.0-rc.8",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-logbook": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-markdown-preview": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-mcp-connector": {
+      "version": "0.2.42",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 6
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-mcp-client",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-domain",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-mcp-servers-panel": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-memoria": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-message-navigator": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-mini-games": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-mnemos": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING",
+        "message": "Stripping types is currently unsupported for files under node_modules, for \"file:///tmp/dsh-harbor-board-10/dsh-mnemos_0.2.0/node_modules/dsh-mnemos/src/index.ts\""
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.0-rc.8 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-model-context-catalog": {
+      "version": "0.2.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.1-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-model-probe": {
+      "version": "0.1.5",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-movein": {
+      "version": "0.13.8",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-mv-session": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-neu-theme": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-theme",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-notify": {
+      "version": "0.1.7",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-nuphus-mcp": {
+      "version": "0.2.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-mcp-client",
+          "range": "^0.0.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-oc-tui": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent-loop",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent-presets",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-cmdline",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-persistence",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-user-approval",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-user-questions",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-ontology": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-domain",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-opencode-go-usage-dock": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-paopaocat-skin": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "unknown",
+      "import": {
+        "status": "skipped",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-patchouli": {
+      "version": "0.1.6",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-domain",
+          "range": ">=0.1.0-rc.5 <0.2.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-peak-pricing": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-pet-dfeiyu-mo": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 5
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent-default-model",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-plannotator": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.0.1-rc.0 <1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-plan-mode",
+          "range": ">=0.0.1-rc.0 <1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.0.1-rc.0 <1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:38:49.471Z"
+    },
+    "dsh-plugin-ai-bridge": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-jobs",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-auto-review": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-renderer",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.2-alpha.3"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-user-approval",
+          "range": "^0.1.2-alpha.3",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-claude-import": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "ERR_MODULE_NOT_FOUND",
+        "message": "Cannot find package '@deepseek-ai/dsh-host-apiproxy' imported from /home/runner/.config/dsh-harbor/hosts/0.1.5-rc.2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-harbor-anchor.mjs"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-host-apiproxy",
+          "range": "^0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-cost-tracker": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-education": {
+      "version": "0.3.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-fs",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-greet": {
+      "version": "0.3.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.1-rc.1 || 0.1.2-rc.1 || 0.1.5-alpha.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-llm-balance": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-mm-vision": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-opencode-bridge": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-quote-reply": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-save-token": {
+      "version": "2.4.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-studio": {
+      "version": "0.3.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-token-gacha": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-projection",
+          "range": ">=0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugin-vscode-bridge": {
+      "version": "1.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-plugins-store": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 1
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-native-command",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-pr-board": {
+      "version": "0.11.13",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-project-portfolio": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-prompt-system": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-qa": {
+      "version": "0.3.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-quota": {
+      "version": "0.14.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-reasoning-cn": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-llm' does not provide an export named 'deepFreeze'"
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-system-prompt",
+          "range": "0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-reference-checker": {
+      "version": "1.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-remote-mod-plugin": {
+      "version": "0.7.8-mod",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-research-report": {
+      "version": "0.3.9",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-ros2": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-skill",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:13.373Z"
+    },
+    "dsh-rules": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 10
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-home-paths",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-scheduler": {
+      "version": "2026.9.72",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": ">=0.1.1-rc.2 <0.1.2-0 || >=0.1.2-rc.1 <0.1.3-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.1-rc.2 <0.1.2-0 || >=0.1.2-rc.1 <0.1.3-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-search-hub": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-launch-environment",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-server-deck": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-session-info": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-session-scope": {
+      "version": "0.5.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 13
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-settings-organizer": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'settingsNamespace'"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-schema-form",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-web-react",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-sidebar-balance": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-siyuan": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "blocks-boot",
+      "import": {
+        "code": "SyntaxError",
+        "message": "The requested module '@deepseek-ai/dsh-settings' does not provide an export named 'installSettingsSection'"
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/cordis",
+          "range": "4.0.1",
+          "installed": "4.0.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-skill-studio": {
+      "version": "0.2.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-slash-match": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-sonarqube": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.8 || ^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-ssh-terminal": {
+      "version": "0.1.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-stock-dashboard": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-sidebar",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-superpowers-essentials": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-task-worktree": {
+      "version": "0.4.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-subprocess",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-telegram-multiagent": {
+      "version": "1.5.5",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-theme-liquid-glass": {
+      "version": "0.4.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 2
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-store"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-store",
+          "range": "^0.1.2-rc.1"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-theme",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-ths-holdings": {
+      "version": "0.1.7",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 5
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.1-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-invariants",
+          "range": "^0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-token-budget": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-projection",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "^0.1.0-rc.6"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "^0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-tool-autoexpand": {
+      "version": "0.3.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-tool-result-guard": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-trajectory-teacher": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 9
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-commands",
+          "range": "^0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "^0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-turn-fork": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent-presets",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-session-controller",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-connection",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-store",
+          "range": "0.1.5-rc.1"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-chat",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-renderer",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-persistence",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-query",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-workspace",
+          "range": "0.1.5-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-ui-spec": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:35.110Z"
+    },
+    "dsh-update-center": {
+      "version": "0.9.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "unresolvable",
+      "import": {
+        "code": "ERR_MODULE_NOT_FOUND",
+        "message": "Cannot find package 'schemastery' imported from /tmp/dsh-harbor-board-10/dsh-update-center_0.9.0/node_modules/dsh-update-center/lib/index.js"
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.0.1-rc <2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-usage-insights": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 5
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session-query",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-storage-domain",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-compaction",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-valley-meter": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-settings",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "0.1.1-rc.2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-video-lens": {
+      "version": "0.3.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-vision-recognizer": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-vscode-shell": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-web-fetch-playwright": {
+      "version": "0.2.7",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 10
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.2-alpha.0 <0.3.0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web",
+          "range": ">=0.1.2-alpha.0 <0.3.0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-web-search-anysearch": {
+      "version": "0.1.2",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-credentials",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-launch-environment",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-web",
+          "range": "^0.1.2-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-web-ui-notify": {
+      "version": "0.1.4",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-whale-desktop-launcher": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-win-multi-bash": {
+      "version": "0.2.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-bash-local",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-pwsh-local",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-pwsh-sandbox",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-sandbox",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-settings",
+          "range": ">=0.1.2-alpha.2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-shell",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.7",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-workflow-view": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-session-controller",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-store",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-conversation",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-writing-desk": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "*"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": "*"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dsh-yali-image-generator": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/cordis",
+          "range": "4.0.1",
+          "installed": "4.0.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/schemastery",
+          "range": "3.18.1",
+          "installed": "3.18.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "dshbase-catalog": {
+      "version": "0.3.24",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.1.0-rc.6",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "gavel-review": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": "^0.0.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": "^0.0.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "^0.0.1-rc.1",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "liangwengu": {
+      "version": "0.1.5-rc.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "multiple-chat-panels": {
+      "version": "0.1.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-api-remotes",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": ">=0.0.1-rc <2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-layout",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-model-selection",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-ui-sidebar",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": ">=0.0.1-rc <2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-primitives",
+          "range": ">=0.0.1-rc <2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-host-webserver",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-permission-presets",
+          "range": ">=0.0.1-rc <2",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "openharness-reply-in-cn": {
+      "version": "0.1.0",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-runtime"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-runtime",
+          "range": "0.1.0-rc.6"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "relay-dsh-plugin-events": {
+      "version": "0.2.3",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 12
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-primitives"
+        },
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-llm",
+          "range": ">=0.1.1-rc.2 <0.1.2-0 || >=0.1.2-alpha.2 <0.1.3-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-session",
+          "range": ">=0.1.1-rc.2 <0.1.2-0 || >=0.1.2-alpha.2 <0.1.3-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.1-rc.2 <0.1.2-0 || >=0.1.2-alpha.2 <0.1.3-0",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": ">=0.1.1-rc.2 <0.1.2-0 || >=0.1.2-alpha.2 <0.1.3-0",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "sent-msg-locator": {
+      "version": "2.3.5",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 0
+      },
+      "advisories": [],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "task-passport": {
+      "version": "0.3.1",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 11
+      },
+      "advisories": [
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-tools",
+          "range": ">=0.1.0-rc.5",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    },
+    "what-was-that": {
+      "version": "0.1.11",
+      "dsh": "0.1.5-rc.2",
+      "verdict": "ok",
+      "import": {
+        "status": "ok",
+        "resolved": 3
+      },
+      "advisories": [
+        {
+          "kind": "dead-inject",
+          "field": "inject",
+          "id": "@deepseek-ai/dsh-client-ui-slots"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-agent",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-protocol",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-typert-registry",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        },
+        {
+          "kind": "peer-missing",
+          "name": "@deepseek-ai/dsh-client-ui-slots",
+          "range": "*"
+        },
+        {
+          "kind": "peer-range",
+          "name": "@deepseek-ai/dsh-client-locale",
+          "range": "*",
+          "installed": "0.1.5-rc.2"
+        }
+      ],
+      "probedAt": "2026-09-11T17:39:57.264Z"
+    }
+  }
+}
