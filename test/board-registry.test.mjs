@@ -46,3 +46,16 @@ test('overlapping search pages count one package and refresh ambiguous cached ve
   assert.equal(rows[0].ambiguous, true);
   assert.equal(rows[1].name, 'b');
 });
+
+
+test('cached results survive reassignment and old unrelated shard rows are removed', async () => {
+  const { mergeCachedResults, cachedShard } = await import('../scripts/board/cache.mjs');
+  const cache = mergeCachedResults([
+    { results: { a: { version: '1', probeSchema: 2, probedAt: '2026-10-01' }, b: { version: '1', probeSchema: 2 } } },
+    { results: { a: { version: '2', probeSchema: 2, probedAt: '2026-10-02' } } },
+  ]);
+  const shard = cachedShard([{ name: 'a', version: '2' }, { name: 'new', version: '1' }], cache, 2);
+  assert.deepEqual(Object.keys(shard), ['a']);
+  assert.equal(shard.a.version, '2');
+  assert.deepEqual(cachedShard([{ name: 'a', version: '1' }], cache, 2), {});
+});

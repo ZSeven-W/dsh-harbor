@@ -3,10 +3,11 @@
 //   node scripts/board/run.mjs --dsh 0.1.5-rc.2 --shard 0 --shards 8 [--full]
 // Incremental by default: a package whose (name, version, dsh) triple already
 // has a result in board/results/<dsh>/ is skipped. Writes one JSON per shard.
-import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { preflight } from '../../src/preflight/index.mjs';
+import { mergeCachedResults, cachedShard } from './cache.mjs';
 
 const args = Object.fromEntries(process.argv.slice(2).map((a, i, all) => (a.startsWith('--') ? [a.slice(2), all[i + 1]?.startsWith('--') || all[i + 1] === undefined ? true : all[i + 1]] : [])).filter((x) => x.length));
 const dsh = String(args.dsh ?? 'latest');
@@ -20,11 +21,13 @@ const registry = JSON.parse(readFileSync(join(root, 'registry.json'), 'utf8'));
 const resultsDir = join(root, 'results', dsh);
 mkdirSync(resultsDir, { recursive: true });
 const outFile = join(resultsDir, `shard-${shard}.json`);
-let previous = {};
-try { previous = JSON.parse(readFileSync(outFile, 'utf8')).results ?? {}; } catch { /* first run */ }
-
+const cached = mergeCachedResults(readdirSync(resultsDir).filter(f => f.endsWith('.json')).map(file => {
+  try { return JSON.parse(readFileSync(join(resultsDir, file), 'utf8')); } catch { return {}; }
+}));
 const mine = registry.plugins.filter((_, i) => i % shards === shard);
-const todo = full ? mine : mine.filter((p) => previous[p.name]?.version !== p.version || previous[p.name]?.probeSchema !== 2);
+const previous = cachedShard(mine, cached, 2);
+const todo = full ? mine : mine.filter(p => previous[p.name] === undefined);
+
 process.stderr.write(`shard ${shard}/${shards}: ${mine.length} plugins, ${todo.length} to probe against ${dsh}\n`);
 
 const results = { ...previous };
@@ -53,7 +56,7 @@ for (let i = 0; i < todo.length; i += batch) {
   writeFileSync(outFile, `${JSON.stringify({ dsh: hostVersion ?? dsh, shard, shards, results }, null, 2)}\n`);
 }
 rmSync(packRoot, { recursive: true, force: true });
-if (!existsSync(outFile)) writeFileSync(outFile, `${JSON.stringify({ dsh, shard, shards, results }, null, 2)}\n`);
+writeFileSync(outFile, `${JSON.stringify({ dsh, shard, shards, results }, null, 2)}\n`);
 const counts = {};
 for (const r of Object.values(results)) counts[r.verdict] = (counts[r.verdict] ?? 0) + 1;
 process.stderr.write(`shard ${shard} done: ${JSON.stringify(counts)}\n`);
