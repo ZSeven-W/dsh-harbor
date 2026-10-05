@@ -38,9 +38,10 @@ jobs:
           changed="$(node -e 'const c=JSON.parse(process.argv[1]);process.stdout.write(String(c.changed))' "$change")"
           echo "changed=$changed" >> "$GITHUB_OUTPUT"
           # Targets to diff and board: every tag that moved, as from→to pairs.
-          node -e '
+          node --input-type=module -e '
+            import { releaseTargets } from "./scripts/board/release-targets.mjs";
             const c = JSON.parse(process.argv[1]);
-            const pairs = c.tagMoves.filter((m) => m.from && m.to && m.from !== m.to).map((m) => ({ tag: m.tag, from: m.from, to: m.to }));
+            const pairs = releaseTargets(c.tagMoves);
             process.stdout.write(`targets=${JSON.stringify(pairs)}\n`);
           ' "$change" >> "$GITHUB_OUTPUT"
       - name: Commit the new state
@@ -90,6 +91,7 @@ jobs:
           git add board/host-diffs
           git commit -m "board: contract diff DSH ${{ matrix.target.from }} → ${{ matrix.target.to }} (${{ matrix.target.tag }})" && git push
       - name: Start the ecosystem board for ${{ matrix.target.to }}
+        if: matrix.target.runBoard
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run board.yml -f dsh="${{ matrix.target.to }}" -f full=true

@@ -8,28 +8,19 @@
 // change keep their previous classification without a packument fetch.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
+import { createRegistryReader } from './registry-fetch.mjs';
 
 const OUT = new URL('../../board/registry.json', import.meta.url);
 const REGISTRY = process.env.NPM_REGISTRY ?? 'https://registry.npmjs.org';
 const UA = `dsh-harbor-board (+https://github.com/ZSeven-W/dsh-harbor)`;
 const PAGE = 250;
-const CONCURRENCY = 8;
+const CONCURRENCY = 2;
 const LIMIT = Number(process.env.BOARD_LIMIT ?? 0); // for local trials
 
-async function getJson(url, abbreviated = false) {
-  const headers = { 'user-agent': UA, ...(abbreviated ? { accept: 'application/vnd.npm.install-v1+json' } : {}) };
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    try {
-      const res = await fetch(url, { headers, signal: AbortSignal.timeout(30_000) });
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json();
-    } catch (error) {
-      if (attempt === 3) throw error;
-      await new Promise((r) => setTimeout(r, 1000 * attempt));
-    }
-  }
-  return null;
+const readRegistry = createRegistryReader();
+function getJson(url, abbreviated = false) {
+  return readRegistry(url, { 'user-agent': UA, ...(abbreviated ? { accept: 'application/vnd.npm.install-v1+json' } : {}) });
 }
 
 let previous = { plugins: [] };
@@ -40,6 +31,7 @@ const prevByName = new Map(previous.plugins.map((p) => [p.name, p]));
 const listed = [];
 let total = Infinity;
 for (let from = 0; from < total; from += PAGE) {
+  if (from > 0) await delay(1500);
   const page = await getJson(`${REGISTRY}/-/v1/search?text=keywords:dsh-plugin&size=${PAGE}&from=${from}`, true);
   if (!page) break;
   total = page.total;
