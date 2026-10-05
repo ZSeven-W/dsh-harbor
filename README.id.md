@@ -50,7 +50,7 @@ harbor preflight --dsh next             # atau versi spesifik: --dsh 0.1.5-rc.2
 harbor preflight --dsh 0.1.5-rc.2 --json   # laporan lengkap yang dapat dibaca mesin
 ```
 
-Putusan diberikan per plugin (**memblokir boot** / **bisa dimuat** / **tidak diuji**) dan per profile; rentang peer dan inject mati hanyalah saran dan tidak pernah mengubah putusan. Kode keluar 3 berarti setidaknya satu profile tidak akan boot. Semuanya berjalan di proses anak; prefix npm global dan profile Anda tidak pernah ditulis. Hook resolve memerlukan Node ≥ 20.6.
+DSH >= 0.2 melewati plugin dengan rentang host peer yang tidak kompatibel (**blocked-by-host**), terpisah dari kegagalan import (**blocks-boot**). Semver host target digunakan termasuk prarilis; pengecualian risiko untuk versi tertentu tidak diasumsikan. Import berhasil tidak memverifikasi aktivasi, pengaturan, alat atau perangkat. Kode 3 menunjukkan plugin yang belum lolos atau masalah pengaturan yang diketahui. Profile asli tidak diubah. Memerlukan Node >= 20.6.
 
 ## Versi
 

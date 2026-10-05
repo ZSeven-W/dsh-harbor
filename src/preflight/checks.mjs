@@ -9,12 +9,37 @@ import { existsSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn as spawnProcess } from 'node:child_process';
-import { satisfies } from './semver.mjs';
+import { createRequire } from 'node:module';
+import { satisfies, compareVersions } from './semver.mjs';
 import { HOST_SCOPE, hostAnchorUrl } from './host.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PROBE_TIMEOUT_MS = 20_000;
 const MAX_ERROR_LENGTH = 2000;
+
+/** DSH 0.2 enforces host peers against the runtime version, including prereleases.
+ * Use the target's semver implementation, so wildcard/hyphen/workspace ranges
+ * have the same meaning as in its loader. Older hosts only advise on peers.
+ * Exact-version risk exemptions are intentionally not assumed by a preflight.
+ */
+export function checkHostCompatibility(manifest, runtimeVersion, treeDir) {
+  if (compareVersions(runtimeVersion, '0.2.0-0') < 0) return { status: 'not-enforced', peers: [] };
+  const peers = Object.entries(manifest?.peerDependencies ?? {})
+    .filter(([name]) => name === '@deepseek-ai/dsh' || name.startsWith('@deepseek-ai/dsh-'));
+  if (!peers.length) return { status: 'compatible', peers: [] };
+  let semver;
+  try {
+    semver = createRequire(hostAnchorUrl(treeDir))('semver');
+  } catch (error) {
+    return { status: 'unknown', peers: [], reason: `target semver unavailable: ${error.message}` };
+  }
+  const incompatible = peers.filter(([, range]) => {
+    if (typeof range !== 'string' || range.trim() === '') return true;
+    const requirement = ['workspace:^', 'workspace:~', 'workspace:*'].includes(range) ? runtimeVersion : range;
+    return !semver.satisfies(runtimeVersion, requirement, { includePrerelease: true });
+  }).map(([name, range]) => ({ name, range }));
+  return { status: incompatible.length ? 'blocked' : 'compatible', peers: incompatible };
+}
 
 /** The server entry a plugin's manifest names, resolved to an absolute path. */
 export function serverEntry(pluginDir, manifest) {

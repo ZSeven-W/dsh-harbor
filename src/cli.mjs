@@ -361,7 +361,8 @@ async function main(args = process.argv.slice(2)) {
 
 const VERDICT_MARK = {
   'blocks-boot': '✖ 拖崩启动',
-  ok: '✓ 可加载',
+  'blocked-by-host': '✖ 宿主拒绝加载',
+  ok: '✓ 入口可导入（未验证激活）',
   unknown: '? 未探测',
   unresolvable: '? 无法解析',
 };
@@ -396,13 +397,13 @@ async function runPreflight(invocation, flag) {
   });
   if (flag('json')) {
     await writeStdout(`${JSON.stringify(report, null, 2)}\n`);
-    return report.summary.allProfilesBoot ? 0 : 3;
+    return report.summary.allPluginsLoad && report.summary.settingsIssues === 0 ? 0 : 3;
   }
 
   const t = report.target;
   console.log(`\ndsh-harbor 升级预检 — 目标 DSH ${terminalSafe(t.version, 60)}${t.requested !== t.version ? `（${terminalSafe(t.requested, 40)}）` : ''}，当前 ${terminalSafe(report.current.version ?? '未知', 60)}`);
   console.log(`宿主树: ${terminalSafe(report.host.prefix)}${report.host.cached ? '（缓存）' : '（本次安装）'}，${terminalSafe(report.host.packages, 20)} 个官方包，${terminalSafe(report.host.clientModules, 20)} 个 web 客户端模块`);
-  const order = { 'blocks-boot': 0, unresolvable: 1, unknown: 2, ok: 3 };
+  const order = { 'blocks-boot': 0, 'blocked-by-host': 1, unresolvable: 2, unknown: 3, ok: 4 };
   const rows = [...report.plugins].sort((a, b) => (order[a.verdict] ?? 9) - (order[b.verdict] ?? 9) || a.name.localeCompare(b.name));
   for (const p of rows) {
     const advisory = p.advisories.length ? `  ⚠ ${terminalSafe(p.advisories.length, 20)} 条声明过期` : '';
@@ -411,6 +412,8 @@ async function runPreflight(invocation, flag) {
     else if (p.import.status === 'fail') console.log(`    import 失败 ${terminalSafe(p.import.code, 60)}: ${terminalSafe(p.import.message, 400)}`);
     else if (p.import.status === 'ok') console.log(`    import 通过，链接到 ${terminalSafe(p.import.resolved.length, 20)} 个宿主包`);
     else console.log(`    import 跳过: ${terminalSafe(p.import.reason ?? '', 200)}`);
+    if (p.compatibility?.status === 'blocked') console.log(`    宿主版本闸门拒绝: ${terminalList(p.compatibility.peers.map(peer => `${peer.name} ${peer.range}`), ', ', 400)}`);
+    if (p.compatibility?.status === 'unknown') console.log(`    闸门未验证: ${terminalSafe(p.compatibility.reason, 400)}`);
     const dead = p.advisories.filter((a) => a.kind === 'dead-inject');
     if (dead.length) console.log(`    client ${terminalList(dead.map((a) => `${a.field}:${a.id}`), ', ', 300)} 在目标宿主中不存在（0.1.5 起加载器静默跳过）`);
     const ranges = p.advisories.filter((a) => a.kind === 'peer-range');
@@ -426,13 +429,15 @@ async function runPreflight(invocation, flag) {
   if (report.subjects === 'profiles') {
     console.log('\nprofile 结论:');
     for (const [profile, state] of Object.entries(report.summary.profiles)) {
+      if (state.skippedPlugins?.length) console.log(`  ⚠ ${terminalSafe(profile, 120)} 会跳过插件: ${terminalList(state.skippedPlugins, ', ', 300)}`);
       console.log(state.boots
         ? `  ✓ ${terminalSafe(profile, 120)} 升级后可以启动`
         : `  ✖ ${terminalSafe(profile, 120)} 升级后起不来（${terminalList(state.blockedBy, ', ', 300)}）`);
     }
   }
-  console.log(`\n合计: 拖崩 ${terminalSafe(c['blocks-boot'], 20)} · 可加载 ${terminalSafe(c.ok, 20)} · 无法解析 ${terminalSafe(c.unresolvable ?? 0, 20)} · 未探测 ${terminalSafe(c.unknown, 20)} · 带过期声明 ${terminalSafe(c.withAdvisories, 20)}`);
-  return report.summary.allProfilesBoot ? 0 : 3;
+  console.log(`\n合计: 拖崩 ${terminalSafe(c['blocks-boot'], 20)} · 宿主拒绝 ${terminalSafe(c['blocked-by-host'], 20)} · 入口可导入 ${terminalSafe(c.ok, 20)} · 无法解析 ${terminalSafe(c.unresolvable ?? 0, 20)} · 未探测 ${terminalSafe(c.unknown, 20)} · 带过期声明 ${terminalSafe(c.withAdvisories, 20)}`);
+  console.log('预检未执行插件激活、设置读写、工具调用或设备验收。');
+  return report.summary.allPluginsLoad && report.summary.settingsIssues === 0 ? 0 : 3;
 }
 
 try {

@@ -11,8 +11,9 @@
 //                            the target does not ship (skipped silently ≥ 0.1.5)
 //   advisory peer-range    — a host peer range excludes the target's version
 //   advisory peer-missing  — a host peer the target tree does not contain
-// Advisories never change the verdict: a stale range does not stop a plugin
-// from loading, and pretending otherwise would bury the one hard signal.
+// DSH >= 0.2 rejects incompatible host peers independently of entry imports:
+// blocked-by-host means the plugin is skipped, not that the whole host crashes.
+// An ok import is not an activation, settings, tool, or device acceptance.
 
 import { join, resolve as resolvePath } from 'node:path';
 import { homedir } from 'node:os';
@@ -21,7 +22,7 @@ import {
   HOST_PACKAGE, ensureHost, hostPresetIds, installedHostVersion, listHostVersions,
   readHostInventory, readSettingsSection, resolveHostVersion,
 } from './host.mjs';
-import { checkInject, checkPeers, checkPresetSetting, probeImport } from './checks.mjs';
+import { checkHostCompatibility, checkInject, checkPeers, checkPresetSetting, probeImport } from './checks.mjs';
 import { packPlugin } from './pack.mjs';
 import { parseVersion } from './semver.mjs';
 
@@ -48,6 +49,7 @@ const NOT_A_HOST_VERDICT = new Set(['ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING
 const PROBE_INCONCLUSIVE = new Set(['PROBE_TIMEOUT', 'SPAWN_FAILED', 'PROBE_NO_REPORT']);
 
 function verdictFor(row) {
+  if (row.compatibility.status === 'blocked') return 'blocked-by-host';
   if (row.import.status === 'fail') {
     const text = `${row.import.code} ${row.import.message}`;
     if (PROBE_INCONCLUSIVE.has(row.import.code)) return 'unknown';
@@ -55,7 +57,7 @@ function verdictFor(row) {
     if (row.import.code === 'ERR_MODULE_NOT_FOUND' && !HOST_IMPORT_FAILURE.test(text)) return 'unresolvable';
     return 'blocks-boot';
   }
-  return row.import.status === 'ok' ? 'ok' : 'unknown';
+  return row.import.status === 'ok' && row.compatibility.status !== 'unknown' ? 'ok' : 'unknown';
 }
 
 function advisoriesFor(row) {
@@ -141,7 +143,10 @@ export async function preflight(target, options = {}) {
     }
     const manifest = readJson(join(plugin.dir, 'package.json')) ?? {};
     onLog(`probing ${plugin.name}@${plugin.resolvedVersion ?? '?'}`);
-    const importResult = await probeImpl(plugin.dir, manifest, host.treeDir, { env });
+    const compatibility = checkHostCompatibility(manifest, version, host.treeDir);
+    const importResult = compatibility.status === 'blocked'
+      ? { status: 'skipped', reason: 'target host rejects incompatible peerDependencies', entry: null, resolved: [] }
+      : await probeImpl(plugin.dir, manifest, host.treeDir, { env });
     const row = {
       name: plugin.name,
       version: plugin.resolvedVersion,
@@ -150,6 +155,8 @@ export async function preflight(target, options = {}) {
       profiles: [...new Set(plugin.installs.map((i) => i.profile))].sort(),
       ...(plugin.spec ? { spec: plugin.spec } : {}),
       import: importResult,
+      compatibility,
+      activation: { status: 'not-probed' },
       inject: checkInject(manifest, inventory),
       peers: checkPeers(manifest, inventory),
     };
@@ -163,7 +170,7 @@ export async function preflight(target, options = {}) {
     agentPresets: checkPresetSetting(readSettingsSection(settingsPath, 'agent-presets'), presetIds),
   } : { file: null, agentPresets: { status: 'skipped', wanted: null, available: presetIds } };
 
-  const counts = { 'blocks-boot': 0, ok: 0, unknown: 0, unresolvable: 0, withAdvisories: 0 };
+  const counts = { 'blocks-boot': 0, 'blocked-by-host': 0, ok: 0, unknown: 0, unresolvable: 0, withAdvisories: 0 };
   for (const p of plugins) {
     counts[p.verdict] = (counts[p.verdict] ?? 0) + 1;
     if (p.advisories.length) counts.withAdvisories++;
@@ -172,8 +179,9 @@ export async function preflight(target, options = {}) {
   const profiles = {};
   for (const p of plugins) {
     for (const profile of p.profiles) {
-      const entry = profiles[profile] ?? (profiles[profile] = { boots: true, blockedBy: [] });
+      const entry = profiles[profile] ?? (profiles[profile] = { boots: true, blockedBy: [], skippedPlugins: [] });
       if (p.verdict === 'blocks-boot') { entry.boots = false; entry.blockedBy.push(`${p.name}@${p.version ?? '?'}`); }
+      if (p.verdict === 'blocked-by-host') entry.skippedPlugins.push(`${p.name}@${p.version ?? '?'}`);
     }
   }
 
@@ -191,6 +199,8 @@ export async function preflight(target, options = {}) {
       counts,
       profiles,
       allProfilesBoot: counts['blocks-boot'] === 0,
+      allPluginsLoad: plugins.every(p => p.verdict === 'ok'),
+      activation: 'not-probed',
       settingsIssues: settings.agentPresets.status === 'invalid' ? 1 : 0,
     },
   };

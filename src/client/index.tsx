@@ -117,7 +117,7 @@ const COPY = {
     bannerHubStale: 'harbor 的扫描代码已更新，但运行中的 DSH 仍在使用启动时载入的旧版本。请重启 DSH，否则本页显示的结论可能不完整。',
     bannerPanelStale: '本页面用的是旧版界面代码，请刷新页面。',
     preflight: '升级预检',
-    preflightIntro: '把目标版本的 DSH 装进 Harbor 自己的缓存目录，逐个对已安装插件做 import 探针、client inject 核对和 peer 范围核对，回答"升级到这个版本后，哪个 profile 还能起来"。全部在子进程里完成，不碰真实 profile。',
+    preflightIntro: '把目标版本的 DSH 装进 Harbor 自己的缓存目录，逐个对已安装插件做 import 探针、client inject 核对和 peer 范围核对，同时核对目标宿主的版本闸门。入口可导入不代表激活、设置、工具或设备功能已验证；不碰真实 profile。',
     preflightTarget: '目标版本',
     preflightRun: '开始预检',
     preflightRunning: '预检中…',
@@ -129,9 +129,11 @@ const COPY = {
     preflightLog: '进度',
     preflightBusy: '已有一个预检在运行',
     preflightProfiles: 'profile 结论',
-    preflightBoots: '升级后可以启动',
+    preflightBoots: '未发现启动阻断',
+    preflightSkipped: (names: string) => `宿主会跳过：${names}`,
+    preflightActivation: '尚未验证插件激活、设置读写、工具调用或设备功能。',
     preflightBlocked: (by: string) => `升级后起不来：${by}`,
-    preflightVerdict: { 'blocks-boot': '✖ 拖崩启动', ok: '✓ 可加载', unknown: '? 未探测' },
+    preflightVerdict: { 'blocks-boot': '✖ 拖崩启动', 'blocked-by-host': '✖ 宿主拒绝加载', ok: '✓ 入口可导入', unknown: '? 未探测' },
     preflightAdvisories: (n: number) => `${n} 条声明过期`,
     preflightImportFail: '入口 import 失败',
     preflightImportOk: (n: number) => `入口 import 通过，链接到 ${n} 个宿主包`,
@@ -140,7 +142,7 @@ const COPY = {
     preflightPeerRange: 'peer 范围不含目标版本',
     preflightPeerMissing: '目标宿主未提供',
     preflightSettings: (wanted: string, available: string) => `用户设置 agent-presets.default = "${wanted}" 不在目标版本的预设里（可用：${available}）；升级后新建会话会报 agent-preset/not-found`,
-    preflightSummary: (blocks: number, ok: number, adv: number) => `拖崩 ${blocks} · 可加载 ${ok} · 带过期声明 ${adv}`,
+    preflightSummary: (blocks: number, ok: number, adv: number, skipped: number) => `启动阻断 ${blocks} · 宿主拒绝 ${skipped} · 入口可导入 ${ok} · 带过期声明 ${adv}`,
     preflightFinished: (t: string, host: string, cached: boolean) => `完成于 ${t} · 宿主树 ${host}${cached ? '（缓存）' : '（本次安装）'}`,
     preflightNoPlugins: '没有可预检的第三方插件。',
   },
@@ -241,7 +243,7 @@ const COPY = {
     bannerHubStale: "harbor's scanner has been updated, but the running DSH still uses the copy it loaded at boot. Restart DSH — until then this page may be quietly incomplete.",
     bannerPanelStale: 'This page is running an older build of the panel. Reload the page.',
     preflight: 'Upgrade preflight',
-    preflightIntro: 'Installs the target DSH version into Harbor\'s own cache, then import-probes every installed plugin against it and checks client inject ids and host peer ranges — answering "which profiles still boot after this upgrade". Everything runs in child processes; real profiles are never touched.',
+    preflightIntro: 'Installs the target DSH version into Harbor\'s own cache, then import-probes every installed plugin against it and checks client inject ids and host peer ranges — answering "which profiles still boot after this upgrade". Checks the target host version gate too. Import success does not verify activation, settings, tools or devices. Real profiles are never touched.',
     preflightTarget: 'Target',
     preflightRun: 'Run preflight',
     preflightRunning: 'Running…',
@@ -253,9 +255,11 @@ const COPY = {
     preflightLog: 'Progress',
     preflightBusy: 'A preflight is already running',
     preflightProfiles: 'Per profile',
-    preflightBoots: 'boots after upgrade',
+    preflightBoots: 'no boot blocker found',
+    preflightSkipped: (names: string) => `host skips: ${names}`,
+    preflightActivation: 'Plugin activation, settings, tools and devices have not been verified.',
     preflightBlocked: (by: string) => `would not boot: ${by}`,
-    preflightVerdict: { 'blocks-boot': '✖ blocks boot', ok: '✓ loads', unknown: '? not probed' },
+    preflightVerdict: { 'blocks-boot': '✖ blocks boot', 'blocked-by-host': '✖ rejected by host', ok: '✓ entry imports', unknown: '? not probed' },
     preflightAdvisories: (n: number) => `${n} stale declaration(s)`,
     preflightImportFail: 'entry import failed',
     preflightImportOk: (n: number) => `entry imports; links ${n} host package(s)`,
@@ -264,7 +268,7 @@ const COPY = {
     preflightPeerRange: 'peer range excludes the target',
     preflightPeerMissing: 'not shipped by the target host',
     preflightSettings: (wanted: string, available: string) => `agent-presets.default = "${wanted}" is not a preset of the target (available: ${available}); new sessions would fail with agent-preset/not-found`,
-    preflightSummary: (blocks: number, ok: number, adv: number) => `blocks boot ${blocks} · loads ${ok} · with stale declarations ${adv}`,
+    preflightSummary: (blocks: number, ok: number, adv: number, skipped: number) => `blocks boot ${blocks} · host rejects ${skipped} · entry imports ${ok} · with stale declarations ${adv}`,
     preflightFinished: (t: string, host: string, cached: boolean) => `finished ${t} · host tree ${host}${cached ? ' (cached)' : ' (installed now)'}`,
     preflightNoPlugins: 'No third-party plugins to preflight.',
   },
@@ -466,8 +470,8 @@ function PreflightSection({ copy, get, post, fmtTime }: { copy: any; get: (path:
     : [{ value: 'latest', label: 'latest' }, { value: 'next', label: 'next' }];
   const versionOptions = (versions?.listing?.versions ?? []).map((v: string) => ({ value: v, label: v }));
   const options = [...tagOptions, ...versionOptions.filter((o: any) => !tagOptions.some((t: any) => t.value === o.value))];
-  const verdictColor = (v: string) => v === 'blocks-boot' ? CLASH : v === 'ok' ? '#3fb950' : undefined;
-  const order: Record<string, number> = { 'blocks-boot': 0, unknown: 1, ok: 2 };
+  const verdictColor = (v: string) => ['blocks-boot', 'blocked-by-host'].includes(v) ? CLASH : v === 'ok' ? '#3fb950' : undefined;
+  const order: Record<string, number> = { 'blocks-boot': 0, 'blocked-by-host': 1, unknown: 2, ok: 3 };
 
   return (<>
     <div style={S.section}>{copy.preflight}</div>
@@ -504,16 +508,16 @@ function PreflightSection({ copy, get, post, fmtTime }: { copy: any; get: (path:
           <div style={{ fontSize: 12, fontWeight: 600 }}>{copy.preflightProfiles} · DSH {report.target?.version}</div>
           {Object.entries(report.summary?.profiles ?? {}).map(([profile, state]: any) => (
             <div key={profile} style={{ fontSize: 12.5, display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' as const }}>
-              <span style={{ color: state.boots ? '#3fb950' : CLASH }}>{state.boots ? '✓' : '✖'}</span>
+              <span style={{ color: state.boots && !(state.skippedPlugins?.length) ? '#3fb950' : CLASH }}>{state.boots ? '✓' : '✖'}</span>
               <span style={{ fontWeight: 600 }}>{profile}</span>
-              <span style={{ opacity: 0.75 }}>{state.boots ? copy.preflightBoots : copy.preflightBlocked((state.blockedBy ?? []).join(', '))}</span>
+              <span style={{ opacity: 0.75 }}>{state.skippedPlugins?.length ? copy.preflightSkipped(state.skippedPlugins.join(', ')) : state.boots ? copy.preflightBoots : copy.preflightBlocked((state.blockedBy ?? []).join(', '))}</span>
             </div>
           ))}
           {report.settings?.agentPresets?.status === 'invalid' && (
             <div style={{ fontSize: 12, color: DRIFT }}>⚠ {copy.preflightSettings(report.settings.agentPresets.wanted, (report.settings.agentPresets.available ?? []).join(', '))}</div>
           )}
           <div style={{ fontSize: 11.5, opacity: 0.6 }}>
-            {copy.preflightSummary(report.summary?.counts?.['blocks-boot'] ?? 0, report.summary?.counts?.ok ?? 0, report.summary?.counts?.withAdvisories ?? 0)}
+            {copy.preflightSummary(report.summary?.counts?.['blocks-boot'] ?? 0, report.summary?.counts?.ok ?? 0, report.summary?.counts?.withAdvisories ?? 0, report.summary?.counts?.['blocked-by-host'] ?? 0)}
           </div>
         </div>
         {(report.plugins ?? []).length === 0 && <div style={{ opacity: 0.55 }}>{copy.preflightNoPlugins}</div>}
@@ -522,7 +526,7 @@ function PreflightSection({ copy, get, post, fmtTime }: { copy: any; get: (path:
           const ranges = (p.advisories ?? []).filter((a: any) => a.kind === 'peer-range');
           const missing = (p.advisories ?? []).filter((a: any) => a.kind === 'peer-missing');
           return (
-            <div key={p.identity ?? `${p.name}@${p.version}`} style={{ ...S.block, gap: 5, ...(p.verdict === 'blocks-boot' ? { borderColor: 'rgba(248,81,73,0.55)', background: 'rgba(248,81,73,0.06)' } : {}) }}>
+            <div key={p.identity ?? `${p.name}@${p.version}`} style={{ ...S.block, gap: 5, ...(['blocks-boot', 'blocked-by-host'].includes(p.verdict) ? { borderColor: 'rgba(248,81,73,0.55)', background: 'rgba(248,81,73,0.06)' } : {}) }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' as const }}>
                 <span style={{ fontSize: 12.5, color: verdictColor(p.verdict), whiteSpace: 'nowrap' as const }}>{copy.preflightVerdict[p.verdict] ?? p.verdict}</span>
                 <span style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</span>
@@ -534,13 +538,14 @@ function PreflightSection({ copy, get, post, fmtTime }: { copy: any; get: (path:
                 <div style={{ ...S.mono, fontSize: 11.5, color: CLASH, whiteSpace: 'pre-wrap' as const, wordBreak: 'break-all' as const }}>{copy.preflightImportFail} · {p.import.code}: {p.import.message}</div>
               )}
               {p.import?.status === 'ok' && <div style={{ fontSize: 11.5, opacity: 0.7 }}>{copy.preflightImportOk((p.import.resolved ?? []).length)}</div>}
-              {p.import?.status === 'skipped' && <div style={{ fontSize: 11.5, opacity: 0.7 }}>{copy.preflightImportSkipped}</div>}
+              {p.import?.status === 'skipped' && <div style={{ fontSize: 11.5, opacity: 0.7 }}>{p.import.reason ?? copy.preflightImportSkipped}</div>}
               {dead.length > 0 && <div style={{ fontSize: 11.5, opacity: 0.8 }}>{copy.preflightDeadInject}: <span style={S.mono}>{dead.map((a: any) => a.id).join(', ')}</span></div>}
               {ranges.length > 0 && <div style={{ fontSize: 11.5, opacity: 0.8 }}>{copy.preflightPeerRange}: <span style={S.mono}>{ranges.map((a: any) => `${a.name} ${a.range}`).join(', ')}</span></div>}
               {missing.length > 0 && <div style={{ fontSize: 11.5, opacity: 0.8 }}>{copy.preflightPeerMissing}: <span style={S.mono}>{missing.map((a: any) => a.name).join(', ')}</span></div>}
             </div>
           );
         })}
+        <div style={{ fontSize: 11.5, opacity: 0.75 }}>{copy.preflightActivation}</div>
         <div style={{ fontSize: 11, opacity: 0.5 }}>{copy.preflightFinished(fmtTime(report.finishedAt), report.host?.prefix ?? '', !!report.host?.cached)}</div>
       </div>
     )}

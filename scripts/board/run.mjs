@@ -24,7 +24,7 @@ let previous = {};
 try { previous = JSON.parse(readFileSync(outFile, 'utf8')).results ?? {}; } catch { /* first run */ }
 
 const mine = registry.plugins.filter((_, i) => i % shards === shard);
-const todo = full ? mine : mine.filter((p) => previous[p.name]?.version !== p.version);
+const todo = full ? mine : mine.filter((p) => previous[p.name]?.version !== p.version || previous[p.name]?.probeSchema !== 2);
 process.stderr.write(`shard ${shard}/${shards}: ${mine.length} plugins, ${todo.length} to probe against ${dsh}\n`);
 
 const results = { ...previous };
@@ -39,6 +39,9 @@ for (let i = 0; i < todo.length; i += batch) {
     const spec = row.spec;
     const name = spec.replace(/@[^@/]+$/, '');
     results[name] = {
+      probeSchema: 2,
+      compatibility: row.compatibility,
+      activation: row.activation,
       version: row.version ?? spec.slice(name.length + 1),
       dsh: report.target.version,
       verdict: row.verdict,

@@ -50,7 +50,7 @@ harbor preflight --dsh next             # oder eine konkrete Version: --dsh 0.1.
 harbor preflight --dsh 0.1.5-rc.2 --json   # maschinenlesbarer Vollbericht
 ```
 
-Urteile gibt es pro Plugin (**blockiert den Start** / **lädt** / **nicht geprüft**) und pro Profile; Peer-Bereiche und tote Injects sind Hinweise und ändern nie ein Urteil. Exit-Code 3 bedeutet, dass mindestens ein Profile nicht starten würde. Alles läuft in Kindprozessen; das globale npm-Prefix und deine Profiles werden nie beschrieben. Der Resolve-Hook benötigt Node ≥ 20.6.
+DSH >= 0.2 überspringt Plugins mit inkompatiblen Host-Peer-Bereichen (**blocked-by-host**), getrennt von Importfehlern (**blocks-boot**). Verwendet wird semver des Zielhosts einschließlich Vorabversionen; eine versionsbezogene Risikoausnahme wird nicht vorausgesetzt. Ein erfolgreicher Import prüft weder Aktivierung, Einstellungen, Werkzeuge noch Geräte. Exit-Code 3 meldet ungeprüfte Plugins oder bekannte Einstellungsprobleme. Echte Profiles bleiben unverändert. Node >= 20.6 erforderlich.
 
 ## Versionen
 

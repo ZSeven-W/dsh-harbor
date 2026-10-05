@@ -3,15 +3,16 @@
 // process, host listing/installation with fakes, and the orchestrator.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, symlinkSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import { satisfies, compareVersions, parseVersion } from '../src/preflight/semver.mjs';
 import {
   ensureHost, hostPresetIds, hostTreeDir, listCachedHosts, listHostVersions,
   readHostInventory, readSettingsSection, resolveHostVersion,
 } from '../src/preflight/host.mjs';
-import { checkInject, checkPeers, checkPresetSetting, probeImport, serverEntry } from '../src/preflight/checks.mjs';
+import { checkHostCompatibility, checkInject, checkPeers, checkPresetSetting, probeImport, serverEntry } from '../src/preflight/checks.mjs';
 import { preflight } from '../src/preflight/index.mjs';
 
 function sandbox(t) {
@@ -33,6 +34,10 @@ function writePkg(dir, manifest, files = {}) {
 function fakeHost(root, version = '9.9.9', { withSettingsNamespace = false } = {}) {
   const prefix = join(root, 'hosts', version);
   const tree = join(prefix, 'lib', 'node_modules', '@deepseek-ai', 'dsh', 'node_modules', '@deepseek-ai');
+  mkdirSync(tree, { recursive: true });
+  // The real target host supplies this matcher at runtime; fixtures use the
+  // same library rather than a second hand-written range implementation.
+  symlinkSync(dirname(createRequire(import.meta.url).resolve('semver/package.json')), join(tree, '..', 'semver'), process.platform === 'win32' ? 'junction' : 'dir');
   writePkg(join(tree, 'dsh-settings'), { name: '@deepseek-ai/dsh-settings', version, type: 'module', main: 'lib/index.js' }, {
     'lib/index.js': withSettingsNamespace
       ? 'export function settingsNamespace(v) { return v; }\nexport class SettingsProvider {}\n'
@@ -245,7 +250,7 @@ test('preflight: orchestrates checks per install and summarises per profile', as
     { name: '@acme/stale', dir: join(root, 'p', 'stale'), identity: 'stale@registry:1', resolvedVersion: '0.0.1', installs: [{ profile: 'web' }, { profile: 'lab' }] },
     { name: '@acme/fine', dir: join(root, 'p', 'fine'), identity: 'fine@registry:1', resolvedVersion: '0.0.2', installs: [{ profile: 'lab' }] },
   ];
-  writePkg(plugins[0].dir, { name: '@acme/stale', version: '0.0.1', main: 'lib/index.js', dsh: { client: { platform: 'web', inject: ['@deepseek-ai/dsh-client-runtime'] } }, peerDependencies: { '@deepseek-ai/dsh-tools': '^0.1.0-rc.6' } });
+  writePkg(plugins[0].dir, { name: '@acme/stale', version: '0.0.1', main: 'lib/index.js', dsh: { client: { platform: 'web', inject: ['@deepseek-ai/dsh-client-runtime'] } }, dependencies: { '@deepseek-ai/dsh-tools': '^0.1.0-rc.6' } });
   writePkg(plugins[1].dir, { name: '@acme/fine', version: '0.0.2', main: 'lib/index.js', dsh: { client: { platform: 'web', inject: ['@deepseek-ai/dsh-client-locale'] } }, peerDependencies: { '@deepseek-ai/dsh-tools': '^2.0.0' } });
 
   const logs = [];
@@ -271,11 +276,11 @@ test('preflight: orchestrates checks per install and summarises per profile', as
   assert.equal(fine.verdict, 'ok');
   assert.deepEqual(fine.advisories, []);
   assert.deepEqual(report.summary.profiles, {
-    web: { boots: false, blockedBy: ['@acme/stale@0.0.1'] },
-    lab: { boots: false, blockedBy: ['@acme/stale@0.0.1'] },
+    web: { boots: false, blockedBy: ['@acme/stale@0.0.1'], skippedPlugins: [] },
+    lab: { boots: false, blockedBy: ['@acme/stale@0.0.1'], skippedPlugins: [] },
   });
   assert.equal(report.summary.allProfilesBoot, false);
-  assert.deepEqual(report.summary.counts, { 'blocks-boot': 1, ok: 1, unknown: 0, unresolvable: 0, withAdvisories: 1 });
+  assert.deepEqual(report.summary.counts, { 'blocks-boot': 1, 'blocked-by-host': 0, ok: 1, unknown: 0, unresolvable: 0, withAdvisories: 1 });
   assert.equal(report.settings.agentPresets.status, 'invalid');
   assert.equal(report.summary.settingsIssues, 1);
   assert.ok(logs.some((l) => l.includes('probing @acme/stale')));
@@ -317,6 +322,38 @@ test('preflight: explicit subjects (--plugin dirs, --pack specs) skip profile di
   assert.deepEqual(report.summary.profiles, {});
   assert.equal(report.summary.counts.unresolvable, 1);
   assert.equal(report.summary.allProfilesBoot, true);
+});
+
+test('preflight: DSH 0.2 rejects host peers before import; older hosts only advise', async (t) => {
+  const root = sandbox(t);
+  const { prefix, tree } = fakeHost(root, '0.2.0-rc.2');
+  const dir = join(root, 'plugin');
+  const manifest = { name: 'old-plugin', version: '1.0.0', main: 'index.js', peerDependencies: { '@deepseek-ai/dsh-tools': '^0.1.5-rc.1' } };
+  writePkg(dir, manifest);
+  let imports = 0;
+  const opts = {
+    ensureHostImpl: async version => ({ version, prefix, treeDir: tree, cached: true }),
+    probeImpl: async () => { imports++; return { status: 'ok', resolved: [] }; },
+    discover: () => [{ name: manifest.name, dir, identity: 'old-plugin', resolvedVersion: manifest.version, installs: [{ profile: 'desktop' }] }],
+    checkSettings: false,
+  };
+  const current = await preflight('0.2.0-rc.2', opts);
+  assert.equal(imports, 0, 'a host-rejected entry must not execute top-level side effects');
+  assert.equal(current.plugins[0].verdict, 'blocked-by-host');
+  assert.equal(current.summary.allProfilesBoot, true, 'skipping a plugin is not a host crash');
+  assert.equal(current.summary.allPluginsLoad, false);
+  assert.deepEqual(current.summary.profiles.desktop.skippedPlugins, ['old-plugin@1.0.0']);
+  assert.equal(current.plugins[0].activation.status, 'not-probed');
+  const older = await preflight('0.1.5-rc.3', opts);
+  assert.equal(imports, 1);
+  assert.equal(older.plugins[0].verdict, 'ok');
+  for (const range of ['*', '>=0.1.5 <0.3.0', '0.1.0 - 0.3.0', 'workspace:^', 'workspace:~', 'workspace:*']) {
+    assert.equal(checkHostCompatibility({ peerDependencies: { '@deepseek-ai/dsh': range } }, '0.2.0-rc.2', tree).status, 'compatible', range);
+  }
+  for (const range of ['', 'nonsense', '0.1.5-rc.1']) {
+    assert.equal(checkHostCompatibility({ peerDependencies: { '@deepseek-ai/dsh': range } }, '0.2.0-rc.2', tree).status, 'blocked', range);
+  }
+  assert.equal(checkHostCompatibility({ dependencies: manifest.peerDependencies }, '0.2.0-rc.2', tree).status, 'compatible', 'only peerDependencies participate in the loader gate');
 });
 
 test('preflight: a missing non-host dependency is unresolvable, a missing host export blocks boot', async (t) => {

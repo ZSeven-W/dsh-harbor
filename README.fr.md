@@ -50,7 +50,7 @@ harbor preflight --dsh next             # ou une version précise : --dsh 0.1.5-
 harbor preflight --dsh 0.1.5-rc.2 --json   # rapport complet lisible par machine
 ```
 
-Les verdicts sont donnés par plugin (**bloque le démarrage** / **se charge** / **non sondé**) et par profile ; les plages peer et les inject morts sont des avis et ne changent jamais un verdict. Le code de sortie 3 signifie qu'au moins un profile ne démarrerait pas. Tout s'exécute dans des processus enfants ; le préfixe npm global et vos profiles ne sont jamais écrits. Le hook de résolution requiert Node ≥ 20.6.
+DSH >= 0.2 refuse les plages peer incompatibles et ignore le plugin (**blocked-by-host**), distinctement des échecs import (**blocks-boot**). Le contrôle utilise semver du hôte cible, préversions incluses, sans supposer une exemption de risque par version. Un import réussi ne vérifie ni activation, ni paramètres, ni outils, ni appareils. Le code 3 signale un plugin non validé ou un problème connu de paramètres. Les profiles réels restent inchangés. Node >= 20.6 requis.
 
 ## Versions
 

@@ -50,7 +50,7 @@ harbor preflight --dsh next             # o una versión concreta: --dsh 0.1.5-r
 harbor preflight --dsh 0.1.5-rc.2 --json   # informe completo legible por máquina
 ```
 
-Los veredictos se dan por plugin (**bloquea el arranque** / **carga** / **no sondeado**) y por profile; los rangos peer y los inject muertos son avisos y nunca cambian un veredicto. El código de salida 3 significa que al menos un profile no arrancaría. Todo se ejecuta en procesos hijos; el prefijo global de npm y tus profiles nunca se escriben. El hook de resolución requiere Node ≥ 20.6.
+DSH >= 0.2 rechaza rangos peer incompatibles y omite el plugin (**blocked-by-host**), separado de los fallos de importación (**blocks-boot**). Se usa semver del host objetivo, incluidas las versiones preliminares, sin asumir excepciones de riesgo por versión. Importar no verifica activación, ajustes, herramientas ni dispositivos. El código 3 indica plugins sin validar o problemas conocidos de ajustes. Los profiles reales no se modifican. Requiere Node >= 20.6.
 
 ## Versiones
 

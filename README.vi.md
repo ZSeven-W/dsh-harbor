@@ -50,7 +50,7 @@ harbor preflight --dsh next             # hoặc một phiên bản cụ thể: 
 harbor preflight --dsh 0.1.5-rc.2 --json   # báo cáo đầy đủ đọc được bằng máy
 ```
 
-Phán quyết theo plugin (**chặn khởi động** / **tải được** / **chưa thăm dò**) và theo profile; dải peer và inject chết chỉ là khuyến cáo, không bao giờ thay đổi phán quyết. Mã thoát 3 nghĩa là ít nhất một profile sẽ không khởi động. Mọi thứ chạy trong tiến trình con; tiền tố npm toàn cục và các profile của bạn không bao giờ bị ghi. Hook phân giải cần Node ≥ 20.6.
+DSH >= 0.2 bỏ qua plugin có dải host peer không tương thích (**blocked-by-host**), tách biệt với lỗi import (**blocks-boot**). Dùng semver của host đích, bao gồm bản phát hành trước; không giả định có miễn trừ rủi ro cho phiên bản cụ thể. Import thành công không xác minh kích hoạt, cài đặt, công cụ hay thiết bị. Mã 3 chỉ plugin chưa đạt hoặc vấn đề cài đặt đã biết. Không thay đổi profile thực. Cần Node >= 20.6.
 
 ## Phiên bản
 

@@ -135,7 +135,7 @@ What runs, in order:
 3. `dsh.client.inject` / `external` ids are checked against the packages in the target that declare a web client module (DSH ≥ 0.1.5 skips unknown ids silently, so this never errors on its own). Host peer ranges are matched with npm's prerelease rule.
 4. `agent-presets.default` from `settings.yaml` is checked against the target's built-in presets.
 
-Verdicts are per plugin (**blocks boot** / **loads** / **unresolvable** / **not probed**) and per profile; peer-range and dead-inject findings are advisories and never change a verdict. *Unresolvable* means the plugin's own dependency could not be found — a packaging problem, not a host problem. Exit code 3 means at least one profile would not boot. Node ≥ 20.6 is required for the resolve hook.
+Verdicts distinguish an entry import failure (**blocks boot**) from DSH >= 0.2 rejecting host peer ranges (**blocked by host**, the plugin is skipped). The version gate uses the target host semver library with prereleases included; exact-version risk exemptions are not assumed. **Entry imports** does not verify activation, settings, tools, or devices. Unresolvable/unknown results are inconclusive. Exit code 3 means at least one plugin has not passed preflight or a known settings issue remains. Node >= 20.6 is required for the resolve hook.
 
 Outside a profile — in CI, or for a package you have not installed — name the subjects explicitly:
 

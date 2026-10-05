@@ -50,7 +50,7 @@ harbor preflight --dsh next             # ya da belirli bir sürüm: --dsh 0.1.5
 harbor preflight --dsh 0.1.5-rc.2 --json   # makine tarafından okunabilir tam rapor
 ```
 
-Kararlar eklenti başına (**açılışı engeller** / **yüklenir** / **yoklanmadı**) ve profile başına verilir; peer aralıkları ile ölü inject'ler yalnızca uyarıdır ve kararı değiştirmez. Çıkış kodu 3, en az bir profile'ın açılmayacağı anlamına gelir. Her şey alt süreçlerde çalışır; küresel npm öneki ve profile'larınız asla yazılmaz. Çözümleme kancası Node ≥ 20.6 gerektirir.
+DSH >= 0.2 uyumsuz host peer aralıklarını reddeder ve eklentiyi atlar (**blocked-by-host**); import hataları (**blocks-boot**) ayrı gösterilir. Hedef hostun semver kitaplığı ön sürümler dahil kullanılır; sürüme özel risk izni varsayılmaz. Başarılı import etkinleştirme, ayar, araç veya cihaz doğrulaması değildir. Kod 3 doğrulanmamış eklentileri veya bilinen ayar sorunlarını belirtir. Gerçek profile değiştirilmez. Node >= 20.6 gerekir.
 
 ## Sürümler
 
