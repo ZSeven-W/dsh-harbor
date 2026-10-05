@@ -32,3 +32,17 @@ test('a latest/next move schedules one board; alpha still gets a contract diff',
   assert.equal(plan.length, 3);
   assert.deepEqual(plan.filter(p => p.runBoard).map(p => p.to), ['0.2.0-rc.2']);
 });
+
+
+test('overlapping search pages count one package and refresh ambiguous cached versions', async () => {
+  const { uniquePackages } = await import('../scripts/board/packages.mjs');
+  const rows = uniquePackages([
+    { name: 'a', version: '1', modified: '2026-09-01' },
+    { name: 'b', version: '1', modified: '2026-09-01' },
+    { name: 'a', version: '2', modified: '2026-10-01' },
+  ]);
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].version, '2');
+  assert.equal(rows[0].ambiguous, true);
+  assert.equal(rows[1].name, 'b');
+});

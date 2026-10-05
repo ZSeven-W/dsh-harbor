@@ -10,6 +10,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { createRegistryReader } from './registry-fetch.mjs';
+import { uniquePackages } from './packages.mjs';
 
 const OUT = new URL('../../board/registry.json', import.meta.url);
 const REGISTRY = process.env.NPM_REGISTRY ?? 'https://registry.npmjs.org';
@@ -41,14 +42,15 @@ for (let from = 0; from < total; from += PAGE) {
 }
 
 // 2. Classify: full packument only when the listing moved since last time.
-const queue = [...listed];
+const uniqueListed = uniquePackages(listed);
+const queue = [...uniqueListed];
 const plugins = [];
 let fetched = 0;
 async function worker() {
   while (queue.length) {
     const item = queue.shift();
     const prev = prevByName.get(item.name);
-    if (prev && prev.version === item.version && prev.modified === item.modified) { plugins.push(prev); continue; }
+    if (!item.ambiguous && prev && prev.version === item.version && prev.modified === item.modified) { plugins.push(prev); continue; }
     const p = await getJson(`${REGISTRY}/${item.name.replace('/', '%2f')}`);
     fetched++;
     if (!p) continue;
@@ -73,5 +75,5 @@ await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
 const real = plugins.filter((p) => p.bundle || p.client).sort((a, b) => a.name.localeCompare(b.name));
 mkdirSync(dirname(OUT.pathname), { recursive: true });
-writeFileSync(OUT, `${JSON.stringify({ fetchedAt: new Date().toISOString(), listed: listed.length, total, fetchedPackuments: fetched, plugins: real }, null, 2)}\n`);
+writeFileSync(OUT, `${JSON.stringify({ fetchedAt: new Date().toISOString(), listed: uniqueListed.length, searchRows: listed.length, total, fetchedPackuments: fetched, plugins: real }, null, 2)}\n`);
 process.stderr.write(`plugins with dsh.bundle/client: ${real.length} of ${listed.length} listed (${fetched} packuments fetched)\n`);

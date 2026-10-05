@@ -3,6 +3,7 @@
 // and render board/site/index.html (a static page; GitHub Pages serves it).
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { uniquePackages } from './packages.mjs';
 
 const root = new URL('../../board/', import.meta.url).pathname;
 const registry = JSON.parse(readFileSync(join(root, 'registry.json'), 'utf8'));
@@ -19,7 +20,7 @@ for (const v of versions) {
   byVersion[v] = merged;
 }
 
-const rows = registry.plugins.map((p) => ({
+const rows = uniquePackages(registry.plugins).map((p) => ({
   name: p.name, version: p.version, client: p.client, bundle: p.bundle, repository: p.repository,
   results: Object.fromEntries(versions.map((v) => [v, byVersion[v][p.name] ?? null])),
 }));
