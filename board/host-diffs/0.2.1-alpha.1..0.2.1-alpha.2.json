@@ -1,0 +1,147 @@
+{
+  "from": {
+    "version": "0.2.1-alpha.1",
+    "packages": 290,
+    "clientModules": 73
+  },
+  "to": {
+    "version": "0.2.1-alpha.2",
+    "packages": 299,
+    "clientModules": 74
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-experimental-badge-skill-bundle",
+      "@deepseek-ai/dsh-experimental-client-ui-cot-translation",
+      "@deepseek-ai/dsh-experimental-cot-translation-bundle",
+      "@deepseek-ai/dsh-experimental-ralph-bundle",
+      "@deepseek-ai/dsh-experimental-session-search",
+      "@deepseek-ai/dsh-experimental-session-titles-bundle",
+      "@deepseek-ai/dsh-experimental-terminal-bundle",
+      "@deepseek-ai/dsh-experimental-tool-worktree",
+      "@deepseek-ai/dsh-experimental-translator",
+      "@deepseek-ai/dsh-experimental-worktree",
+      "@deepseek-ai/dsh-session-title-all-prompts-llm",
+      "@deepseek-ai/dsh-tool-session-query",
+      "@deepseek-ai/dsh-tool-terminal",
+      "@deepseek-ai/dsh-tool-working-directory",
+      "@deepseek-ai/dsh-working-directory"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-hook-protocol",
+      "@deepseek-ai/dsh-hooks-claude-code",
+      "@deepseek-ai/dsh-hooks-codex",
+      "@deepseek-ai/dsh-subagent-in-process-driver",
+      "@deepseek-ai/dsh-webhook",
+      "@deepseek-ai/dsh-webhook-github"
+    ]
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-experimental-client-ui-cot-translation"
+    ],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [
+    {
+      "name": "@deepseek-ai/dsh-app-boot",
+      "added": [
+        "OFFICIAL_ON_DEMAND_CATALOG",
+        "ON_DEMAND_BUNDLES",
+        "resolvePluginResource"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-home-paths",
+      "added": [
+        "AGENTS_HOME_DIR_NAME",
+        "AGENTS_HOME_ENV",
+        "DEFAULT_AGENTS_HOME_DISPLAY",
+        "agentsHomeDisplay",
+        "defaultAgentsHome",
+        "resolveAgentsHome"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-host-webserver",
+      "added": [
+        "isLoopbackHost",
+        "isWildcardHost",
+        "normalizeBindAddress"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-session",
+      "added": [
+        "appendPluginRecord",
+        "pluginRecordOf"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-session-title-llm",
+      "added": [
+        "executeSessionTitleLlm"
+      ],
+      "removed": [
+        "generateSessionTitleWithLlm",
+        "registerSessionTitleLlmProvider"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-subagent",
+      "added": [
+        "STRUCTURED_OUTPUT_TOOL"
+      ],
+      "removed": [
+        "resolveChildCwd",
+        "settleRun",
+        "validateConfiguredCwd"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-web-app",
+      "added": [],
+      "removed": [
+        "resolveLanTrust"
+      ]
+    }
+  ],
+  "unreadable": {
+    "from": [
+      {
+        "name": "@deepseek-ai/dsh-client-store",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'zustand' imported from /home/runner/.config/dsh-harbor/hosts/0.2.1-alpha.1/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-store/lib/index.js"
+      },
+      {
+        "name": "@deepseek-ai/dsh-client-ui-primitives",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'react' imported from /home/runner/.config/dsh-harbor/hosts/0.2.1-alpha.1/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js"
+      }
+    ],
+    "to": [
+      {
+        "name": "@deepseek-ai/dsh-client-store",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'zustand' imported from /home/runner/.config/dsh-harbor/hosts/0.2.1-alpha.2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-store/lib/index.js"
+      },
+      {
+        "name": "@deepseek-ai/dsh-client-ui-primitives",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'react' imported from /home/runner/.config/dsh-harbor/hosts/0.2.1-alpha.2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js"
+      }
+    ]
+  },
+  "summary": {
+    "packagesRemoved": 6,
+    "packagesAdded": 15,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 3,
+    "versionBumps": 273,
+    "breaking": true
+  }
+}
