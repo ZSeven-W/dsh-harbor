@@ -1,9 +1,9 @@
 {
-  "fetchedAt": "2026-10-10T08:55:42.459Z",
-  "listed": 5249,
-  "searchRows": 7750,
-  "total": 7654,
-  "fetchedPackuments": 1228,
+  "fetchedAt": "2026-10-11T09:16:54.158Z",
+  "listed": 5250,
+  "searchRows": 8250,
+  "total": 8044,
+  "fetchedPackuments": 1111,
   "plugins": [
     {
       "name": "@0x427567/dsh-tavily",
@@ -80,8 +80,8 @@
     },
     {
       "name": "@240xu/dsh-message-ops",
-      "version": "0.9.5",
-      "modified": "2026-10-10T05:11:34.575Z",
+      "version": "0.10.2",
+      "modified": "2026-10-11T03:24:51.555Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -94,8 +94,8 @@
     },
     {
       "name": "@240xu/dsh-session-search",
-      "version": "0.1.6",
-      "modified": "2026-10-05T02:24:56.439Z",
+      "version": "0.1.7",
+      "modified": "2026-10-11T04:09:50.291Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -257,6 +257,22 @@
       ],
       "hostDeps": [],
       "repository": "git+https://github.com/A1SOYO0/dsh-autostart.git"
+    },
+    {
+      "name": "@a42null/dsh-opencode-zen-plugin",
+      "version": "0.3.6",
+      "modified": "2026-10-04T07:04:18.435Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/A42Null/dsh-opencode-zen-plugin.git"
     },
     {
       "name": "@a9i5k4/dsh-memory-fitting",
@@ -720,8 +736,8 @@
     },
     {
       "name": "@agent_forge/forge-dsh",
-      "version": "1.74.1",
-      "modified": "2026-10-09T09:17:38.341Z",
+      "version": "1.75.0",
+      "modified": "2026-10-10T09:35:14.891Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -1346,8 +1362,8 @@
     },
     {
       "name": "@aiwayds/dsh-topics-memory",
-      "version": "0.22.0",
-      "modified": "2026-10-09T09:15:50.413Z",
+      "version": "0.25.0",
+      "modified": "2026-10-11T07:55:42.246Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -1610,8 +1626,8 @@
     },
     {
       "name": "@alm-allen/dsh-chat-ux",
-      "version": "0.2.5",
-      "modified": "2026-10-09T19:37:00.249Z",
+      "version": "0.2.6",
+      "modified": "2026-10-10T17:39:26.443Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -1911,8 +1927,8 @@
     },
     {
       "name": "@anysearch/anysearch-dsh",
-      "version": "0.1.7",
-      "modified": "2026-10-08T09:03:26.329Z",
+      "version": "0.1.8",
+      "modified": "2026-10-10T08:56:08.514Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -2113,8 +2129,8 @@
     },
     {
       "name": "@ash-qw/dsh-theme-prts",
-      "version": "1.0.5",
-      "modified": "2026-10-10T04:42:19.482Z",
+      "version": "1.0.6",
+      "modified": "2026-10-10T09:53:33.287Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -2177,8 +2193,8 @@
     },
     {
       "name": "@asun-labs/dsh-plugin-agent-deck",
-      "version": "0.2.1",
-      "modified": "2026-10-08T11:43:45.042Z",
+      "version": "0.2.2",
+      "modified": "2026-10-10T11:27:31.939Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -2331,8 +2347,8 @@
     },
     {
       "name": "@beihaizb/dsh-notebook",
-      "version": "0.3.0",
-      "modified": "2026-10-09T10:58:55.961Z",
+      "version": "0.3.1",
+      "modified": "2026-10-10T11:28:35.657Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -2346,8 +2362,8 @@
     },
     {
       "name": "@benz-ai-x/dsh-24pa",
-      "version": "0.2.1-alpha.2.1",
-      "modified": "2026-10-10T03:33:08.487Z",
+      "version": "0.2.1-alpha.2.3",
+      "modified": "2026-10-10T14:38:45.542Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -2740,25 +2756,6 @@
       "repository": "git+https://github.com/BorisShaw6/dsh-cyber-pet.git"
     },
     {
-      "name": "@brainpilot/dsh-neuro-previewer",
-      "version": "0.1.0",
-      "modified": "2026-08-14T13:32:53.249Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-tool"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-tool",
-        "@deepseek-ai/dsh-fs",
-        "@deepseek-ai/dsh-tools"
-      ],
-      "repository": "git+https://github.com/NeuroAIHub/NeuroPreviewer.git"
-    },
-    {
       "name": "@brilliant751/dsh-web-search-litellm",
       "version": "0.1.1",
       "modified": "2026-09-07T02:07:01.913Z",
@@ -2981,8 +2978,8 @@
     },
     {
       "name": "@caob23/dsh-browser-control",
-      "version": "1.0.7",
-      "modified": "2026-09-04T04:26:44.938Z",
+      "version": "1.0.9",
+      "modified": "2026-10-10T13:42:43.731Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -3061,8 +3058,8 @@
     },
     {
       "name": "@cerbur/clutch-dsh-worktree",
-      "version": "0.1.16",
-      "modified": "2026-10-02T05:02:08.274Z",
+      "version": "0.1.17",
+      "modified": "2026-10-10T18:55:48.863Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -3074,6 +3071,7 @@
         "@deepseek-ai/dsh-client-ui-layout",
         "@deepseek-ai/dsh-client-ui-renderer",
         "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-settings",
         "@deepseek-ai/dsh-client-ui-sidebar",
         "@deepseek-ai/dsh-client-ui-workspace"
       ],
@@ -3089,13 +3087,17 @@
         "@deepseek-ai/dsh-client-ui-primitives",
         "@deepseek-ai/dsh-client-ui-renderer",
         "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-settings",
         "@deepseek-ai/dsh-client-ui-sidebar",
         "@deepseek-ai/dsh-client-ui-slots",
         "@deepseek-ai/dsh-client-ui-workspace",
+        "@deepseek-ai/dsh-commands",
         "@deepseek-ai/dsh-session",
         "@deepseek-ai/dsh-session-persistence",
         "@deepseek-ai/dsh-subprocess",
+        "@deepseek-ai/dsh-tools",
         "@deepseek-ai/dsh-typert-protocol",
+        "@deepseek-ai/dsh-util-workspace-path",
         "@deepseek-ai/dsh-workspace"
       ],
       "repository": "git+https://github.com/Cerbur/clutch-dsh.git"
@@ -3508,35 +3510,6 @@
         "@deepseek-ai/dsh-typert-registry"
       ],
       "repository": "git+https://github.com/Epsirom/braid.git"
-    },
-    {
-      "name": "@chuantian/dsh-share",
-      "version": "0.1.0",
-      "modified": "2026-08-16T06:28:06.728Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-primitives"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-primitives",
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-session",
-        "@deepseek-ai/dsh-session-query",
-        "@deepseek-ai/dsh-session-title",
-        "@deepseek-ai/dsh-typert-protocol",
-        "@deepseek-ai/dsh-typert-registry",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/ChuanTianML/dsh-share.git"
     },
     {
       "name": "@chushixixin/dsh-harness-mcp-server",
@@ -3968,8 +3941,8 @@
     },
     {
       "name": "@cowwo/dsh-model-fit",
-      "version": "0.2.2",
-      "modified": "2026-09-29T09:31:04.681Z",
+      "version": "0.2.3",
+      "modified": "2026-10-10T09:37:16.760Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -4125,9 +4098,9 @@
       "repository": "git+https://github.com/ctl456/dsh-skills-manager.git"
     },
     {
-      "name": "@cueai/dsh-omni-reader",
-      "version": "0.1.13",
-      "modified": "2026-10-07T23:19:11.608Z",
+      "name": "@cueai/dsh-cue-data-mcp",
+      "version": "0.1.3",
+      "modified": "2026-09-04T12:12:45.085Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -4137,14 +4110,14 @@
       "repository": null
     },
     {
-      "name": "@cueai/dsh-omni-reader-guard",
-      "version": "0.1.5",
-      "modified": "2026-09-04T12:12:07.511Z",
+      "name": "@cueai/dsh-omni-reader",
+      "version": "0.1.13",
+      "modified": "2026-10-07T23:19:11.608Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
       "hostDeps": [
-        "@deepseek-ai/dsh-tools"
+        "@deepseek-ai/dsh-mcp-client"
       ],
       "repository": null
     },
@@ -4405,8 +4378,8 @@
     },
     {
       "name": "@darlingc/dsh-freesearch",
-      "version": "0.5.7",
-      "modified": "2026-09-14T10:24:14.818Z",
+      "version": "0.5.8",
+      "modified": "2026-10-10T09:57:45.449Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -4438,30 +4411,13 @@
     },
     {
       "name": "@deepblend/dsh-blender-bundle",
-      "version": "0.3.4",
-      "modified": "2026-10-10T06:03:28.349Z",
+      "version": "0.4.0",
+      "modified": "2026-10-11T07:14:47.548Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/pearjelly/deep-blend.git"
-    },
-    {
-      "name": "@deepseek-ai-harness/tui",
-      "version": "0.0.1-beta",
-      "modified": "2026-08-13T17:33:10.209Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/dsh-agent",
-        "@deepseek-ai/dsh-llm",
-        "@deepseek-ai/dsh-llm-deepseek",
-        "@deepseek-ai/dsh-scope",
-        "@deepseek-ai/dsh-sdk-protocol",
-        "@deepseek-ai/dsh-session"
-      ],
-      "repository": "git+https://github.com/openma-ai/deepseek-harness-tui.git"
     },
     {
       "name": "@deepseekstudio/dsh-deepseek-pet",
@@ -4837,8 +4793,8 @@
     },
     {
       "name": "@dingyi222666/dsh-wakatime",
-      "version": "0.2.7",
-      "modified": "2026-09-28T15:25:41.207Z",
+      "version": "0.2.10",
+      "modified": "2026-10-10T18:59:44.803Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -6010,39 +5966,6 @@
       "repository": "git+https://github.com/yu502950715yang/dsh-use-wallpaper.git"
     },
     {
-      "name": "@dsh-xhl/dsh-file-review",
-      "version": "0.4.0",
-      "modified": "2026-09-05T09:22:24.529Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-api-session-controller",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-chat",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-renderer"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-agent",
-        "@deepseek-ai/dsh-api-session-controller",
-        "@deepseek-ai/dsh-atomic-write",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-chat",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-primitives",
-        "@deepseek-ai/dsh-client-ui-renderer",
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-session",
-        "@deepseek-ai/dsh-system-prompt",
-        "@deepseek-ai/dsh-typert-protocol",
-        "@deepseek-ai/dsh-typert-registry"
-      ],
-      "repository": "git+https://github.com/left0ver/dsh-file-review.git"
-    },
-    {
       "name": "@dsh-xhl/workspace-groups",
       "version": "0.4.2",
       "modified": "2026-09-29T02:19:10.191Z",
@@ -6386,8 +6309,8 @@
     },
     {
       "name": "@eddyskywalker/dsh-chatgpt-subscription",
-      "version": "0.17.0",
-      "modified": "2026-10-09T14:01:47.771Z",
+      "version": "0.18.0",
+      "modified": "2026-10-11T04:28:15.071Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -6835,6 +6758,22 @@
       "repository": "git+https://github.com/EverMind-AI/plugins.git"
     },
     {
+      "name": "@evomap/dsh-evolver",
+      "version": "0.1.3",
+      "modified": "2026-10-10T10:32:08.831Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-skill",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/EvoMap/evolver-dsh-plugin.git"
+    },
+    {
       "name": "@eya46/dsh-plugin-info",
       "version": "0.1.1",
       "modified": "2026-09-29T12:46:47.993Z",
@@ -7016,8 +6955,8 @@
     },
     {
       "name": "@fish-under-sea/dsh-fish",
-      "version": "0.6.9",
-      "modified": "2026-10-10T08:33:55.990Z",
+      "version": "0.7.4",
+      "modified": "2026-10-10T20:15:38.004Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -7026,8 +6965,8 @@
     },
     {
       "name": "@fish-under-sea/dsh-git-sync",
-      "version": "0.3.0",
-      "modified": "2026-10-07T20:24:01.826Z",
+      "version": "0.3.2",
+      "modified": "2026-10-10T10:21:21.182Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -7036,8 +6975,8 @@
     },
     {
       "name": "@fish-under-sea/dsh-session-title-refresh",
-      "version": "0.3.1",
-      "modified": "2026-10-10T08:28:39.229Z",
+      "version": "0.3.2",
+      "modified": "2026-10-10T17:25:26.384Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -7409,6 +7348,19 @@
       "repository": "git+https://github.com/gausszhou/dsh-market.git"
     },
     {
+      "name": "@gavinc-cn/touchstone-dsh",
+      "version": "0.2.0",
+      "modified": "2026-10-11T04:35:57.421Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-agent",
+        "@deepseek-ai/dsh-llm"
+      ],
+      "repository": "git+https://github.com/gavinc-cn/touchstone-dsh.git"
+    },
+    {
       "name": "@geecraft23/dsh-session-cost",
       "version": "0.1.2",
       "modified": "2026-09-11T08:08:35.655Z",
@@ -7480,8 +7432,8 @@
     },
     {
       "name": "@ggboy123/dsh-paper-reader",
-      "version": "1.2.1",
-      "modified": "2026-10-10T06:14:50.974Z",
+      "version": "1.3.5",
+      "modified": "2026-10-11T03:50:38.829Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -7567,8 +7519,8 @@
     },
     {
       "name": "@goodandready/dsh-approval-gate",
-      "version": "0.1.14",
-      "modified": "2026-10-09T11:55:08.334Z",
+      "version": "0.1.17",
+      "modified": "2026-10-10T16:37:24.167Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -7942,8 +7894,8 @@
     },
     {
       "name": "@goodandready/dsh-plugin-notify",
-      "version": "0.4.0",
-      "modified": "2026-10-05T20:04:31.787Z",
+      "version": "0.4.2",
+      "modified": "2026-10-10T14:49:56.603Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -7980,8 +7932,8 @@
     },
     {
       "name": "@goodandready/dsh-russian-lang",
-      "version": "0.3.41",
-      "modified": "2026-10-09T15:35:11.310Z",
+      "version": "0.3.42",
+      "modified": "2026-10-10T16:55:03.953Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -8035,8 +7987,8 @@
     },
     {
       "name": "@goodandready/dsh-shadow-auditor",
-      "version": "0.2.23",
-      "modified": "2026-10-09T16:41:58.279Z",
+      "version": "0.2.24",
+      "modified": "2026-10-10T15:40:40.291Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -8366,8 +8318,8 @@
     },
     {
       "name": "@guilduo/dsh-oauth-poc",
-      "version": "0.6.0-beta.16",
-      "modified": "2026-10-10T00:44:39.553Z",
+      "version": "0.6.0-beta.17",
+      "modified": "2026-10-10T08:28:41.791Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -8386,8 +8338,8 @@
     },
     {
       "name": "@guosheng_047/dsh-erp",
-      "version": "0.1.0",
-      "modified": "2026-10-01T02:27:40.163Z",
+      "version": "0.1.1",
+      "modified": "2026-10-10T09:52:16.555Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -8881,6 +8833,22 @@
       "repository": "git+https://github.com/hellosz/dsh-pets.git"
     },
     {
+      "name": "@heluojiang/dsh-agents-toml",
+      "version": "0.3.4",
+      "modified": "2026-10-04T06:57:58.469Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/Heluojiang/dsh-agents-toml.git"
+    },
+    {
       "name": "@heyvin/dsh-community-market-test",
       "version": "1.0.3",
       "modified": "2026-08-30T16:21:49.030Z",
@@ -9052,6 +9020,16 @@
       "repository": "git+https://github.com/honlnk/dsh-input-assist.git"
     },
     {
+      "name": "@howillmakeit/skills-dsh",
+      "version": "0.2.0",
+      "modified": "2026-08-26T13:05:02.011Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/HOWILLMAKEIT/skills.git"
+    },
+    {
       "name": "@hoyyang/dsh-code-graph",
       "version": "0.2.0",
       "modified": "2026-09-18T02:30:27.412Z",
@@ -9094,12 +9072,14 @@
     },
     {
       "name": "@hualiong/dsh-session-delete",
-      "version": "0.3.4",
-      "modified": "2026-10-01T15:09:45.877Z",
+      "version": "0.3.6",
+      "modified": "2026-10-11T08:00:14.219Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
-      "hostDeps": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-home-paths"
+      ],
       "repository": "git+https://github.com/hualiong/dsh-session-delete.git"
     },
     {
@@ -9694,8 +9674,8 @@
     },
     {
       "name": "@huaqiu/dsh-kicad-drc",
-      "version": "0.5.3",
-      "modified": "2026-10-10T08:38:38.763Z",
+      "version": "0.5.5",
+      "modified": "2026-10-10T15:53:48.368Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -10191,8 +10171,8 @@
     },
     {
       "name": "@iasiv5/dsh-skins",
-      "version": "1.5.1",
-      "modified": "2026-10-09T11:19:14.825Z",
+      "version": "1.5.2",
+      "modified": "2026-10-10T19:35:35.519Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -10739,6 +10719,16 @@
       "repository": "git+https://github.com/jetecho/dsh-csv-and-image-preview.git"
     },
     {
+      "name": "@jfhshx/dsh-self-distill",
+      "version": "0.1.0",
+      "modified": "2026-09-12T21:13:03.177Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/JFHSHX/dsh-self-distill.git"
+    },
+    {
       "name": "@jhckevin/dsh-auto-review",
       "version": "0.6.2-rc.1",
       "modified": "2026-09-07T04:48:33.161Z",
@@ -11133,18 +11123,6 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/JuuWaii/autodsh.git"
-    },
-    {
-      "name": "@jw-king/dsh-plugin-workspaces-extra",
-      "version": "0.1.0",
-      "modified": "2026-09-05T12:41:22.872Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
-      ],
-      "repository": null
     },
     {
       "name": "@jw-king/dsh-plugin-zentao",
@@ -12180,8 +12158,8 @@
     },
     {
       "name": "@kirkchinese/dsh-citeciter",
-      "version": "0.9.0-alpha.3",
-      "modified": "2026-09-28T13:12:01.273Z",
+      "version": "0.9.0-beta.1",
+      "modified": "2026-10-10T12:36:26.140Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -12193,31 +12171,23 @@
         "@deepseek-ai/dsh-api-session-controller",
         "@deepseek-ai/dsh-client-ui-session",
         "@deepseek-ai/dsh-client-ui-chat",
-        "@deepseek-ai/dsh-api-settings-controller"
+        "@deepseek-ai/dsh-api-settings-controller",
+        "@deepseek-ai/dsh-api-remotes"
       ],
       "hostDeps": [
         "@deepseek-ai/cordis",
         "@deepseek-ai/dsh-agent",
         "@deepseek-ai/dsh-agent-loop",
         "@deepseek-ai/dsh-attachment",
-        "@deepseek-ai/dsh-fs",
         "@deepseek-ai/dsh-home-paths",
         "@deepseek-ai/dsh-llm",
-        "@deepseek-ai/dsh-output-retention",
         "@deepseek-ai/dsh-sandbox-policy",
+        "@deepseek-ai/dsh-scope",
         "@deepseek-ai/dsh-session",
         "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-session-projection",
         "@deepseek-ai/dsh-session-query",
         "@deepseek-ai/dsh-session-title",
-        "@deepseek-ai/dsh-session-title-llm",
         "@deepseek-ai/dsh-settings",
-        "@deepseek-ai/dsh-spill",
-        "@deepseek-ai/dsh-subprocess",
-        "@deepseek-ai/dsh-system-prompt",
-        "@deepseek-ai/dsh-tool-ask-user",
-        "@deepseek-ai/dsh-tool-fs",
-        "@deepseek-ai/dsh-tool-fs-search",
         "@deepseek-ai/dsh-tools",
         "@deepseek-ai/dsh-typert-protocol",
         "@deepseek-ai/dsh-user-questions",
@@ -12318,8 +12288,8 @@
     },
     {
       "name": "@klarkxy/dsh-current-title",
-      "version": "0.1.7",
-      "modified": "2026-10-01T12:01:40.719Z",
+      "version": "0.2.0",
+      "modified": "2026-10-11T01:40:53.866Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -12339,8 +12309,8 @@
     },
     {
       "name": "@klarkxy/dsh-dev-index",
-      "version": "0.1.7",
-      "modified": "2026-10-01T11:56:41.636Z",
+      "version": "0.2.0",
+      "modified": "2026-10-11T01:40:59.123Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -12387,8 +12357,8 @@
     },
     {
       "name": "@klarkxy/dsh-git-commit",
-      "version": "0.1.6",
-      "modified": "2026-10-01T12:02:59.328Z",
+      "version": "0.2.0",
+      "modified": "2026-10-11T01:41:10.342Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -12511,8 +12481,8 @@
     },
     {
       "name": "@klarkxy/dsh-web-search-manager",
-      "version": "0.1.11",
-      "modified": "2026-10-01T12:02:06.639Z",
+      "version": "0.2.0",
+      "modified": "2026-10-11T01:42:15.743Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -12535,8 +12505,8 @@
     },
     {
       "name": "@klarkxy/dsh-zhihu",
-      "version": "0.1.10",
-      "modified": "2026-10-01T11:56:28.275Z",
+      "version": "0.2.0",
+      "modified": "2026-10-11T01:42:22.821Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -13303,16 +13273,6 @@
       "repository": "git+https://github.com/LiFenrir/dsh-scenario.git"
     },
     {
-      "name": "@lihangcz/dsh-fin-trace",
-      "version": "0.4.0",
-      "modified": "2026-08-23T08:06:08.930Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": "git+https://github.com/yiwufen/fin-trace.git"
-    },
-    {
       "name": "@lijian-ui/dsh-im-gateway",
       "version": "0.3.5",
       "modified": "2026-09-30T02:16:30.508Z",
@@ -13724,16 +13684,6 @@
       "repository": "git+https://github.com/linziyanleo/dsh-custom-provider.git"
     },
     {
-      "name": "@liuguanghs/dsh-ecc",
-      "version": "0.1.0",
-      "modified": "2026-08-31T13:49:09.699Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": "git+https://github.com/LiuGuangHS/dsh-ecc.git"
-    },
-    {
       "name": "@liuguangzhe/dsh-token-usage",
       "version": "0.1.1",
       "modified": "2026-09-16T06:41:11.087Z",
@@ -13747,8 +13697,8 @@
     },
     {
       "name": "@liuhange/dsh-ai-dataset-inspector",
-      "version": "3.1.4",
-      "modified": "2026-10-06T06:49:10.645Z",
+      "version": "3.1.5",
+      "modified": "2026-10-11T02:53:26.387Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13760,8 +13710,8 @@
     },
     {
       "name": "@liuhange/dsh-city-data-classifier",
-      "version": "3.1.3",
-      "modified": "2026-09-28T13:02:49.983Z",
+      "version": "3.1.4",
+      "modified": "2026-10-11T02:52:23.185Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13773,8 +13723,8 @@
     },
     {
       "name": "@liuhange/dsh-construction-data-inventory",
-      "version": "3.2.2",
-      "modified": "2026-10-06T06:49:32.658Z",
+      "version": "3.2.3",
+      "modified": "2026-10-11T02:54:03.581Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13786,8 +13736,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-attestation",
-      "version": "3.1.3",
-      "modified": "2026-09-28T13:02:49.925Z",
+      "version": "3.1.4",
+      "modified": "2026-10-11T02:54:52.392Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13799,8 +13749,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-compliance-check",
-      "version": "3.1.5",
-      "modified": "2026-09-28T13:03:31.623Z",
+      "version": "3.1.6",
+      "modified": "2026-10-11T02:54:08.990Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13812,8 +13762,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-inventory-scan",
-      "version": "3.1.5",
-      "modified": "2026-09-28T13:02:52.578Z",
+      "version": "3.1.6",
+      "modified": "2026-10-11T02:53:17.669Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13825,8 +13775,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-orchestration",
-      "version": "3.1.2",
-      "modified": "2026-09-28T13:04:06.648Z",
+      "version": "3.2.1",
+      "modified": "2026-10-11T02:57:53.652Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13839,8 +13789,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-quality-score",
-      "version": "3.1.5",
-      "modified": "2026-09-28T13:04:08.729Z",
+      "version": "3.1.6",
+      "modified": "2026-10-11T02:54:38.716Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13852,8 +13802,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-registration-helper",
-      "version": "3.1.5",
-      "modified": "2026-09-28T13:02:58.070Z",
+      "version": "3.1.6",
+      "modified": "2026-10-11T02:55:28.635Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13865,8 +13815,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-shared",
-      "version": "3.2.3",
-      "modified": "2026-09-28T13:05:11.664Z",
+      "version": "3.3.1",
+      "modified": "2026-10-11T02:54:17.267Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13879,8 +13829,8 @@
     },
     {
       "name": "@liuhange/dsh-data-asset-valuation",
-      "version": "3.1.5",
-      "modified": "2026-09-28T13:02:59.508Z",
+      "version": "3.1.6",
+      "modified": "2026-10-11T02:54:35.638Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13892,8 +13842,8 @@
     },
     {
       "name": "@liuhange/dsh-data-circulation-assessor",
-      "version": "3.1.3",
-      "modified": "2026-09-28T13:06:15.037Z",
+      "version": "3.1.4",
+      "modified": "2026-10-11T02:54:55.247Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13905,8 +13855,8 @@
     },
     {
       "name": "@liuhange/dsh-data-cleaning",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:03:23.405Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T02:55:34.008Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13918,8 +13868,8 @@
     },
     {
       "name": "@liuhange/dsh-data-inventory",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:03:23.930Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T02:55:29.364Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13931,8 +13881,8 @@
     },
     {
       "name": "@liuhange/dsh-data-lineage",
-      "version": "2.0.5",
-      "modified": "2026-09-28T13:03:04.981Z",
+      "version": "2.0.6",
+      "modified": "2026-10-11T02:57:19.570Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13944,8 +13894,8 @@
     },
     {
       "name": "@liuhange/dsh-data-masking",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:04:20.131Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T03:01:38.992Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13957,8 +13907,8 @@
     },
     {
       "name": "@liuhange/dsh-data-packaging",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:03:27.692Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T02:57:54.355Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13970,8 +13920,8 @@
     },
     {
       "name": "@liuhange/dsh-data-quality-scoring",
-      "version": "2.0.5",
-      "modified": "2026-09-28T13:04:22.369Z",
+      "version": "2.0.6",
+      "modified": "2026-10-11T02:58:43.900Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13983,8 +13933,8 @@
     },
     {
       "name": "@liuhange/dsh-data-sensitivity-classification",
-      "version": "2.0.5",
-      "modified": "2026-09-28T13:04:55.156Z",
+      "version": "2.0.6",
+      "modified": "2026-10-11T02:57:02.893Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -13996,8 +13946,8 @@
     },
     {
       "name": "@liuhange/dsh-data-visualization",
-      "version": "2.0.5",
-      "modified": "2026-09-28T13:03:53.597Z",
+      "version": "2.0.6",
+      "modified": "2026-10-11T03:00:58.506Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14009,8 +13959,8 @@
     },
     {
       "name": "@liuhange/dsh-fin-aml-checker",
-      "version": "3.1.3",
-      "modified": "2026-10-06T06:44:53.548Z",
+      "version": "3.1.4",
+      "modified": "2026-10-11T03:00:15.545Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14022,8 +13972,8 @@
     },
     {
       "name": "@liuhange/dsh-generate-registration-docs",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:03:36.520Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T02:58:21.397Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14035,8 +13985,8 @@
     },
     {
       "name": "@liuhange/dsh-geo-data-quality-inspector",
-      "version": "1.0.2",
-      "modified": "2026-10-06T06:45:36.088Z",
+      "version": "1.0.3",
+      "modified": "2026-10-11T03:01:51.873Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14048,8 +13998,8 @@
     },
     {
       "name": "@liuhange/dsh-gov-data-inspector",
-      "version": "3.7.2",
-      "modified": "2026-10-08T13:47:55.702Z",
+      "version": "3.7.8",
+      "modified": "2026-10-11T01:54:20.235Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14061,8 +14011,8 @@
     },
     {
       "name": "@liuhange/dsh-match-registration-agency",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:03:16.298Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T02:59:20.692Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14074,8 +14024,8 @@
     },
     {
       "name": "@liuhange/dsh-registration-precheck",
-      "version": "3.0.4",
-      "modified": "2026-09-28T13:03:39.949Z",
+      "version": "3.0.5",
+      "modified": "2026-10-11T03:01:19.757Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14087,8 +14037,8 @@
     },
     {
       "name": "@liuhange/dsh-research-data-provenance",
-      "version": "3.1.3",
-      "modified": "2026-10-06T06:47:48.227Z",
+      "version": "3.1.4",
+      "modified": "2026-10-11T02:59:57.400Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14100,8 +14050,8 @@
     },
     {
       "name": "@liuhange/dsh-underground-pipeline-inspector",
-      "version": "1.0.2",
-      "modified": "2026-10-06T06:47:03.355Z",
+      "version": "1.0.3",
+      "modified": "2026-10-11T03:01:57.341Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14113,8 +14063,8 @@
     },
     {
       "name": "@liuhange/dsh-visibility-doctor",
-      "version": "1.0.3",
-      "modified": "2026-09-28T13:07:44.702Z",
+      "version": "1.0.4",
+      "modified": "2026-10-11T03:00:36.069Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -14133,8 +14083,8 @@
     },
     {
       "name": "@liustack/pptwise",
-      "version": "0.40.0",
-      "modified": "2026-09-29T07:10:53.053Z",
+      "version": "0.43.0",
+      "modified": "2026-10-11T06:36:48.127Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14197,8 +14147,8 @@
     },
     {
       "name": "@ljwei-stak/dsh-mv-cli",
-      "version": "0.11.0",
-      "modified": "2026-10-09T06:49:04.456Z",
+      "version": "0.12.0",
+      "modified": "2026-10-11T09:06:47.688Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14359,8 +14309,8 @@
     },
     {
       "name": "@logictan/dsh-config-manager",
-      "version": "0.1.78",
-      "modified": "2026-10-09T06:56:30.334Z",
+      "version": "0.1.79",
+      "modified": "2026-10-10T19:53:47.238Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14411,8 +14361,8 @@
     },
     {
       "name": "@logictan/dsh-desktop-agent",
-      "version": "0.1.5",
-      "modified": "2026-10-04T14:54:15.179Z",
+      "version": "0.1.6",
+      "modified": "2026-10-10T19:55:16.036Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14422,6 +14372,7 @@
       ],
       "hostDeps": [
         "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-client-connection",
         "@deepseek-ai/dsh-llm",
         "@deepseek-ai/dsh-mcp-client",
         "@deepseek-ai/dsh-system-prompt",
@@ -14509,8 +14460,8 @@
     },
     {
       "name": "@lolkda/dsh-web-lan",
-      "version": "0.3.0",
-      "modified": "2026-10-03T15:58:23.363Z",
+      "version": "0.4.0",
+      "modified": "2026-10-10T10:34:41.071Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14827,6 +14778,22 @@
       "repository": "git+https://github.com/luweiyabo/dsh-whale-pet.git"
     },
     {
+      "name": "@lxchapu/dsh-session-purge",
+      "version": "0.1.2",
+      "modified": "2026-10-03T08:55:05.757Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-api-workspace-controller",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/lxchapu/dsh-session-purge.git"
+    },
+    {
       "name": "@lyd123qw2008/dsh-tool-control-chrome",
       "version": "0.8.0",
       "modified": "2026-09-18T17:58:49.214Z",
@@ -14848,8 +14815,8 @@
     },
     {
       "name": "@lynn123411/dsh-a6api",
-      "version": "1.6.0",
-      "modified": "2026-10-06T05:08:34.546Z",
+      "version": "1.6.1",
+      "modified": "2026-10-11T08:14:02.182Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14866,8 +14833,8 @@
     },
     {
       "name": "@lynn123411/dsh-chat-translate",
-      "version": "3.3.0",
-      "modified": "2026-10-06T05:07:46.185Z",
+      "version": "3.3.1",
+      "modified": "2026-10-11T08:14:08.153Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -14882,8 +14849,8 @@
     },
     {
       "name": "@lynn123411/dsh-web-auth-url",
-      "version": "0.2.0",
-      "modified": "2026-10-06T05:10:29.521Z",
+      "version": "0.2.1",
+      "modified": "2026-10-11T08:14:14.526Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -15468,8 +15435,8 @@
     },
     {
       "name": "@microi.net/cli",
-      "version": "5.8.8",
-      "modified": "2026-10-09T19:34:26.436Z",
+      "version": "5.9.2",
+      "modified": "2026-10-11T08:22:40.169Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -15730,8 +15697,8 @@
     },
     {
       "name": "@mokuyoaxis/dsh-iris",
-      "version": "0.2.1",
-      "modified": "2026-10-09T13:09:06.498Z",
+      "version": "0.2.2",
+      "modified": "2026-10-11T08:13:19.037Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -15770,8 +15737,8 @@
     },
     {
       "name": "@moon16u/dsh-pouch",
-      "version": "0.5.1",
-      "modified": "2026-09-29T13:14:19.321Z",
+      "version": "0.5.2",
+      "modified": "2026-10-11T03:30:49.713Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -16214,16 +16181,6 @@
       "repository": "git+https://github.com/PiyotaHu/muxiva-dsh-voice.git"
     },
     {
-      "name": "@muyangplus/dsh-oi-workbench",
-      "version": "0.1.4",
-      "modified": "2026-08-22T15:17:17.453Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": "git+https://github.com/muyangplus/dsh-oi-workbench.git"
-    },
-    {
       "name": "@nakamuraia/dsh-plugin-speech",
       "version": "0.1.0",
       "modified": "2026-09-14T16:09:16.147Z",
@@ -16245,8 +16202,8 @@
     },
     {
       "name": "@nanmicoder/dsh-agent-teams",
-      "version": "0.1.22",
-      "modified": "2026-09-29T13:52:39.905Z",
+      "version": "0.1.23",
+      "modified": "2026-10-11T02:32:57.400Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -16594,8 +16551,8 @@
     },
     {
       "name": "@noob-stupid/dsh-connection-card-host",
-      "version": "1.0.72",
-      "modified": "2026-10-08T03:16:25.189Z",
+      "version": "1.0.73",
+      "modified": "2026-10-10T08:57:49.065Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -16726,8 +16683,8 @@
     },
     {
       "name": "@oh-story/dsh",
-      "version": "0.1.14",
-      "modified": "2026-10-09T02:46:58.760Z",
+      "version": "0.1.15",
+      "modified": "2026-10-10T12:30:59.277Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -16761,16 +16718,6 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/zenstory-ai/oh-story-dsh.git"
-    },
-    {
-      "name": "@ohmydsh/runtime",
-      "version": "0.1.0-preview.1",
-      "modified": "2026-08-15T08:31:30.402Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": "git+https://github.com/omdsh-dev/omdsh-runtime.git"
     },
     {
       "name": "@omdp/dsh-archived-sessions",
@@ -16912,8 +16859,8 @@
     },
     {
       "name": "@openbkn/dsh-business-context",
-      "version": "0.2.0-rc.2-openbkn.0.2.0-8",
-      "modified": "2026-10-09T18:39:24.458Z",
+      "version": "0.2.0-rc.2-openbkn.0.2.0-9",
+      "modified": "2026-10-10T17:33:32.531Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -17365,6 +17312,16 @@
       "repository": "git+https://github.com/plur-ai/plur.git"
     },
     {
+      "name": "@pricewin/dsh",
+      "version": "1.0.1",
+      "modified": "2026-10-04T06:10:08.660Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/PriceDotWin/pricewin-dsh.git"
+    },
+    {
       "name": "@pure01fx/dsh-openai-codex-auth",
       "version": "0.13.2",
       "modified": "2026-10-09T07:19:32.993Z",
@@ -17431,6 +17388,18 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/pymodel/dsh-research-plugins.git"
+    },
+    {
+      "name": "@qgynisc/dsh-inline-pastes",
+      "version": "0.6.0",
+      "modified": "2026-10-03T09:42:33.526Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis"
+      ],
+      "repository": "git+https://github.com/qgynisc/dsh-inline-pastes.git"
     },
     {
       "name": "@qing3a/dsh-event-auditor",
@@ -17607,8 +17576,8 @@
     },
     {
       "name": "@rebornace/dsh-tracescope",
-      "version": "0.2.7",
-      "modified": "2026-10-10T08:45:45.101Z",
+      "version": "0.3.2",
+      "modified": "2026-10-11T09:03:10.274Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -17795,8 +17764,8 @@
     },
     {
       "name": "@ryuu-64/dsh-find-all",
-      "version": "0.1.10",
-      "modified": "2026-10-10T00:59:34.222Z",
+      "version": "0.1.11",
+      "modified": "2026-10-10T16:49:23.762Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -18705,19 +18674,6 @@
       "repository": "git+https://github.com/StarPivotNet/dsh-plugins-public.git"
     },
     {
-      "name": "@starpivot/dsh-file-drop",
-      "version": "0.1.2",
-      "modified": "2026-09-05T12:56:57.316Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-connection"
-      ],
-      "hostDeps": [],
-      "repository": "git+https://github.com/StarPivotNet/dsh-plugins-public.git"
-    },
-    {
       "name": "@starpivot/dsh-plugin-marketplace",
       "version": "0.1.15",
       "modified": "2026-08-17T01:32:08.595Z",
@@ -18804,8 +18760,8 @@
     },
     {
       "name": "@steven-stack-s/dsh-memos-local",
-      "version": "2.0.20-dsh.2",
-      "modified": "2026-09-22T14:20:44.203Z",
+      "version": "2.0.20-dsh.3",
+      "modified": "2026-10-10T09:48:52.844Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -18832,6 +18788,34 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/toustifer/dsh-harvest.git"
+    },
+    {
+      "name": "@stmol/dsh-prompt-lib",
+      "version": "1.0.1",
+      "modified": "2026-10-04T02:33:17.925Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-api-remotes"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/Stmol/dsh-prompt-lib.git"
+    },
+    {
+      "name": "@stmol/dsh-rub-cost",
+      "version": "1.1.1",
+      "modified": "2026-10-04T03:13:22.913Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/Stmol/dsh-rub-cost.git"
     },
     {
       "name": "@stolyarovmn/dsh-client-ui-schedule-tab",
@@ -18895,8 +18879,8 @@
     },
     {
       "name": "@stuga/dsh-plugin",
-      "version": "0.2.1",
-      "modified": "2026-10-09T16:13:30.494Z",
+      "version": "0.2.2",
+      "modified": "2026-10-11T06:40:09.673Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -19494,8 +19478,8 @@
     },
     {
       "name": "@toddzheng024/dscode-desktop",
-      "version": "0.7.36",
-      "modified": "2026-10-10T00:46:03.300Z",
+      "version": "0.7.39",
+      "modified": "2026-10-11T00:10:31.317Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -19537,6 +19521,16 @@
       "name": "@toddzheng024/vapor-captions",
       "version": "0.3.0",
       "modified": "2026-09-11T09:29:51.283Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/qiz029/vapor.git"
+    },
+    {
+      "name": "@toddzheng024/vapor-costs",
+      "version": "0.3.0",
+      "modified": "2026-09-11T09:30:09.790Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -19833,8 +19827,8 @@
     },
     {
       "name": "@try-works/dsh-memory",
-      "version": "0.1.20",
-      "modified": "2026-10-10T01:52:15.254Z",
+      "version": "0.1.25",
+      "modified": "2026-10-10T22:47:42.099Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -19959,6 +19953,18 @@
       "repository": "https://github.com/tumi-huakai/dsh-plugin-meow-speech.git"
     },
     {
+      "name": "@twinsearth/w2m-dsh-plugin",
+      "version": "0.5.9",
+      "modified": "2026-10-11T08:34:54.413Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-tools"
+      ],
+      "repository": "git+https://github.com/TwinsEarth/dsh-windows2macos.git"
+    },
+    {
       "name": "@uachar/dsh-ui-chime",
       "version": "0.1.3",
       "modified": "2026-08-16T15:44:09.966Z",
@@ -19982,18 +19988,6 @@
       ],
       "hostDeps": [],
       "repository": null
-    },
-    {
-      "name": "@univerxyz/dsh-dsov-plugin",
-      "version": "1.4.0",
-      "modified": "2026-08-29T12:35:01.124Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
-      ],
-      "repository": "git+https://github.com/univerxyz/dsh-dsov-plugin.git"
     },
     {
       "name": "@upstash/dsh-box",
@@ -20063,6 +20057,57 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/valuz-ai/dsh-valuz-genui.git"
+    },
+    {
+      "name": "@vibedev-si/dsh-ecosystem",
+      "version": "0.1.13",
+      "modified": "2026-10-11T08:45:05.381Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/VibeDev-Si/dsh-ecosystem.git"
+    },
+    {
+      "name": "@vibedev-si/dsh-media-viewer",
+      "version": "0.2.0",
+      "modified": "2026-10-10T16:48:05.236Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-client-ui-sidebar-documentpreview"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/VibeDev-Si/dsh-media-viewer.git"
+    },
+    {
+      "name": "@vibedev-si/dsh-vibedev",
+      "version": "0.3.0",
+      "modified": "2026-10-10T09:48:50.733Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-attachment",
+        "@deepseek-ai/dsh-brand",
+        "@deepseek-ai/dsh-credentials",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-timeout",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/dsh-web",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/VibeDev-Si/dsh-vibedev.git"
     },
     {
       "name": "@vibeinging/dsh-red-alert",
@@ -20599,8 +20644,8 @@
     },
     {
       "name": "@wenaixi/dsh-ponytail",
-      "version": "5.4.0",
-      "modified": "2026-10-08T16:34:13.215Z",
+      "version": "5.5.0",
+      "modified": "2026-10-10T10:19:50.456Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -20617,9 +20662,41 @@
       "repository": "git+https://github.com/Wenaixi/dsh-ponytail.git"
     },
     {
+      "name": "@wenaixi/dsh-prompt-history",
+      "version": "2.4.1",
+      "modified": "2026-10-10T15:25:47.534Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/dsh-client-ui-input-trigger"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-invariants"
+      ],
+      "repository": "git+https://github.com/Wenaixi/dsh-prompt-history.git"
+    },
+    {
       "name": "@wenaixi/dsh-superpower",
-      "version": "7.7.0",
-      "modified": "2026-10-08T16:25:11.898Z",
+      "version": "7.7.2",
+      "modified": "2026-10-10T16:19:21.595Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -20641,8 +20718,8 @@
     },
     {
       "name": "@wenbin_wb/dsh-bridge",
-      "version": "2.12.4",
-      "modified": "2026-10-10T00:07:43.827Z",
+      "version": "2.13.0",
+      "modified": "2026-10-10T13:25:33.603Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -20783,8 +20860,8 @@
     },
     {
       "name": "@whaletalk/dsh-codex-collab",
-      "version": "0.1.6",
-      "modified": "2026-10-10T04:36:36.860Z",
+      "version": "0.1.7",
+      "modified": "2026-10-10T09:04:52.890Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -21144,8 +21221,8 @@
     },
     {
       "name": "@wszhoho/dsh-file-attachment",
-      "version": "0.6.0",
-      "modified": "2026-10-10T07:43:34.070Z",
+      "version": "0.6.2",
+      "modified": "2026-10-10T13:31:38.716Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -21352,8 +21429,8 @@
     },
     {
       "name": "@xia-sc/dsh-cc-studio",
-      "version": "0.3.7",
-      "modified": "2026-09-24T01:53:42.724Z",
+      "version": "0.4.0",
+      "modified": "2026-10-10T10:14:58.037Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -21361,9 +21438,7 @@
         "@deepseek-ai/dsh-client-ui-conversation",
         "@deepseek-ai/dsh-client-ui-layout"
       ],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
-      ],
+      "hostDeps": [],
       "repository": "git+https://github.com/xia-sc/dsh-cc-studio.git"
     },
     {
@@ -21635,8 +21710,8 @@
     },
     {
       "name": "@xmwengxing/dsh-client-ui-sidebar-perfmon",
-      "version": "0.4.0",
-      "modified": "2026-10-09T15:00:14.883Z",
+      "version": "0.4.2",
+      "modified": "2026-10-10T10:45:34.328Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -22766,8 +22841,8 @@
     },
     {
       "name": "@yolk_vat-y/dsh-project-memory",
-      "version": "0.5.15",
-      "modified": "2026-10-06T13:34:06.582Z",
+      "version": "0.5.16",
+      "modified": "2026-10-10T17:19:25.402Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -23079,8 +23154,8 @@
     },
     {
       "name": "@zaofan/dsh-qqbot",
-      "version": "1.8.0",
-      "modified": "2026-10-10T00:42:05.709Z",
+      "version": "1.8.2",
+      "modified": "2026-10-11T05:50:45.490Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -23206,24 +23281,6 @@
       "repository": "git+https://github.com/Z-Asset/ZA_report.git"
     },
     {
-      "name": "@zebbkira/dsh-blockworld",
-      "version": "0.2.2",
-      "modified": "2026-08-24T15:20:49.870Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-theme",
-        "@deepseek-ai/dsh-client-ui-settings",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-api-remotes"
-      ],
-      "hostDeps": [],
-      "repository": "git+https://github.com/zebbkira/dsh-blockworld-theme.git"
-    },
-    {
       "name": "@zerorigin-studio/dsh-deepseek-chat",
       "version": "0.3.5",
       "modified": "2026-09-22T09:33:35.778Z",
@@ -23283,6 +23340,64 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/Smalldy/godot-bridge.git"
+    },
+    {
+      "name": "@zhangzhian/dsh-devtools",
+      "version": "0.1.2",
+      "modified": "2026-10-11T07:49:20.092Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-client-ui-directory-picker-browse",
+        "@deepseek-ai/dsh-host-directory-picker-browse"
+      ],
+      "repository": "git+https://codeup.aliyun.com/67617ae720a07de19c7c1633/dsh-plugins.git"
+    },
+    {
+      "name": "@zhangzhian/dsh-devtools-git",
+      "version": "0.1.2",
+      "modified": "2026-10-11T07:48:52.271Z",
+      "bundle": false,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-agent-default-model",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-api-workspace-files",
+        "@deepseek-ai/dsh-fs",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-session",
+        "@deepseek-ai/dsh-session-projection",
+        "@deepseek-ai/dsh-storage-domain",
+        "@deepseek-ai/dsh-subprocess",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/dsh-typert-protocol",
+        "@deepseek-ai/dsh-util-values",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://codeup.aliyun.com/67617ae720a07de19c7c1633/dsh-plugins.git"
+    },
+    {
+      "name": "@zhangzhian/dsh-devtools-runs",
+      "version": "0.1.2",
+      "modified": "2026-10-11T07:49:46.706Z",
+      "bundle": false,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-api-workspace-files",
+        "@deepseek-ai/dsh-fs",
+        "@deepseek-ai/dsh-storage-domain",
+        "@deepseek-ai/dsh-subprocess",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/dsh-typert-protocol",
+        "@deepseek-ai/dsh-util-values",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://codeup.aliyun.com/67617ae720a07de19c7c1633/dsh-plugins.git"
     },
     {
       "name": "@zhaoolee/dsh-notes",
@@ -23462,6 +23577,26 @@
       ],
       "hostDeps": [
         "@deepseek-ai/cordis"
+      ],
+      "repository": null
+    },
+    {
+      "name": "@zhou05/dsh-whale-appearance",
+      "version": "0.2.3",
+      "modified": "2026-10-03T18:43:56.809Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/schemastery"
       ],
       "repository": null
     },
@@ -24351,8 +24486,8 @@
     },
     {
       "name": "bladebro",
-      "version": "4.4.0",
-      "modified": "2026-10-09T20:01:24.291Z",
+      "version": "4.5.0",
+      "modified": "2026-10-10T10:28:10.210Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -24434,8 +24569,8 @@
     },
     {
       "name": "clearai-dsh",
-      "version": "0.5.2",
-      "modified": "2026-10-10T07:35:47.161Z",
+      "version": "0.5.4",
+      "modified": "2026-10-10T10:46:37.421Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -25367,6 +25502,24 @@
       "repository": "git+https://github.com/yaways/dsh-about-plugin.git"
     },
     {
+      "name": "dsh-academic-web-proxy",
+      "version": "0.2.0",
+      "modified": "2026-10-03T12:19:38.321Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-system-prompt",
+        "@deepseek-ai/dsh-tools"
+      ],
+      "repository": "git+https://github.com/Yokhong/dsh_academic_web_proxy.git"
+    },
+    {
       "name": "dsh-academy",
       "version": "0.1.0",
       "modified": "2026-08-16T17:29:15.922Z",
@@ -25506,6 +25659,16 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/dushaobindoudou/dsh-acp.git"
+    },
+    {
+      "name": "dsh-acrylic",
+      "version": "0.1.0",
+      "modified": "2026-10-03T11:59:44.390Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/N3kOk0/dsh-acrylic.git"
     },
     {
       "name": "dsh-action-outbox",
@@ -25915,8 +26078,8 @@
     },
     {
       "name": "dsh-agent-lang",
-      "version": "0.9.2",
-      "modified": "2026-10-05T11:38:26.010Z",
+      "version": "0.10.0",
+      "modified": "2026-10-10T16:54:12.278Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -25993,8 +26156,8 @@
     },
     {
       "name": "dsh-agent-plugins-market",
-      "version": "0.9.1",
-      "modified": "2026-10-10T05:09:20.646Z",
+      "version": "0.9.2",
+      "modified": "2026-10-11T03:37:24.666Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -26193,26 +26356,9 @@
       "repository": "git+https://github.com/thissensen/dsh-agent-studio.git"
     },
     {
-      "name": "dsh-agent-teams-approval",
-      "version": "0.1.0",
-      "modified": "2026-09-27T16:23:01.791Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-ui-settings",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-renderer"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/dsh-llm",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/mimajiushi/dsh-plugins.git"
-    },
-    {
       "name": "dsh-agent-teams-fish",
-      "version": "0.4.1",
-      "modified": "2026-10-08T10:14:45.288Z",
+      "version": "0.5.0",
+      "modified": "2026-10-10T20:13:59.073Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -26389,8 +26535,8 @@
     },
     {
       "name": "dsh-agentone",
-      "version": "0.5.38",
-      "modified": "2026-10-10T01:55:07.300Z",
+      "version": "0.5.41",
+      "modified": "2026-10-11T08:59:26.799Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -26447,6 +26593,21 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/riverho/agents-playbook.git"
+    },
+    {
+      "name": "dsh-agentteams-dashboard",
+      "version": "0.2.0",
+      "modified": "2026-10-03T12:10:34.525Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-system-prompt",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": null
     },
     {
       "name": "dsh-aginxbrowser",
@@ -26642,6 +26803,18 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/zuohaisu/dsh-ai-soul.git"
+    },
+    {
+      "name": "dsh-ai-suplex",
+      "version": "0.4.0",
+      "modified": "2026-10-04T01:09:43.852Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-tools"
+      ],
+      "repository": "git+https://github.com/kmagwenzi/dsh-ai-suplex.git"
     },
     {
       "name": "dsh-ai-team",
@@ -26935,6 +27108,19 @@
       "repository": "git+https://github.com/xi-kari/dsh-amphoreus.git"
     },
     {
+      "name": "dsh-anagenesis",
+      "version": "0.2.1",
+      "modified": "2026-10-10T10:46:45.723Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/3likofj/dsh-anagenesis.git"
+    },
+    {
       "name": "dsh-analytics",
       "version": "0.4.0",
       "modified": "2026-08-14T06:23:25.065Z",
@@ -27195,8 +27381,8 @@
     },
     {
       "name": "dsh-api-ledger",
-      "version": "0.2.2",
-      "modified": "2026-09-22T02:08:09.209Z",
+      "version": "0.4.0",
+      "modified": "2026-10-10T09:45:55.526Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -27251,6 +27437,21 @@
         "@deepseek-ai/dsh-tools"
       ],
       "repository": "git+https://github.com/BlankDevil/dsh-app-manager.git"
+    },
+    {
+      "name": "dsh-app-packager",
+      "version": "0.6.2",
+      "modified": "2026-10-11T04:06:24.592Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/lw0129a/dsh-app-packager.git"
     },
     {
       "name": "dsh-appearance-editor",
@@ -27464,8 +27665,8 @@
     },
     {
       "name": "dsh-arabic",
-      "version": "0.4.1",
-      "modified": "2026-10-09T22:00:18.964Z",
+      "version": "0.4.2",
+      "modified": "2026-10-10T22:45:25.277Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -27701,6 +27902,19 @@
       "repository": "git+https://github.com/XN-H/dsh-ark-image.git"
     },
     {
+      "name": "dsh-ark-readaloud",
+      "version": "0.1.0",
+      "modified": "2026-10-03T10:02:13.896Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-renderer"
+      ],
+      "hostDeps": [],
+      "repository": null
+    },
+    {
       "name": "dsh-arknights",
       "version": "0.1.0",
       "modified": "2026-08-19T14:22:09.243Z",
@@ -27859,6 +28073,18 @@
       "repository": "git+https://github.com/liujianqiao701/dsh-ask-notify.git"
     },
     {
+      "name": "dsh-assistant",
+      "version": "0.2.0",
+      "modified": "2026-10-03T13:58:06.841Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-renderer"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/vianvio/dsh-assistant.git"
+    },
+    {
       "name": "dsh-ast-edit-tool",
       "version": "0.1.6",
       "modified": "2026-09-30T02:45:19.916Z",
@@ -27961,18 +28187,6 @@
       "repository": "git+https://github.com/WJZ-P/dsh-attachments.git"
     },
     {
-      "name": "dsh-attachment-downscale",
-      "version": "0.1.0",
-      "modified": "2026-08-22T14:33:04.661Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
-      ],
-      "repository": "git+https://github.com/zoumutou/dsh-attachment-downscale.git"
-    },
-    {
       "name": "dsh-attachments",
       "version": "0.1.1",
       "modified": "2026-08-14T14:06:33.719Z",
@@ -27993,8 +28207,8 @@
     },
     {
       "name": "dsh-attention",
-      "version": "0.3.0",
-      "modified": "2026-09-14T12:41:18.429Z",
+      "version": "0.4.0",
+      "modified": "2026-10-10T17:20:38.833Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -28002,6 +28216,8 @@
         "@deepseek-ai/dsh-client-locale",
         "@deepseek-ai/dsh-client-ui-settings",
         "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-workspace",
         "@deepseek-ai/dsh-client-ui-settings-general"
       ],
       "hostDeps": [
@@ -28274,8 +28490,8 @@
     },
     {
       "name": "dsh-auto-memory",
-      "version": "0.7.0",
-      "modified": "2026-10-08T16:18:04.950Z",
+      "version": "0.7.1",
+      "modified": "2026-10-10T12:18:43.791Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -28587,8 +28803,8 @@
     },
     {
       "name": "dsh-background-by-model",
-      "version": "0.8.0",
-      "modified": "2026-10-07T02:46:00.678Z",
+      "version": "0.8.2",
+      "modified": "2026-10-11T02:22:05.770Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -28819,14 +29035,17 @@
     },
     {
       "name": "dsh-bash-native",
-      "version": "0.1.5",
-      "modified": "2026-10-09T11:36:19.606Z",
+      "version": "0.1.6",
+      "modified": "2026-10-10T12:46:38.041Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
       "hostDeps": [
         "@deepseek-ai/dsh-bash-local",
         "@deepseek-ai/dsh-sandbox",
+        "@deepseek-ai/dsh-terminal",
+        "@deepseek-ai/dsh-terminal-bash",
+        "@deepseek-ai/dsh-tool-terminal",
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/SpookyWaste/dsh-bash-native.git"
@@ -29471,8 +29690,8 @@
     },
     {
       "name": "dsh-bridge-gateway",
-      "version": "0.2.1",
-      "modified": "2026-09-25T12:19:30.505Z",
+      "version": "0.2.2",
+      "modified": "2026-10-11T06:48:49.608Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -29713,8 +29932,8 @@
     },
     {
       "name": "dsh-buddy-checkin",
-      "version": "0.3.1",
-      "modified": "2026-10-08T08:18:45.632Z",
+      "version": "0.4.0",
+      "modified": "2026-10-10T17:58:24.832Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -29771,6 +29990,23 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": null
+    },
+    {
+      "name": "dsh-budget-handoff",
+      "version": "0.2.1",
+      "modified": "2026-10-11T05:20:11.114Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-agent",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-session",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/ZiOstudio/dsh-budget-handoff.git"
     },
     {
       "name": "dsh-builtin-browser",
@@ -30153,6 +30389,25 @@
         "@deepseek-ai/dsh-client-ui-theme"
       ],
       "repository": "git+https://github.com/zhijun-dai/Catppuccin-dsh-theme.git"
+    },
+    {
+      "name": "dsh-ccd-style",
+      "version": "0.1.0",
+      "modified": "2026-10-03T10:22:20.531Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-workspace",
+        "@deepseek-ai/dsh-client-ui-model-selection",
+        "@deepseek-ai/dsh-client-ui-sidebar-right"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/zkforge/dsh-ccd-style.git"
     },
     {
       "name": "dsh-cerrda-theme",
@@ -31082,12 +31337,15 @@
     },
     {
       "name": "dsh-claude-style",
-      "version": "0.12.1",
-      "modified": "2026-10-09T16:20:30.958Z",
+      "version": "0.13.1",
+      "modified": "2026-10-11T02:03:29.738Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
-      "hostDeps": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/schemastery"
+      ],
       "repository": "git+https://github.com/Nwflower/dsh-claude-style.git"
     },
     {
@@ -31418,6 +31676,32 @@
       "repository": null
     },
     {
+      "name": "dsh-clipbook",
+      "version": "0.2.0",
+      "modified": "2026-10-03T09:23:00.710Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/Hwayn-pixel/dsh-clipbook.git"
+    },
+    {
+      "name": "dsh-cloud-handoff",
+      "version": "0.6.0",
+      "modified": "2026-10-11T04:51:30.571Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/engty/dsh-cloud-handoff.git"
+    },
+    {
       "name": "dsh-cloud-workspaces",
       "version": "0.2.1",
       "modified": "2026-08-31T13:41:43.299Z",
@@ -31609,6 +31893,16 @@
       "repository": "git+https://github.com/lonelymoon87/dsh-code-intel.git"
     },
     {
+      "name": "dsh-code-pill",
+      "version": "0.2.0",
+      "modified": "2026-10-10T09:14:23.061Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/KouzakiUmi/dsh-code-pill.git"
+    },
+    {
       "name": "dsh-code-reading-coach",
       "version": "0.1.0",
       "modified": "2026-08-22T09:58:08.950Z",
@@ -31645,8 +31939,8 @@
     },
     {
       "name": "dsh-codearts",
-      "version": "0.3.0",
-      "modified": "2026-10-10T08:42:32.045Z",
+      "version": "0.4.0",
+      "modified": "2026-10-10T09:38:32.341Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -32144,8 +32438,8 @@
     },
     {
       "name": "dsh-codex-subscription",
-      "version": "2.5.9",
-      "modified": "2026-10-09T08:03:05.308Z",
+      "version": "2.6.0",
+      "modified": "2026-10-11T06:05:24.839Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -32731,6 +33025,23 @@
       "repository": "git+https://github.com/Han-1413141/dsh-compat-guardian.git"
     },
     {
+      "name": "dsh-compat-market",
+      "version": "0.2.0",
+      "modified": "2026-10-03T13:59:01.668Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-api-gateway",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/lpf0404/dsh-compat-market.git"
+    },
+    {
       "name": "dsh-compat-vet",
       "version": "0.3.2",
       "modified": "2026-09-30T09:45:53.745Z",
@@ -32958,15 +33269,17 @@
     },
     {
       "name": "dsh-composer-stretch",
-      "version": "0.1.2",
-      "modified": "2026-08-29T05:17:58.376Z",
+      "version": "0.2.0",
+      "modified": "2026-10-10T16:42:24.735Z",
       "bundle": true,
       "client": true,
       "clientInject": [
         "@deepseek-ai/dsh-client-ui-conversation"
       ],
       "hostDeps": [
-        "@deepseek-ai/cordis"
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-primitives"
       ],
       "repository": "git+https://github.com/Pudge1996/dsh-composer-stretch.git"
     },
@@ -32986,8 +33299,8 @@
     },
     {
       "name": "dsh-composer-ux",
-      "version": "0.19.2",
-      "modified": "2026-10-09T14:44:47.221Z",
+      "version": "0.20.0",
+      "modified": "2026-10-10T11:31:32.258Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -33182,8 +33495,8 @@
     },
     {
       "name": "dsh-connect-sensenova-token-plan",
-      "version": "0.5.1",
-      "modified": "2026-10-05T16:22:05.502Z",
+      "version": "0.5.2",
+      "modified": "2026-10-10T09:04:43.430Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -33236,8 +33549,8 @@
     },
     {
       "name": "dsh-connect-workbuddy",
-      "version": "4.2.0",
-      "modified": "2026-10-09T06:13:43.575Z",
+      "version": "4.3.0",
+      "modified": "2026-10-10T21:41:38.223Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -33360,16 +33673,6 @@
       "repository": "git+https://github.com/bigPaulSixSixSix/dsh-context-compaction-optimizer.git"
     },
     {
-      "name": "dsh-context-engineering",
-      "version": "0.1.0",
-      "modified": "2026-08-19T17:39:16.422Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": "git+https://github.com/satan9394/dsh-context-engineering.git"
-    },
-    {
       "name": "dsh-context-explorer",
       "version": "0.1.0",
       "modified": "2026-09-30T21:40:01.321Z",
@@ -33405,8 +33708,8 @@
     },
     {
       "name": "dsh-context-guardian",
-      "version": "0.1.0-alpha.9",
-      "modified": "2026-10-04T22:04:34.451Z",
+      "version": "0.1.0-alpha.10",
+      "modified": "2026-10-11T02:43:28.004Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -33751,20 +34054,6 @@
       "repository": "git+https://github.com/omdsh-dev/dsh-conversation-share.git"
     },
     {
-      "name": "dsh-conversation-shortcuts",
-      "version": "0.2.0",
-      "modified": "2026-08-28T03:43:00.533Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-sidebar",
-        "@deepseek-ai/dsh-client-ui-settings-general"
-      ],
-      "hostDeps": [],
-      "repository": "git+https://github.com/QChengW/dsh-conversation-shortcuts.git"
-    },
-    {
       "name": "dsh-convo-cost",
       "version": "1.0.1",
       "modified": "2026-08-23T12:06:47.769Z",
@@ -33929,8 +34218,8 @@
     },
     {
       "name": "dsh-cost-meter",
-      "version": "1.8.19",
-      "modified": "2026-10-10T05:22:18.725Z",
+      "version": "1.8.20",
+      "modified": "2026-10-10T09:46:38.891Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -34021,8 +34310,8 @@
     },
     {
       "name": "dsh-credits",
-      "version": "0.4.2",
-      "modified": "2026-10-10T07:10:48.292Z",
+      "version": "0.4.3",
+      "modified": "2026-10-10T09:59:40.041Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -34196,6 +34485,23 @@
         "@deepseek-ai/cordis"
       ],
       "repository": "git+https://github.com/SA1992X/dsh-ctrl-enter-submit.git"
+    },
+    {
+      "name": "dsh-ctxopt-compaction",
+      "version": "0.0.1",
+      "modified": "2026-10-03T22:25:04.866Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-compaction-basic",
+        "@deepseek-ai/dsh-compaction-tool-result-pruner",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-session",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/chunsi-w/dsh-ctxopt-compaction.git"
     },
     {
       "name": "dsh-cubox",
@@ -34695,28 +35001,6 @@
       "repository": "git+https://github.com/nabin-qq273274877/dsh-database-manager.git"
     },
     {
-      "name": "dsh-dbpulse",
-      "version": "0.1.3",
-      "modified": "2026-08-30T03:50:14.904Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-client-ui-primitives"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-client-ui-primitives",
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-home-paths",
-        "@deepseek-ai/dsh-llm",
-        "@deepseek-ai/dsh-tools",
-        "@deepseek-ai/dsh-typert-protocol"
-      ],
-      "repository": "git+https://github.com/lispking/dsh-dbpulse.git"
-    },
-    {
       "name": "dsh-dbq",
       "version": "0.5.0",
       "modified": "2026-10-08T09:30:17.236Z",
@@ -34839,8 +35123,8 @@
     },
     {
       "name": "dsh-deeppilot",
-      "version": "0.9.3",
-      "modified": "2026-10-05T12:14:54.429Z",
+      "version": "0.9.4",
+      "modified": "2026-10-10T16:34:15.752Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -34978,8 +35262,8 @@
     },
     {
       "name": "dsh-deepseek-style-theme",
-      "version": "2.1.90",
-      "modified": "2026-10-08T06:17:50.253Z",
+      "version": "2.1.91",
+      "modified": "2026-10-10T13:14:35.139Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -35337,6 +35621,16 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/Junkrat9527/dsh-desktop-automation.git"
+    },
+    {
+      "name": "dsh-desktop-base",
+      "version": "0.1.0",
+      "modified": "2026-08-15T14:57:17.141Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/ningbainb/deepseek-harness-desktop.git"
     },
     {
       "name": "dsh-desktop-companion",
@@ -35892,6 +36186,19 @@
       "repository": "git+https://github.com/Snowy117/dsh-direnv.git"
     },
     {
+      "name": "dsh-disable-unofficial-plugins",
+      "version": "1.3.0",
+      "modified": "2026-10-04T08:45:59.499Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/WhatCannotBeSaid/dsh-disable-unofficial-plugins.git"
+    },
+    {
       "name": "dsh-discord-bot",
       "version": "0.3.3",
       "modified": "2026-08-15T16:56:55.262Z",
@@ -36218,18 +36525,13 @@
       "repository": "git+https://github.com/mba1398/dsh-done.git"
     },
     {
-      "name": "dsh-done-notify",
-      "version": "0.1.0",
-      "modified": "2026-09-05T13:31:42.104Z",
+      "name": "dsh-done-badge",
+      "version": "0.4.6",
+      "modified": "2026-08-24T08:21:49.902Z",
       "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-modules",
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
       "repository": null
     },
     {
@@ -36262,16 +36564,6 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/satan9394/dsh-doubt-driven-dev.git"
-    },
-    {
-      "name": "dsh-douyin-oem-touliu-report",
-      "version": "1.0.0",
-      "modified": "2026-08-28T11:32:36.460Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": null
     },
     {
       "name": "dsh-dracula-theme",
@@ -36353,8 +36645,8 @@
     },
     {
       "name": "dsh-drawai",
-      "version": "0.2.4",
-      "modified": "2026-10-08T17:40:45.452Z",
+      "version": "0.2.6",
+      "modified": "2026-10-10T10:46:31.178Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -36391,8 +36683,8 @@
     },
     {
       "name": "dsh-dream-skin",
-      "version": "10.9.3",
-      "modified": "2026-10-09T11:54:34.720Z",
+      "version": "10.10.0",
+      "modified": "2026-10-10T15:13:47.965Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -36563,8 +36855,8 @@
     },
     {
       "name": "dsh-dupguard",
-      "version": "1.9.0",
-      "modified": "2026-10-09T05:50:09.952Z",
+      "version": "1.9.1",
+      "modified": "2026-10-10T10:46:40.557Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -36887,6 +37179,16 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/imroc/dsh-embedded-browser.git"
+    },
+    {
+      "name": "dsh-emil-skills",
+      "version": "1.0.0",
+      "modified": "2026-10-03T10:52:28.093Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/Inceptzws/dsh-emil-skills.git"
     },
     {
       "name": "dsh-emoji",
@@ -37374,8 +37676,8 @@
     },
     {
       "name": "dsh-expedition-memory",
-      "version": "0.2.6",
-      "modified": "2026-10-10T08:09:30.375Z",
+      "version": "0.3.0",
+      "modified": "2026-10-10T10:09:55.127Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -37475,8 +37777,8 @@
     },
     {
       "name": "dsh-expert-orchestrator",
-      "version": "2.9.2",
-      "modified": "2026-10-10T07:08:53.539Z",
+      "version": "2.9.6",
+      "modified": "2026-10-11T00:46:59.894Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -37947,6 +38249,16 @@
       "repository": "git+https://github.com/aqsk-BLG/dsh-memory.git"
     },
     {
+      "name": "dsh-file-opener",
+      "version": "1.4.0",
+      "modified": "2026-10-03T15:56:14.375Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/sailoumili/dsh-file-opener.git"
+    },
+    {
       "name": "dsh-file-path",
       "version": "0.1.0",
       "modified": "2026-08-15T16:43:16.497Z",
@@ -38285,6 +38597,25 @@
       "repository": "git+https://github.com/STARDUSTLC666/dsh-flakefinder.git"
     },
     {
+      "name": "dsh-flash-proxy",
+      "version": "0.1.6",
+      "modified": "2026-10-10T12:32:06.282Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-locale",
+        "dsh-flash"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/tcgbp/dsh-flash-proxy.git"
+    },
+    {
       "name": "dsh-fleet",
       "version": "0.1.0",
       "modified": "2026-08-20T01:15:44.526Z",
@@ -38438,8 +38769,8 @@
     },
     {
       "name": "dsh-font-enhancer",
-      "version": "1.4.13",
-      "modified": "2026-09-29T05:22:11.069Z",
+      "version": "1.5.0",
+      "modified": "2026-10-11T08:35:19.609Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -38521,8 +38852,8 @@
     },
     {
       "name": "dsh-free-search",
-      "version": "0.8.4",
-      "modified": "2026-10-10T07:49:58.255Z",
+      "version": "0.8.5",
+      "modified": "2026-10-10T12:44:55.846Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -39332,8 +39663,8 @@
     },
     {
       "name": "dsh-gitbash-shell",
-      "version": "0.34.2",
-      "modified": "2026-10-09T08:46:04.621Z",
+      "version": "0.34.3",
+      "modified": "2026-10-10T16:55:40.912Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -39420,24 +39751,6 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/AngelosZou/dsh-github-router.git"
-    },
-    {
-      "name": "dsh-github-sidebar",
-      "version": "0.1.0",
-      "modified": "2026-08-30T08:33:23.310Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "slots",
-        "layout"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-layout",
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
-      "repository": "git+https://github.com/Olympianz/dsh-github-sidebar.git"
     },
     {
       "name": "dsh-github-skills",
@@ -39848,8 +40161,8 @@
     },
     {
       "name": "dsh-graph",
-      "version": "0.20.0",
-      "modified": "2026-10-09T17:18:19.120Z",
+      "version": "0.20.2",
+      "modified": "2026-10-10T17:58:11.427Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -39882,8 +40195,8 @@
     },
     {
       "name": "dsh-graphlint",
-      "version": "0.4.0",
-      "modified": "2026-09-16T07:18:55.064Z",
+      "version": "0.6.0",
+      "modified": "2026-10-11T08:03:24.738Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -40072,6 +40385,25 @@
       "repository": "git+https://github.com/gezi-wen/dsh-guikit.git"
     },
     {
+      "name": "dsh-hackatime",
+      "version": "0.3.2",
+      "modified": "2026-10-11T08:33:59.709Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-settings-plugins"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/namandhakad712/dsh-hackatime.git"
+    },
+    {
       "name": "dsh-handoff",
       "version": "0.1.0",
       "modified": "2026-08-16T08:46:52.961Z",
@@ -40082,19 +40414,6 @@
         "@deepseek-ai/cordis",
         "@deepseek-ai/dsh-llm",
         "@deepseek-ai/dsh-tools"
-      ],
-      "repository": null
-    },
-    {
-      "name": "dsh-handwritten-notes",
-      "version": "0.1.0",
-      "modified": "2026-09-06T07:23:52.868Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-skill"
       ],
       "repository": null
     },
@@ -40131,8 +40450,8 @@
     },
     {
       "name": "dsh-harden",
-      "version": "0.0.1-preview.7",
-      "modified": "2026-10-09T12:58:20.664Z",
+      "version": "0.0.1-preview.8",
+      "modified": "2026-10-10T13:22:05.533Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -40208,8 +40527,8 @@
     },
     {
       "name": "dsh-harness-one",
-      "version": "0.11.4",
-      "modified": "2026-09-29T04:14:27.989Z",
+      "version": "0.12.0",
+      "modified": "2026-10-10T08:55:55.621Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -40360,8 +40679,8 @@
     },
     {
       "name": "dsh-herta",
-      "version": "0.1.9",
-      "modified": "2026-10-05T12:28:15.295Z",
+      "version": "0.1.10",
+      "modified": "2026-10-10T10:11:08.868Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -40415,6 +40734,18 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/Ryu6Zero/dsh-hindsight.git"
+    },
+    {
+      "name": "dsh-hindsight-gui",
+      "version": "1.2.1",
+      "modified": "2026-10-11T01:39:30.498Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-slots"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/KouzakiUmi/dsh-hindsight-gui.git"
     },
     {
       "name": "dsh-hindsight-workspace-switch",
@@ -40677,6 +41008,18 @@
       "repository": "git+https://github.com/lussey820/dsh-http-tools.git"
     },
     {
+      "name": "dsh-huashu-pixel",
+      "version": "1.2.1",
+      "modified": "2026-10-04T03:10:42.166Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-theme"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://gitcode.com/weixin_42127089/dsh-huashu-pixel.git"
+    },
+    {
       "name": "dsh-hub-oauth-gateway",
       "version": "1.13.4",
       "modified": "2026-09-15T15:35:06.893Z",
@@ -40878,8 +41221,8 @@
     },
     {
       "name": "dsh-ide-git",
-      "version": "0.16.0",
-      "modified": "2026-10-10T08:23:49.819Z",
+      "version": "0.16.3",
+      "modified": "2026-10-10T10:20:23.218Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -40962,8 +41305,8 @@
     },
     {
       "name": "dsh-im-companion",
-      "version": "0.2.7",
-      "modified": "2026-10-10T01:02:16.243Z",
+      "version": "0.2.8",
+      "modified": "2026-10-11T08:33:19.847Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -41047,8 +41390,8 @@
     },
     {
       "name": "dsh-image-gen",
-      "version": "0.8.6",
-      "modified": "2026-10-08T05:02:03.058Z",
+      "version": "0.8.7",
+      "modified": "2026-10-11T07:48:57.613Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -41918,8 +42261,8 @@
     },
     {
       "name": "dsh-jot",
-      "version": "0.2.8",
-      "modified": "2026-10-07T13:09:27.036Z",
+      "version": "0.2.10",
+      "modified": "2026-10-11T02:27:14.972Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -42327,8 +42670,8 @@
     },
     {
       "name": "dsh-knit",
-      "version": "0.21.0",
-      "modified": "2026-10-09T02:37:06.604Z",
+      "version": "0.22.0",
+      "modified": "2026-10-11T01:05:48.257Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -42352,8 +42695,8 @@
     },
     {
       "name": "dsh-knowledge",
-      "version": "0.5.1",
-      "modified": "2026-10-05T14:18:15.462Z",
+      "version": "0.5.2",
+      "modified": "2026-10-10T13:32:09.843Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -42423,18 +42766,6 @@
       "repository": "git+https://github.com/MicroHEROX/dsh-koboldcpp-hands.git"
     },
     {
-      "name": "dsh-kuajing",
-      "version": "0.1.0",
-      "modified": "2026-08-22T03:25:15.815Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/dsh-mcp-client"
-      ],
-      "repository": "git+https://github.com/mario03690/dsh-kuajing.git"
-    },
-    {
       "name": "dsh-kubectl-guard",
       "version": "0.2.1",
       "modified": "2026-09-13T22:24:56.178Z",
@@ -42446,19 +42777,6 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/gengwg/dsh-kubectl-guard.git"
-    },
-    {
-      "name": "dsh-kubernetes",
-      "version": "0.1.0",
-      "modified": "2026-08-16T02:07:10.117Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/dsh-tools",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/xxiaoxiong/dsh-kubernetes.git"
     },
     {
       "name": "dsh-laa",
@@ -42679,19 +42997,6 @@
       "repository": "git+https://github.com/liuup/dsh-latex-tools.git"
     },
     {
-      "name": "dsh-launchpad",
-      "version": "1.1.0",
-      "modified": "2026-08-22T11:34:16.837Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-host-webserver"
-      ],
-      "repository": "git+https://github.com/Polar-Zhang/dsh-launchpad.git"
-    },
-    {
       "name": "dsh-laya",
       "version": "0.1.4",
       "modified": "2026-09-22T10:34:30.572Z",
@@ -42756,17 +43061,19 @@
     },
     {
       "name": "dsh-lcx-codex",
-      "version": "0.4.3",
-      "modified": "2026-09-10T14:42:56.442Z",
+      "version": "0.5.0",
+      "modified": "2026-10-10T15:44:08.083Z",
       "bundle": true,
       "client": true,
       "clientInject": [
         "@deepseek-ai/dsh-client-ui-chat",
         "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-settings-plugins"
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-settings"
       ],
       "hostDeps": [
         "@deepseek-ai/cordis",
+        "@deepseek-ai/cordis-plugin-loader",
         "@deepseek-ai/dsh-agent",
         "@deepseek-ai/dsh-attachment",
         "@deepseek-ai/dsh-client-locale",
@@ -42774,13 +43081,15 @@
         "@deepseek-ai/dsh-client-store",
         "@deepseek-ai/dsh-client-ui-chat",
         "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-settings-plugins",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-settings",
         "@deepseek-ai/dsh-compaction",
         "@deepseek-ai/dsh-credentials",
         "@deepseek-ai/dsh-fs",
         "@deepseek-ai/dsh-llm",
         "@deepseek-ai/dsh-session",
         "@deepseek-ai/dsh-session-projection",
+        "@deepseek-ai/dsh-session-query",
         "@deepseek-ai/dsh-settings",
         "@deepseek-ai/dsh-token-meter",
         "@deepseek-ai/dsh-tool-web",
@@ -43249,6 +43558,20 @@
       "repository": "git+https://github.com/gone1724/dsh-listener.git"
     },
     {
+      "name": "dsh-lit-fetch",
+      "version": "1.0.3",
+      "modified": "2026-10-11T03:25:37.211Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh",
+        "@deepseek-ai/dsh-tools"
+      ],
+      "repository": "git+https://github.com/loyalchiiina/dsh-lit-fetch.git"
+    },
+    {
       "name": "dsh-lit-search",
       "version": "0.2.1",
       "modified": "2026-09-14T11:12:00.237Z",
@@ -43399,8 +43722,8 @@
     },
     {
       "name": "dsh-live-voice",
-      "version": "0.4.1",
-      "modified": "2026-10-09T22:11:16.736Z",
+      "version": "0.5.1",
+      "modified": "2026-10-11T07:58:47.160Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -43411,7 +43734,7 @@
         "@deepseek-ai/dsh-client-locale"
       ],
       "hostDeps": [],
-      "repository": "git+https://github.com/victorwads/dsh-live-voice.git"
+      "repository": "git+https://github.com/wads-dev/dsh-live-voice.git"
     },
     {
       "name": "dsh-live-wallpaper",
@@ -43738,15 +44061,14 @@
     },
     {
       "name": "dsh-llm-gateway-compat",
-      "version": "0.4.0",
-      "modified": "2026-09-10T08:11:49.115Z",
+      "version": "0.5.0",
+      "modified": "2026-10-11T03:55:09.208Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
       "hostDeps": [
         "@deepseek-ai/cordis",
         "@deepseek-ai/dsh-llm",
-        "@deepseek-ai/dsh-settings",
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/snowshadow/dsh-llm-gateway-compat.git"
@@ -43793,6 +44115,16 @@
         "@deepseek-ai/dsh-llm-pi-ai"
       ],
       "repository": "git+https://github.com/memorax-ai/dsh-llm-memorax.git"
+    },
+    {
+      "name": "dsh-llm-opencode-go",
+      "version": "0.2.2",
+      "modified": "2026-10-06T02:19:16.925Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/a2580vb/dsh-llm-opencode-go.git"
     },
     {
       "name": "dsh-llm-rate-limit",
@@ -44034,6 +44366,18 @@
       "repository": "git+https://github.com/donoteatme/dsh-local-link.git"
     },
     {
+      "name": "dsh-local-long-horizon",
+      "version": "1.0.3",
+      "modified": "2026-10-03T09:48:50.240Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-sidebar-right"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/janpauldahlke/dsh-local-long-horizon.git"
+    },
+    {
       "name": "dsh-local-loop-fuse",
       "version": "0.8.3",
       "modified": "2026-10-07T14:47:17.072Z",
@@ -44044,6 +44388,18 @@
         "@deepseek-ai/dsh-llm"
       ],
       "repository": "git+https://github.com/zimuhuan-code/dsh-local-loop-fuse.git"
+    },
+    {
+      "name": "dsh-local-memento",
+      "version": "1.0.2",
+      "modified": "2026-10-03T13:22:31.897Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-sidebar-right"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/janpauldahlke/dsh-memento.git"
     },
     {
       "name": "dsh-local-memory",
@@ -44148,8 +44504,8 @@
     },
     {
       "name": "dsh-local-usage",
-      "version": "0.6.0",
-      "modified": "2026-09-30T04:06:26.119Z",
+      "version": "0.6.1",
+      "modified": "2026-10-11T06:34:46.917Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -44174,6 +44530,18 @@
         "@deepseek-ai/cordis"
       ],
       "repository": "git+https://github.com/GuidoMaxier/dsh-locale-es.git"
+    },
+    {
+      "name": "dsh-locale-ko",
+      "version": "0.1.2",
+      "modified": "2026-10-10T10:20:48.397Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/juliankang4/dsh-locale-ko.git"
     },
     {
       "name": "dsh-locale-ru",
@@ -44402,8 +44770,8 @@
     },
     {
       "name": "dsh-lowtide",
-      "version": "0.2.5",
-      "modified": "2026-09-16T17:07:19.076Z",
+      "version": "0.2.7",
+      "modified": "2026-10-11T06:36:39.948Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -44454,8 +44822,8 @@
     },
     {
       "name": "dsh-m",
-      "version": "0.9.67",
-      "modified": "2026-10-09T17:46:07.555Z",
+      "version": "0.9.78",
+      "modified": "2026-10-11T06:05:46.269Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -44888,8 +45256,8 @@
     },
     {
       "name": "dsh-mattpocock-skills-deck",
-      "version": "1.7.51",
-      "modified": "2026-10-09T02:05:55.668Z",
+      "version": "1.8.0-rc.7",
+      "modified": "2026-10-11T05:32:51.256Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -45153,8 +45521,8 @@
     },
     {
       "name": "dsh-mcp-manager-ui",
-      "version": "1.5.0",
-      "modified": "2026-10-08T03:26:18.645Z",
+      "version": "1.5.5",
+      "modified": "2026-10-11T07:48:48.495Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -45417,6 +45785,26 @@
       ],
       "hostDeps": [],
       "repository": "git+https://github.com/yangzqq/dsh-mdvault.git"
+    },
+    {
+      "name": "dsh-media",
+      "version": "0.1.3",
+      "modified": "2026-10-04T08:37:34.077Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-credentials",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/CrisLIUning/dsh-media.git"
     },
     {
       "name": "dsh-media-gen",
@@ -46150,8 +46538,8 @@
     },
     {
       "name": "dsh-mimo-connect",
-      "version": "0.3.0",
-      "modified": "2026-09-30T14:52:08.967Z",
+      "version": "0.3.1",
+      "modified": "2026-10-10T15:59:24.834Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -47023,8 +47411,8 @@
     },
     {
       "name": "dsh-model-fit",
-      "version": "0.2.2",
-      "modified": "2026-09-29T09:29:58.653Z",
+      "version": "0.2.3",
+      "modified": "2026-10-10T09:34:41.836Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -47269,18 +47657,6 @@
       ],
       "hostDeps": [],
       "repository": "git+https://github.com/objectyan/dsh-model-picker-plus.git"
-    },
-    {
-      "name": "dsh-model-pin",
-      "version": "0.1.0",
-      "modified": "2026-08-31T02:01:43.653Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/d3vmeh/dsh-model-pin.git"
     },
     {
       "name": "dsh-model-preset",
@@ -47678,8 +48054,8 @@
     },
     {
       "name": "dsh-motor-ai-l0",
-      "version": "0.2.10",
-      "modified": "2026-10-09T17:47:37.383Z",
+      "version": "0.3.1",
+      "modified": "2026-10-10T13:30:54.936Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -47687,6 +48063,18 @@
         "@deepseek-ai/dsh"
       ],
       "repository": "git+https://github.com/wangxuewangxue98/dsh-motor-ai-l0.git"
+    },
+    {
+      "name": "dsh-mouse-mode",
+      "version": "0.2.0",
+      "modified": "2026-10-03T15:24:39.825Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-slots"
+      ],
+      "hostDeps": [],
+      "repository": null
     },
     {
       "name": "dsh-movein",
@@ -47859,6 +48247,24 @@
       "repository": "git+https://github.com/nabin-qq273274877/dsh-multi-user.git"
     },
     {
+      "name": "dsh-multi2api",
+      "version": "0.1.8",
+      "modified": "2026-10-04T08:42:21.737Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "slots",
+        "locale"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/dsh-home-paths",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-llm-pi-ai",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/moze30/dsh-multi2api.git"
+    },
+    {
       "name": "dsh-multimodal-bridge",
       "version": "0.1.2",
       "modified": "2026-08-16T14:51:41.921Z",
@@ -47911,6 +48317,22 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/Blackoutta/dsh-multiroot-workspace.git"
+    },
+    {
+      "name": "dsh-multitask",
+      "version": "1.2.5",
+      "modified": "2026-10-11T05:09:40.775Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-api-remotes"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/dsh"
+      ],
+      "repository": "git+https://github.com/Senguk520/dsh-multitask.git"
     },
     {
       "name": "dsh-musage-card",
@@ -48749,18 +49171,6 @@
       "repository": "git+https://github.com/better-er/dsh-notify-ding.git"
     },
     {
-      "name": "dsh-notify-hub",
-      "version": "0.1.0",
-      "modified": "2026-08-19T03:16:59.105Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/dsh-typert-protocol"
-      ],
-      "repository": "git+https://github.com/wumu-366/dsh-notify.git"
-    },
-    {
       "name": "dsh-notify-me",
       "version": "1.5.3",
       "modified": "2026-10-04T07:43:59.157Z",
@@ -48926,8 +49336,8 @@
     },
     {
       "name": "dsh-novel-writer",
-      "version": "6.5.0",
-      "modified": "2026-10-10T05:33:19.776Z",
+      "version": "6.5.5",
+      "modified": "2026-10-11T02:36:15.990Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -49037,6 +49447,19 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/YMRwithNoworry/dsh-nushell-only.git"
+    },
+    {
+      "name": "dsh-nutstore-backup",
+      "version": "0.1.1",
+      "modified": "2026-10-03T13:04:28.516Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings-general"
+      ],
+      "hostDeps": [],
+      "repository": null
     },
     {
       "name": "dsh-o11y-plugin",
@@ -49371,6 +49794,16 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/maxmilian/dsh-odoo.git"
+    },
+    {
+      "name": "dsh-odoo-lint",
+      "version": "0.1.0-alpha.9",
+      "modified": "2026-10-10T10:09:15.125Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/bosd/odoo-lint.git"
     },
     {
       "name": "dsh-off-peak-hours",
@@ -49925,8 +50358,8 @@
     },
     {
       "name": "dsh-openai-live",
-      "version": "0.6.8",
-      "modified": "2026-10-10T07:40:38.354Z",
+      "version": "0.6.9",
+      "modified": "2026-10-10T20:11:25.451Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -50773,8 +51206,8 @@
     },
     {
       "name": "dsh-pathlink",
-      "version": "0.2.2",
-      "modified": "2026-09-30T14:44:58.946Z",
+      "version": "0.2.3",
+      "modified": "2026-10-10T11:53:01.896Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -51076,8 +51509,8 @@
     },
     {
       "name": "dsh-pentester",
-      "version": "6.2.1",
-      "modified": "2026-10-10T05:17:00.119Z",
+      "version": "6.3.0",
+      "modified": "2026-10-10T12:25:41.055Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -51447,6 +51880,20 @@
       "repository": "git+https://github.com/TGYD-helige/dsh-pi.git"
     },
     {
+      "name": "dsh-pii-anonymizer",
+      "version": "0.1.0",
+      "modified": "2026-10-04T07:15:49.165Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/JWE24-code/dsh-pii-anonymizer.git"
+    },
+    {
       "name": "dsh-pii-gate",
       "version": "0.1.0",
       "modified": "2026-09-19T14:15:22.379Z",
@@ -51484,21 +51931,6 @@
       ],
       "hostDeps": [],
       "repository": "git+https://github.com/Yu-tao-Li/dsh-pin.git"
-    },
-    {
-      "name": "dsh-pinned-sessions",
-      "version": "0.2.0",
-      "modified": "2026-10-04T10:43:04.149Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-store",
-        "@deepseek-ai/dsh-client-ui-renderer"
-      ],
-      "hostDeps": [],
-      "repository": "git+https://github.com/TianYa-DAO/dsh-pinned-sessions.git"
     },
     {
       "name": "dsh-pixel-skin",
@@ -51713,8 +52145,8 @@
     },
     {
       "name": "dsh-plugin",
-      "version": "1.6.4",
-      "modified": "2026-10-10T03:55:02.681Z",
+      "version": "1.6.5",
+      "modified": "2026-10-10T15:34:10.306Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -51776,8 +52208,8 @@
     },
     {
       "name": "dsh-plugin-admin",
-      "version": "1.27.9",
-      "modified": "2026-10-05T14:40:17.147Z",
+      "version": "1.27.15",
+      "modified": "2026-10-11T01:28:07.268Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -52194,8 +52626,8 @@
     },
     {
       "name": "dsh-plugin-bridge",
-      "version": "0.4.1",
-      "modified": "2026-10-04T14:46:14.170Z",
+      "version": "0.4.3",
+      "modified": "2026-10-11T02:25:57.232Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -52252,8 +52684,8 @@
     },
     {
       "name": "dsh-plugin-capabilities",
-      "version": "0.3.13",
-      "modified": "2026-10-01T01:04:51.991Z",
+      "version": "0.3.14",
+      "modified": "2026-10-11T07:44:48.055Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -52268,8 +52700,8 @@
     },
     {
       "name": "dsh-plugin-cards",
-      "version": "0.9.9",
-      "modified": "2026-10-08T04:48:00.644Z",
+      "version": "0.9.19",
+      "modified": "2026-10-11T02:19:01.525Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -52770,18 +53202,6 @@
       "repository": "git+https://github.com/Pasumao/dsh-plugin-dev-kb.git"
     },
     {
-      "name": "dsh-plugin-dictate",
-      "version": "0.1.0",
-      "modified": "2026-09-05T18:09:53.383Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/navneetset/dsh-dictate.git"
-    },
-    {
       "name": "dsh-plugin-diepi",
       "version": "0.1.0-alpha.1",
       "modified": "2026-08-20T12:40:06.846Z",
@@ -53238,8 +53658,8 @@
     },
     {
       "name": "dsh-plugin-install",
-      "version": "0.4.1",
-      "modified": "2026-10-10T08:30:51.090Z",
+      "version": "0.4.5",
+      "modified": "2026-10-11T09:01:46.257Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -53250,6 +53670,26 @@
         "@deepseek-ai/cordis"
       ],
       "repository": "git+https://github.com/qinyre/dsh-plugin-install.git"
+    },
+    {
+      "name": "dsh-plugin-jev-compaction",
+      "version": "0.1.0",
+      "modified": "2026-10-03T15:06:28.657Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/YYTbit/dsh-plugin-jev-compaction.git"
+    },
+    {
+      "name": "dsh-plugin-jev-router",
+      "version": "0.1.0",
+      "modified": "2026-10-03T15:04:16.828Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/YYTbit/dsh-plugin-jev-router.git"
     },
     {
       "name": "dsh-plugin-job-panel",
@@ -54438,6 +54878,16 @@
       "repository": "git+https://github.com/L-ingqin12/dsh-redaction.git"
     },
     {
+      "name": "dsh-plugin-refyard",
+      "version": "0.1.1",
+      "modified": "2026-10-03T10:19:54.843Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/HuakunShen/refyard.git"
+    },
+    {
       "name": "dsh-plugin-reload",
       "version": "0.2.1",
       "modified": "2026-08-16T04:20:32.280Z",
@@ -54464,8 +54914,8 @@
     },
     {
       "name": "dsh-plugin-remote-access",
-      "version": "1.2.0",
-      "modified": "2026-10-02T15:16:12.054Z",
+      "version": "1.3.0",
+      "modified": "2026-10-10T14:18:49.099Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -54536,6 +54986,18 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/vibe-any/dsh-plugin-save-token.git"
+    },
+    {
+      "name": "dsh-plugin-security",
+      "version": "0.5.0",
+      "modified": "2026-10-11T08:59:54.596Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-typert-protocol"
+      ],
+      "repository": "git+https://github.com/dushaobindoudou/dsh-plugin-security.git"
     },
     {
       "name": "dsh-plugin-security-review",
@@ -54699,18 +55161,6 @@
       "repository": "git+https://github.com/SodaMem/dsh-plugin-sodamem.git"
     },
     {
-      "name": "dsh-plugin-sops-vault",
-      "version": "0.3.2",
-      "modified": "2026-10-08T03:16:15.493Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
-      ],
-      "repository": null
-    },
-    {
       "name": "dsh-plugin-spacelens",
       "version": "0.1.3",
       "modified": "2026-10-04T06:26:50.537Z",
@@ -54775,6 +55225,16 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/Kaiji-Z/dsh-plugin-stardeck.git"
+    },
+    {
+      "name": "dsh-plugin-stats",
+      "version": "0.1.1",
+      "modified": "2026-10-03T13:44:17.876Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/HuakunShen/dsh-plugin-stats.git"
     },
     {
       "name": "dsh-plugin-studio",
@@ -55212,20 +55672,6 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/truelove-dreamer/dsh-plugin-vetting.git"
-    },
-    {
-      "name": "dsh-plugin-vision",
-      "version": "0.1.0",
-      "modified": "2026-08-20T16:13:56.211Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-tools",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/huyang218/dsh-plugins.git"
     },
     {
       "name": "dsh-plugin-vision-toolkit",
@@ -56271,8 +56717,8 @@
     },
     {
       "name": "dsh-project-manager",
-      "version": "0.4.0",
-      "modified": "2026-09-30T01:43:53.441Z",
+      "version": "0.11.0",
+      "modified": "2026-10-11T01:28:33.576Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -56399,8 +56845,8 @@
     },
     {
       "name": "dsh-prompt",
-      "version": "0.4.12",
-      "modified": "2026-10-10T06:41:40.107Z",
+      "version": "0.4.13",
+      "modified": "2026-10-11T05:35:33.357Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -56447,6 +56893,18 @@
         "@deepseek-ai/dsh-settings"
       ],
       "repository": "git+https://github.com/DreamsTOF/dsh-prompt-customizer.git"
+    },
+    {
+      "name": "dsh-prompt-desk",
+      "version": "0.4.0",
+      "modified": "2026-10-03T09:29:33.521Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/Hwayn-pixel/dsh-prompt-desk.git"
     },
     {
       "name": "dsh-prompt-easymanager",
@@ -56647,28 +57105,9 @@
       "repository": "git+https://github.com/sojo-negai/dsh-prompt-refine.git"
     },
     {
-      "name": "dsh-prompt-refiner",
-      "version": "0.1.0",
-      "modified": "2026-09-05T17:35:07.537Z",
-      "bundle": false,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
-      "repository": "git+https://github.com/glh5835/dsh-prompt-refiner.git"
-    },
-    {
       "name": "dsh-prompt-setting",
-      "version": "0.2.0",
-      "modified": "2026-10-09T15:44:51.457Z",
+      "version": "0.2.1",
+      "modified": "2026-10-10T17:45:32.096Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -56865,21 +57304,6 @@
       "repository": "git+https://github.com/lizhouai/dsh-provider-usage.git"
     },
     {
-      "name": "dsh-proxy-routes",
-      "version": "0.5.0",
-      "modified": "2026-10-06T12:45:33.696Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "slots",
-        "locale"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/liqiaohuia/dsh-proxy-routes.git"
-    },
-    {
       "name": "dsh-proxy-routing",
       "version": "0.4.2",
       "modified": "2026-08-30T07:44:43.368Z",
@@ -56908,41 +57332,9 @@
       "repository": "git+https://github.com/chenjiyan2001/dsh-proxy-routing.git"
     },
     {
-      "name": "dsh-proxy-switcher",
-      "version": "1.0.0",
-      "modified": "2026-10-02T15:13:13.867Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-http-proxy"
-      ],
-      "repository": "git+https://github.com/JinSuperOfficial/dsh-proxy-switcher.git"
-    },
-    {
-      "name": "dsh-proxy-toggle",
-      "version": "0.1.3",
-      "modified": "2026-09-06T06:31:31.648Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-ui-settings",
-        "@deepseek-ai/dsh-client-ui-settings-plugins"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-atomic-write",
-        "@deepseek-ai/dsh-home-paths",
-        "@deepseek-ai/dsh-settings",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/APPLe-DF/dsh-proxy-toggle.git"
-    },
-    {
       "name": "dsh-ptc-cordis-preset",
-      "version": "0.17.1",
-      "modified": "2026-10-05T11:38:19.544Z",
+      "version": "0.17.2",
+      "modified": "2026-10-10T16:53:26.135Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -57217,8 +57609,8 @@
     },
     {
       "name": "dsh-qqbot-bridge",
-      "version": "0.1.1",
-      "modified": "2026-09-18T18:19:57.039Z",
+      "version": "0.1.2",
+      "modified": "2026-10-10T12:59:30.925Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -57679,20 +58071,6 @@
       "repository": "git+https://github.com/Alfred-Lau/dsh-plugins.git"
     },
     {
-      "name": "dsh-re-workbench",
-      "version": "0.1.0",
-      "modified": "2026-09-30T09:18:46.615Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-tools",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/wxlei2004/dsh-plugins.git"
-    },
-    {
       "name": "dsh-reach",
       "version": "0.1.18",
       "modified": "2026-10-10T01:33:36.719Z",
@@ -58145,6 +58523,16 @@
       "repository": "git+https://github.com/dushaobindoudou/dsh-refine.git"
     },
     {
+      "name": "dsh-refresh",
+      "version": "1.0.2",
+      "modified": "2026-10-03T18:41:08.909Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/spidu-lee/dsh-refresh.git"
+    },
+    {
       "name": "dsh-refresh-button",
       "version": "1.0.0",
       "modified": "2026-09-26T05:35:31.104Z",
@@ -58249,6 +58637,21 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/wentao75/dsh-remote-auth.git"
+    },
+    {
+      "name": "dsh-remote-bridge",
+      "version": "2.2.2",
+      "modified": "2026-10-11T05:40:40.132Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/westanke/dsh-remote-bridge.git"
     },
     {
       "name": "dsh-remote-cpolar",
@@ -58386,8 +58789,8 @@
     },
     {
       "name": "dsh-remote-plugin",
-      "version": "0.7.3",
-      "modified": "2026-10-10T05:29:41.773Z",
+      "version": "0.7.4",
+      "modified": "2026-10-11T04:38:15.671Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -58726,6 +59129,22 @@
       "repository": "git+https://github.com/Leitarkkk/dsh-research-nudge.git"
     },
     {
+      "name": "dsh-research-panel",
+      "version": "0.1.1",
+      "modified": "2026-09-30T07:50:46.408Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-connection"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "repository": null
+    },
+    {
       "name": "dsh-research-report",
       "version": "0.3.22",
       "modified": "2026-10-10T01:04:43.176Z",
@@ -58899,16 +59318,6 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/My-DSH-plugins/dsh-revision-atlas.git"
-    },
-    {
-      "name": "dsh-rgb-input-glow",
-      "version": "1.0.0",
-      "modified": "2026-09-05T13:09:14.110Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": null
     },
     {
       "name": "dsh-rhine-theme",
@@ -59087,8 +59496,8 @@
     },
     {
       "name": "dsh-router-codebuddy",
-      "version": "0.3.19",
-      "modified": "2026-10-03T14:16:15.003Z",
+      "version": "0.3.20",
+      "modified": "2026-10-10T12:42:15.570Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -59138,18 +59547,6 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/shangjian2023/dsh-rss-daily.git"
-    },
-    {
-      "name": "dsh-rss-dock",
-      "version": "0.1.0",
-      "modified": "2026-10-03T01:58:32.028Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-ui-sidebar-right"
-      ],
-      "hostDeps": [],
-      "repository": "git+https://github.com/lemonhall/dsh-rss-dock.git"
     },
     {
       "name": "dsh-rss-monitor",
@@ -59487,6 +59884,16 @@
       "repository": "git+https://github.com/hanbernate/dsh-save-button.git"
     },
     {
+      "name": "dsh-save-chat",
+      "version": "0.1.2",
+      "modified": "2026-10-03T15:51:18.288Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/xypang33-sketch/dsh-save-chat.git"
+    },
+    {
       "name": "dsh-save-session",
       "version": "0.1.4",
       "modified": "2026-09-11T06:29:11.254Z",
@@ -59661,8 +60068,8 @@
     },
     {
       "name": "dsh-scope",
-      "version": "0.2.0",
-      "modified": "2026-10-10T06:05:17.240Z",
+      "version": "0.3.0",
+      "modified": "2026-10-10T09:54:41.515Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -59795,6 +60202,20 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/lkh081231/screenshot-feedback-hook-mcp.git"
+    },
+    {
+      "name": "dsh-scroll-piano",
+      "version": "0.3.5",
+      "modified": "2026-10-09T05:11:16.166Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-slots"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis"
+      ],
+      "repository": null
     },
     {
       "name": "dsh-sdd-generator",
@@ -60263,8 +60684,8 @@
     },
     {
       "name": "dsh-session-billing",
-      "version": "1.0.1",
-      "modified": "2026-09-24T06:31:35.018Z",
+      "version": "1.1.0",
+      "modified": "2026-10-10T12:24:58.726Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -60651,6 +61072,23 @@
       "repository": "git+https://github.com/ewoowe/session-messages-plugin.git"
     },
     {
+      "name": "dsh-session-mgr",
+      "version": "0.6.8",
+      "modified": "2026-10-04T06:11:50.872Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis"
+      ],
+      "repository": "git+https://github.com/mienfong/dsh-session-mgr.git"
+    },
+    {
       "name": "dsh-session-move",
       "version": "0.1.1",
       "modified": "2026-08-16T09:12:30.479Z",
@@ -60762,8 +61200,8 @@
     },
     {
       "name": "dsh-session-radar",
-      "version": "1.3.0",
-      "modified": "2026-10-08T06:18:28.651Z",
+      "version": "1.4.0",
+      "modified": "2026-10-11T04:29:54.772Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -60913,6 +61351,21 @@
       ],
       "hostDeps": [],
       "repository": "git+https://github.com/quicksandznzn/dsh-session-share.git"
+    },
+    {
+      "name": "dsh-session-shift",
+      "version": "0.2.2",
+      "modified": "2026-10-03T17:31:43.626Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-runtime"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-tools"
+      ],
+      "repository": "git+https://github.com/easerlee/dsh-session-shift.git"
     },
     {
       "name": "dsh-session-sight",
@@ -61487,18 +61940,6 @@
       "repository": "git+https://github.com/green-dalii/dsh-shift-router.git"
     },
     {
-      "name": "dsh-shodh-memory",
-      "version": "0.2.2",
-      "modified": "2026-09-23T09:29:01.710Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
-      ],
-      "repository": null
-    },
-    {
       "name": "dsh-shop-assistant",
       "version": "0.1.0",
       "modified": "2026-08-15T02:03:54.350Z",
@@ -62032,8 +62473,8 @@
     },
     {
       "name": "dsh-skill-center",
-      "version": "0.3.0",
-      "modified": "2026-10-10T08:49:08.638Z",
+      "version": "0.4.1",
+      "modified": "2026-10-10T09:14:30.493Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -62286,8 +62727,8 @@
     },
     {
       "name": "dsh-skill-superpowers",
-      "version": "1.0.0",
-      "modified": "2026-09-30T10:41:50.295Z",
+      "version": "1.1.0",
+      "modified": "2026-10-10T17:41:18.768Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -62298,8 +62739,8 @@
     },
     {
       "name": "dsh-skill-trace",
-      "version": "1.2.0",
-      "modified": "2026-10-07T02:50:49.136Z",
+      "version": "1.3.0",
+      "modified": "2026-10-11T01:45:31.152Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -62915,8 +63356,8 @@
     },
     {
       "name": "dsh-solution-explorer",
-      "version": "1.0.1",
-      "modified": "2026-10-10T03:57:32.913Z",
+      "version": "1.0.2",
+      "modified": "2026-10-10T16:13:43.570Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -62953,8 +63394,8 @@
     },
     {
       "name": "dsh-soul",
-      "version": "0.7.0",
-      "modified": "2026-10-09T03:25:03.309Z",
+      "version": "0.7.1",
+      "modified": "2026-10-10T09:54:07.124Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -62999,8 +63440,8 @@
     },
     {
       "name": "dsh-spark-scope",
-      "version": "0.0.2",
-      "modified": "2026-10-09T10:49:08.596Z",
+      "version": "0.0.3",
+      "modified": "2026-10-10T10:20:03.926Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -63817,8 +64258,8 @@
     },
     {
       "name": "dsh-subusage",
-      "version": "0.10.8",
-      "modified": "2026-10-09T21:17:50.734Z",
+      "version": "0.11.0",
+      "modified": "2026-10-11T08:58:45.078Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -63873,24 +64314,35 @@
     },
     {
       "name": "dsh-super-novel",
-      "version": "0.0.2",
-      "modified": "2026-09-21T10:24:15.084Z",
+      "version": "0.3.1",
+      "modified": "2026-10-11T06:25:38.648Z",
       "bundle": true,
       "client": true,
       "clientInject": [
         "@deepseek-ai/dsh-api-remotes",
         "@deepseek-ai/dsh-client-locale",
         "@deepseek-ai/dsh-client-ui-renderer",
-        "@deepseek-ai/dsh-client-ui-sidebar-right"
+        "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-client-ui-primitives"
       ],
       "hostDeps": [
         "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-agent-default-model",
+        "@deepseek-ai/dsh-agent-preset-registry",
         "@deepseek-ai/dsh-agent-presets",
         "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-api-session-controller",
         "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-primitives",
         "@deepseek-ai/dsh-client-ui-renderer",
         "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-fs",
         "@deepseek-ai/dsh-home-paths",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-sandbox-policy",
+        "@deepseek-ai/dsh-session",
+        "@deepseek-ai/dsh-session-persistence",
+        "@deepseek-ai/dsh-session-projection",
         "@deepseek-ai/dsh-system-prompt",
         "@deepseek-ai/dsh-typert-protocol"
       ],
@@ -63950,16 +64402,6 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/codeAnqiang-ma/dsh-superpowers.git"
-    },
-    {
-      "name": "dsh-superpowers-essentials",
-      "version": "0.1.0",
-      "modified": "2026-08-19T17:28:06.027Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": "git+https://github.com/satan9394/dsh-superpowers-essentials.git"
     },
     {
       "name": "dsh-superpowers-zh",
@@ -64202,8 +64644,8 @@
     },
     {
       "name": "dsh-task-dispatch-table",
-      "version": "0.1.2",
-      "modified": "2026-10-09T07:58:22.692Z",
+      "version": "0.1.4",
+      "modified": "2026-10-10T09:45:50.313Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -64256,14 +64698,14 @@
     },
     {
       "name": "dsh-task-feedback",
-      "version": "0.1.0",
-      "modified": "2026-09-01T11:58:20.542Z",
+      "version": "0.2.1",
+      "modified": "2026-10-11T01:52:26.305Z",
       "bundle": true,
       "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis"
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-primitives"
       ],
+      "hostDeps": [],
       "repository": "git+https://github.com/Pudge1996/dsh-task-feedback.git"
     },
     {
@@ -64872,6 +65314,18 @@
       "repository": "git+https://github.com/renjie2026/dsh-theme-gallery.git"
     },
     {
+      "name": "dsh-theme-herta",
+      "version": "0.1.0",
+      "modified": "2026-10-03T11:35:52.089Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-theme"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/HerTa-st/dsh-theme-herta.git"
+    },
+    {
       "name": "dsh-theme-kit",
       "version": "0.1.4",
       "modified": "2026-09-27T02:43:40.881Z",
@@ -65079,8 +65533,8 @@
     },
     {
       "name": "dsh-theone",
-      "version": "0.3.31",
-      "modified": "2026-10-10T01:49:44.536Z",
+      "version": "0.3.32",
+      "modified": "2026-10-11T02:56:20.507Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -65461,6 +65915,22 @@
       "repository": "git+https://github.com/zjukop/dsh-time-machine.git"
     },
     {
+      "name": "dsh-timeband",
+      "version": "1.1.0",
+      "modified": "2026-10-04T05:22:52.611Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/dsh"
+      ],
+      "repository": "git+https://github.com/a961282799-crypto/dsh-timeband.git"
+    },
+    {
       "name": "dsh-timeline",
       "version": "0.1.5",
       "modified": "2026-09-10T16:06:27.675Z",
@@ -65599,8 +66069,8 @@
     },
     {
       "name": "dsh-todo-board",
-      "version": "0.12.0",
-      "modified": "2026-09-30T05:17:00.243Z",
+      "version": "0.13.1",
+      "modified": "2026-10-10T11:27:25.968Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -65610,7 +66080,8 @@
         "@deepseek-ai/dsh-client-ui-theme"
       ],
       "hostDeps": [
-        "@deepseek-ai/cordis"
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh"
       ],
       "repository": "git+https://github.com/sueqet/dsh-todo-board.git"
     },
@@ -66080,21 +66551,6 @@
       "repository": null
     },
     {
-      "name": "dsh-tool-gate",
-      "version": "1.0.0",
-      "modified": "2026-09-05T17:01:02.718Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-agent",
-        "@deepseek-ai/dsh-tools",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/ShehabYahya/DSH-Tool-Gate.git"
-    },
-    {
       "name": "dsh-tool-generate-image",
       "version": "0.2.1",
       "modified": "2026-08-20T00:22:57.876Z",
@@ -66119,30 +66575,9 @@
       "repository": "git+https://github.com/lxj808624/dsh-tool-git.git"
     },
     {
-      "name": "dsh-tool-grafana",
-      "version": "0.1.3",
-      "modified": "2026-08-25T08:20:56.069Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-api-remotes"
-      ],
-      "hostDeps": [
-        "@deepseek-ai/cordis",
-        "@deepseek-ai/dsh-credentials",
-        "@deepseek-ai/dsh-mcp-client",
-        "@deepseek-ai/dsh-skill",
-        "@deepseek-ai/dsh-system-prompt",
-        "@deepseek-ai/schemastery"
-      ],
-      "repository": "git+https://github.com/leoswing/dsh-tool-grafana.git"
-    },
-    {
       "name": "dsh-tool-guardian",
-      "version": "0.5.0-beta.1",
-      "modified": "2026-10-04T22:11:25.039Z",
+      "version": "0.6.0-beta.1",
+      "modified": "2026-10-11T02:46:56.888Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -66270,16 +66705,6 @@
       "repository": "git+https://github.com/Alfred-Lau/dsh-plugins.git"
     },
     {
-      "name": "dsh-tool-result-guard",
-      "version": "0.1.0",
-      "modified": "2026-08-22T13:33:26.047Z",
-      "bundle": true,
-      "client": false,
-      "clientInject": [],
-      "hostDeps": [],
-      "repository": null
-    },
-    {
       "name": "dsh-tool-search",
       "version": "0.1.6",
       "modified": "2026-10-08T06:20:59.988Z",
@@ -66316,8 +66741,8 @@
     },
     {
       "name": "dsh-tool-user-memory",
-      "version": "0.2.1",
-      "modified": "2026-10-10T08:05:02.671Z",
+      "version": "0.3.0",
+      "modified": "2026-10-10T12:33:29.289Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -66378,19 +66803,6 @@
       "repository": "git+https://github.com/LoKiGGo/dsh-tools.git"
     },
     {
-      "name": "dsh-topbar-drawer-xyy",
-      "version": "1.0.0",
-      "modified": "2026-09-05T15:37:17.317Z",
-      "bundle": true,
-      "client": true,
-      "clientInject": [],
-      "hostDeps": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
-      "repository": "git+https://github.com/mengnanxyyyy/dsh-topbar-drawer-xyy.git"
-    },
-    {
       "name": "dsh-totp",
       "version": "0.0.4",
       "modified": "2026-09-23T06:22:14.122Z",
@@ -66405,6 +66817,18 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/SodaZheng/dsh-totp.git"
+    },
+    {
+      "name": "dsh-touchstone",
+      "version": "0.2.0",
+      "modified": "2026-10-03T09:15:12.527Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/Hwayn-pixel/dsh-touchstone.git"
     },
     {
       "name": "dsh-tps-meter",
@@ -66815,6 +67239,20 @@
       "repository": "git+https://github.com/d3vmeh/dsh-turn-doctor.git"
     },
     {
+      "name": "dsh-turn-eraser",
+      "version": "0.2.1",
+      "modified": "2026-10-04T02:15:13.629Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis"
+      ],
+      "repository": "git+https://github.com/Nagiko0739/dsh-turn-eraser.git"
+    },
+    {
       "name": "dsh-turn-fork",
       "version": "0.1.4",
       "modified": "2026-09-10T08:07:52.259Z",
@@ -67068,8 +67506,8 @@
     },
     {
       "name": "dsh-ui-deepdiving",
-      "version": "0.1.0",
-      "modified": "2026-09-29T09:35:13.543Z",
+      "version": "0.1.2",
+      "modified": "2026-10-10T15:44:56.998Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -67113,6 +67551,22 @@
         "@deepseek-ai/dsh-workspace"
       ],
       "repository": "git+https://github.com/AlexYin-Tongji/dsh-ui-enhancer.git"
+    },
+    {
+      "name": "dsh-ui-flow-mapper",
+      "version": "0.1.0",
+      "modified": "2026-10-03T14:34:43.754Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis"
+      ],
+      "repository": "git+https://github.com/liweiyu507/dsh-ui-flow-mapper.git"
     },
     {
       "name": "dsh-ui-font",
@@ -67181,8 +67635,8 @@
     },
     {
       "name": "dsh-ui-outline",
-      "version": "0.1.0",
-      "modified": "2026-09-29T09:35:32.542Z",
+      "version": "0.1.2",
+      "modified": "2026-10-10T15:44:34.100Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -67194,6 +67648,22 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/iluluyu/dsh-ui-outline.git"
+    },
+    {
+      "name": "dsh-ui-scale",
+      "version": "0.1.4",
+      "modified": "2026-10-10T10:19:17.350Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/juliankang4/dsh-ui-scale.git"
     },
     {
       "name": "dsh-ui-session-archive",
@@ -67304,8 +67774,8 @@
     },
     {
       "name": "dsh-ui-ux-pro-max",
-      "version": "1.0.3",
-      "modified": "2026-10-04T14:15:13.077Z",
+      "version": "1.0.4",
+      "modified": "2026-10-11T03:47:05.823Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -67806,8 +68276,8 @@
     },
     {
       "name": "dsh-usage-dock",
-      "version": "0.7.1",
-      "modified": "2026-10-10T06:09:49.204Z",
+      "version": "0.7.2",
+      "modified": "2026-10-10T16:20:18.361Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -68647,6 +69117,20 @@
       "repository": "git+https://github.com/sprainJinyu/dsh-vision-link.git"
     },
     {
+      "name": "dsh-vision-local",
+      "version": "0.3.0",
+      "modified": "2026-08-15T14:21:50.400Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": null
+    },
+    {
       "name": "dsh-vision-mix",
       "version": "0.2.3",
       "modified": "2026-09-08T14:24:26.953Z",
@@ -68826,8 +69310,8 @@
     },
     {
       "name": "dsh-voice-alert",
-      "version": "0.4.8",
-      "modified": "2026-10-08T04:46:09.522Z",
+      "version": "0.4.11",
+      "modified": "2026-10-10T17:01:08.600Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -68845,8 +69329,8 @@
     },
     {
       "name": "dsh-voice-call",
-      "version": "0.3.9",
-      "modified": "2026-09-30T02:00:11.453Z",
+      "version": "0.3.10",
+      "modified": "2026-10-10T08:54:06.481Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -69002,8 +69486,8 @@
     },
     {
       "name": "dsh-vps-manager",
-      "version": "0.6.5",
-      "modified": "2026-10-06T08:24:08.749Z",
+      "version": "0.6.6",
+      "modified": "2026-10-10T12:05:24.199Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -69815,8 +70299,8 @@
     },
     {
       "name": "dsh-web-search-plugin",
-      "version": "0.5.0",
-      "modified": "2026-10-09T12:01:59.504Z",
+      "version": "0.5.1",
+      "modified": "2026-10-10T10:50:09.589Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -69909,6 +70393,25 @@
         "@deepseek-ai/schemastery"
       ],
       "repository": "git+https://github.com/biyuhao/dsh-web-searxng.git"
+    },
+    {
+      "name": "dsh-web-service",
+      "version": "0.3.7",
+      "modified": "2026-10-11T04:49:41.334Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-host-webserver",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/toddpan/dsh-webapi.git"
     },
     {
       "name": "dsh-web-tavily",
@@ -70254,6 +70757,20 @@
       "repository": "git+https://github.com/COH2357/dsh-whale-bridge.git"
     },
     {
+      "name": "dsh-whale-chan",
+      "version": "0.2.0",
+      "modified": "2026-10-03T14:45:25.023Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-slots"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/dsh"
+      ],
+      "repository": "git+https://github.com/duyanta123/dsh-whale-pet.git"
+    },
+    {
       "name": "dsh-whale-copilot",
       "version": "1.3.3",
       "modified": "2026-09-10T09:52:59.177Z",
@@ -70369,8 +70886,8 @@
     },
     {
       "name": "dsh-whale-post-bus",
-      "version": "0.4.0",
-      "modified": "2026-10-10T00:09:26.849Z",
+      "version": "0.6.1",
+      "modified": "2026-10-10T19:36:45.017Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -70379,8 +70896,8 @@
     },
     {
       "name": "dsh-whale-post-deliver",
-      "version": "0.4.0",
-      "modified": "2026-10-10T00:11:10.378Z",
+      "version": "0.6.1",
+      "modified": "2026-10-10T19:35:59.500Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -70389,8 +70906,8 @@
     },
     {
       "name": "dsh-whale-post-gate",
-      "version": "0.4.0",
-      "modified": "2026-10-10T00:10:08.900Z",
+      "version": "0.6.1",
+      "modified": "2026-10-10T19:36:28.883Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -70399,8 +70916,8 @@
     },
     {
       "name": "dsh-whale-post-roster",
-      "version": "0.4.0",
-      "modified": "2026-10-10T00:09:17.588Z",
+      "version": "0.6.1",
+      "modified": "2026-10-10T19:37:55.236Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -70409,8 +70926,8 @@
     },
     {
       "name": "dsh-whale-post-types",
-      "version": "0.4.0",
-      "modified": "2026-10-10T00:09:48.702Z",
+      "version": "0.6.1",
+      "modified": "2026-10-10T19:35:34.772Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -70454,8 +70971,8 @@
     },
     {
       "name": "dsh-whale-widget",
-      "version": "0.3.18",
-      "modified": "2026-10-02T14:07:30.408Z",
+      "version": "0.4.1",
+      "modified": "2026-10-11T07:34:46.041Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -70657,8 +71174,8 @@
     },
     {
       "name": "dsh-with-pencil",
-      "version": "0.6.0",
-      "modified": "2026-09-26T06:08:58.987Z",
+      "version": "0.7.0",
+      "modified": "2026-10-10T21:47:33.655Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -70853,8 +71370,8 @@
     },
     {
       "name": "dsh-workbuddy-connect",
-      "version": "0.7.1",
-      "modified": "2026-10-01T05:15:22.306Z",
+      "version": "0.7.2",
+      "modified": "2026-10-10T18:07:13.471Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -70914,8 +71431,8 @@
     },
     {
       "name": "dsh-workbuddy-console",
-      "version": "2.0.48",
-      "modified": "2026-10-07T08:52:47.959Z",
+      "version": "2.0.49",
+      "modified": "2026-10-10T23:59:20.950Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -70984,8 +71501,8 @@
     },
     {
       "name": "dsh-workbuddy-xdpool",
-      "version": "1.8.3",
-      "modified": "2026-10-08T08:17:20.073Z",
+      "version": "1.8.4",
+      "modified": "2026-10-10T12:16:25.614Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -71508,6 +72025,16 @@
       "repository": "git+https://github.com/Small-tailqwq/dsh-wsl-launcher.git"
     },
     {
+      "name": "dsh-wsl-projects",
+      "version": "0.2.3",
+      "modified": "2026-10-03T09:07:18.790Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/mvalentsev/dsh-wsl-projects.git"
+    },
+    {
       "name": "dsh-wsl-tool",
       "version": "1.11.0",
       "modified": "2026-10-06T17:58:18.680Z",
@@ -71608,8 +72135,8 @@
     },
     {
       "name": "dsh-xcodebuild",
-      "version": "0.6.7",
-      "modified": "2026-10-10T08:48:59.134Z",
+      "version": "0.6.18",
+      "modified": "2026-10-10T11:40:08.510Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -71629,6 +72156,34 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/VioletMizutsuneOrchid/dsh-xcpc-autocode.git"
+    },
+    {
+      "name": "dsh-xiaoai-bridge",
+      "version": "1.0.0",
+      "modified": "2026-10-04T02:07:46.362Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-api-remotes"
+      ],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-agent",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-credentials",
+        "@deepseek-ai/dsh-host-webserver",
+        "@deepseek-ai/dsh-llm",
+        "@deepseek-ai/dsh-session",
+        "@deepseek-ai/dsh-settings",
+        "@deepseek-ai/dsh-skill",
+        "@deepseek-ai/dsh-tools",
+        "@deepseek-ai/schemastery"
+      ],
+      "repository": "git+https://github.com/OMSociety/dsh-xiaoai-bridge.git"
     },
     {
       "name": "dsh-xiaomi-tts",
@@ -71778,6 +72333,16 @@
       "repository": "git+https://github.com/Yeelight/dsh-yeelight-smart-home.git"
     },
     {
+      "name": "dsh-yisi-pet",
+      "version": "0.2.0",
+      "modified": "2026-10-03T15:25:59.676Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": "git+https://github.com/YOUR_GITHUB_NAME/dsh-yisi-pet.git"
+    },
+    {
       "name": "dsh-yogacara",
       "version": "0.2.1",
       "modified": "2026-08-26T01:26:05.089Z",
@@ -71897,8 +72462,8 @@
     },
     {
       "name": "dsh-zen-remote",
-      "version": "2.0.3",
-      "modified": "2026-10-10T04:09:14.575Z",
+      "version": "2.2.0",
+      "modified": "2026-10-11T05:11:34.782Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -72028,6 +72593,20 @@
       "repository": "git+https://github.com/Hongcheng-LI/dsh-zotero.git"
     },
     {
+      "name": "dsh-zspace",
+      "version": "0.3.3",
+      "modified": "2026-10-11T02:54:38.015Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/cordis",
+        "@deepseek-ai/dsh-system-prompt",
+        "@deepseek-ai/dsh-tools"
+      ],
+      "repository": "git+https://github.com/439436269-ctrl/dsh-zspace.git"
+    },
+    {
       "name": "dsh-zsxq",
       "version": "0.1.4",
       "modified": "2026-09-29T15:37:22.613Z",
@@ -72049,8 +72628,8 @@
     },
     {
       "name": "dshbase-catalog",
-      "version": "0.3.52",
-      "modified": "2026-10-09T12:04:55.514Z",
+      "version": "0.3.53",
+      "modified": "2026-10-10T11:21:03.280Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
@@ -72444,8 +73023,8 @@
     },
     {
       "name": "get-fable",
-      "version": "1.11.1",
-      "modified": "2026-10-09T07:14:56.113Z",
+      "version": "1.12.0",
+      "modified": "2026-10-10T15:38:18.600Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -72675,8 +73254,8 @@
     },
     {
       "name": "kczx-user-management",
-      "version": "1.6.3",
-      "modified": "2026-09-23T08:13:28.856Z",
+      "version": "1.7.0",
+      "modified": "2026-10-11T03:20:17.925Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -72777,6 +73356,19 @@
       "repository": "git+https://github.com/VinciBeans/deepseek-plugin-liangwengu.git"
     },
     {
+      "name": "local-shell-mcp-dsh",
+      "version": "5.1.2",
+      "modified": "2026-10-10T10:47:34.239Z",
+      "bundle": true,
+      "client": true,
+      "clientInject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "hostDeps": [],
+      "repository": "git+https://github.com/fwerkor/local-shell-mcp.git"
+    },
+    {
       "name": "loongport",
       "version": "0.2.0",
       "modified": "2026-08-15T03:01:10.015Z",
@@ -72861,6 +73453,16 @@
       "clientInject": [],
       "hostDeps": [],
       "repository": "git+https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher.git"
+    },
+    {
+      "name": "madoka-dsh-github-mcp",
+      "version": "0.2.3",
+      "modified": "2026-10-03T10:11:25.794Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [],
+      "repository": null
     },
     {
       "name": "madoka-dsh-microsoft-docs",
@@ -72976,8 +73578,8 @@
     },
     {
       "name": "misakanet",
-      "version": "2.42.2",
-      "modified": "2026-10-06T16:26:31.841Z",
+      "version": "2.42.3",
+      "modified": "2026-10-10T15:31:06.632Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -73250,8 +73852,8 @@
     },
     {
       "name": "open-sea-skin",
-      "version": "1.2.3",
-      "modified": "2026-09-07T12:02:04.461Z",
+      "version": "1.2.5",
+      "modified": "2026-10-10T17:14:55.012Z",
       "bundle": true,
       "client": true,
       "clientInject": [],
@@ -73437,6 +74039,18 @@
       ],
       "hostDeps": [
         "@deepseek-ai/cordis"
+      ],
+      "repository": null
+    },
+    {
+      "name": "project-ai-docs",
+      "version": "0.1.1",
+      "modified": "2026-08-16T14:17:13.631Z",
+      "bundle": true,
+      "client": false,
+      "clientInject": [],
+      "hostDeps": [
+        "@deepseek-ai/dsh-skill-filesystem"
       ],
       "repository": null
     },
@@ -73806,8 +74420,8 @@
     },
     {
       "name": "sage-mem",
-      "version": "0.9.2",
-      "modified": "2026-10-09T13:52:00.619Z",
+      "version": "0.9.12",
+      "modified": "2026-10-10T19:06:04.811Z",
       "bundle": true,
       "client": true,
       "clientInject": [
@@ -74047,8 +74661,8 @@
     },
     {
       "name": "spec-wave",
-      "version": "3.0.2",
-      "modified": "2026-09-24T00:55:45.386Z",
+      "version": "3.3.0",
+      "modified": "2026-10-11T06:33:10.216Z",
       "bundle": true,
       "client": false,
       "clientInject": [],
