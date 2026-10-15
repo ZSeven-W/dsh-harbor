@@ -1,0 +1,57 @@
+{
+  "from": {
+    "version": "0.2.1-alpha.3",
+    "packages": 302,
+    "clientModules": 76
+  },
+  "to": {
+    "version": "0.2.1-alpha.4",
+    "packages": 303,
+    "clientModules": 77
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-plugin-market",
+      "@deepseek-ai/dsh-experimental-plugin-market-bundle",
+      "@deepseek-ai/dsh-plugin-market",
+      "@deepseek-ai/dsh-plugin-market-index"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-client-store",
+      "@deepseek-ai/dsh-client-ui-primitives",
+      "@deepseek-ai/dsh-client-ui-slots"
+    ]
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-plugin-market"
+    ],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [],
+  "unreadable": {
+    "from": [
+      {
+        "name": "@deepseek-ai/dsh-client-store",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'zustand' imported from /home/runner/.config/dsh-harbor/hosts/0.2.1-alpha.3/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-store/lib/index.js"
+      },
+      {
+        "name": "@deepseek-ai/dsh-client-ui-primitives",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'react' imported from /home/runner/.config/dsh-harbor/hosts/0.2.1-alpha.3/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js"
+      }
+    ],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 3,
+    "packagesAdded": 4,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 0,
+    "versionBumps": 288,
+    "breaking": true
+  }
+}
