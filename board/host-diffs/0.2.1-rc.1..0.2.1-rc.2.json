@@ -1,0 +1,42 @@
+{
+  "from": {
+    "version": "0.2.1-rc.1",
+    "packages": 303,
+    "clientModules": 77
+  },
+  "to": {
+    "version": "0.2.1-rc.2",
+    "packages": 305,
+    "clientModules": 78
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-deepseek-model-label-1017",
+      "@deepseek-ai/dsh-web-deepseek-api"
+    ],
+    "removed": []
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-deepseek-model-label-1017"
+    ],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 0,
+    "packagesAdded": 2,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 0,
+    "versionBumps": 292,
+    "breaking": false
+  }
+}
