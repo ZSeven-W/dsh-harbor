@@ -1,0 +1,240 @@
+{
+  "from": {
+    "version": "0.2.0-rc.2",
+    "packages": 288,
+    "clientModules": 71
+  },
+  "to": {
+    "version": "0.2.1-rc.2",
+    "packages": 305,
+    "clientModules": 78
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-api-remote-access",
+      "@deepseek-ai/dsh-client-ui-deepseek-model-label-1017",
+      "@deepseek-ai/dsh-client-ui-plugin-market",
+      "@deepseek-ai/dsh-client-ui-secret-mask",
+      "@deepseek-ai/dsh-experimental-badge-skill-bundle",
+      "@deepseek-ai/dsh-experimental-client-ui-cot-translation",
+      "@deepseek-ai/dsh-experimental-cot-translation-bundle",
+      "@deepseek-ai/dsh-experimental-inspector",
+      "@deepseek-ai/dsh-experimental-inspector-profile",
+      "@deepseek-ai/dsh-experimental-plugin-market-bundle",
+      "@deepseek-ai/dsh-experimental-ralph-bundle",
+      "@deepseek-ai/dsh-experimental-session-inspector",
+      "@deepseek-ai/dsh-experimental-session-search",
+      "@deepseek-ai/dsh-experimental-session-titles-bundle",
+      "@deepseek-ai/dsh-experimental-terminal-bundle",
+      "@deepseek-ai/dsh-experimental-tool-worktree",
+      "@deepseek-ai/dsh-experimental-translator",
+      "@deepseek-ai/dsh-experimental-worktree",
+      "@deepseek-ai/dsh-harness-dev-context",
+      "@deepseek-ai/dsh-plugin-market",
+      "@deepseek-ai/dsh-plugin-market-index",
+      "@deepseek-ai/dsh-session-title-all-prompts-llm",
+      "@deepseek-ai/dsh-tool-schedule",
+      "@deepseek-ai/dsh-tool-session-query",
+      "@deepseek-ai/dsh-tool-terminal",
+      "@deepseek-ai/dsh-tool-working-directory",
+      "@deepseek-ai/dsh-web-deepseek-api",
+      "@deepseek-ai/dsh-working-directory"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-client-store",
+      "@deepseek-ai/dsh-client-ui-primitives",
+      "@deepseek-ai/dsh-client-ui-slots",
+      "@deepseek-ai/dsh-experimental-schedule-bundle",
+      "@deepseek-ai/dsh-hook-protocol",
+      "@deepseek-ai/dsh-hooks-claude-code",
+      "@deepseek-ai/dsh-hooks-codex",
+      "@deepseek-ai/dsh-invariants",
+      "@deepseek-ai/dsh-subagent-in-process-driver",
+      "@deepseek-ai/dsh-webhook",
+      "@deepseek-ai/dsh-webhook-github"
+    ]
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-api-remote-access",
+      "@deepseek-ai/dsh-client-ui-deepseek-model-label-1017",
+      "@deepseek-ai/dsh-client-ui-plugin-market",
+      "@deepseek-ai/dsh-client-ui-secret-mask",
+      "@deepseek-ai/dsh-experimental-client-ui-cot-translation",
+      "@deepseek-ai/dsh-experimental-inspector",
+      "@deepseek-ai/dsh-experimental-session-inspector"
+    ],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [
+    {
+      "name": "@deepseek-ai/dsh-agent-preset-registry",
+      "added": [],
+      "removed": [
+        "livePresetMounts",
+        "serviceForAgent",
+        "standingMountFor"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-app-boot",
+      "added": [
+        "OFFICIAL_ON_DEMAND_CATALOG",
+        "ON_DEMAND_BUNDLES",
+        "ProfileRuntimeResolution",
+        "ResolutionRestartRequired",
+        "readBundlePatches",
+        "recomposeProfile",
+        "resolvePluginResource"
+      ],
+      "removed": [
+        "HARNESS_SOURCE_SECTION",
+        "addHarnessSourceSection"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-client-connection",
+      "added": [
+        "CONNECT_PATH",
+        "Peer"
+      ],
+      "removed": [
+        "OperatorPeer"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-home-paths",
+      "added": [
+        "AGENTS_HOME_DIR_NAME",
+        "AGENTS_HOME_ENV",
+        "DEFAULT_AGENTS_HOME_DISPLAY",
+        "agentsHomeDisplay",
+        "defaultAgentsHome",
+        "resolveAgentsHome"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-host-webserver",
+      "added": [
+        "bindUrlHost",
+        "isLoopbackHost",
+        "isWildcardHost",
+        "normalizeBindAddress"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-llm-deepseek",
+      "added": [
+        "catalogModelFields"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-schedule",
+      "added": [
+        "REQUIRED_TITLE_MESSAGE"
+      ],
+      "removed": [
+        "registerScheduleTools"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-session",
+      "added": [
+        "appendPluginRecord",
+        "pluginRecordOf"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-session-persistence-jsonl",
+      "added": [
+        "Config",
+        "apply",
+        "name"
+      ],
+      "removed": [
+        "default"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-session-title-llm",
+      "added": [
+        "executeSessionTitleLlm"
+      ],
+      "removed": [
+        "generateSessionTitleWithLlm",
+        "registerSessionTitleLlmProvider"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-subagent",
+      "added": [
+        "STRUCTURED_OUTPUT_TOOL"
+      ],
+      "removed": [
+        "resolveChildCwd",
+        "settleRun",
+        "validateConfiguredCwd"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-tool-workspace-dependencies",
+      "added": [
+        "copyPrimaryRuntime",
+        "primaryRuntimePythonAliases"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-typert-protocol",
+      "added": [
+        "createTypertRemoteInfo",
+        "isTypertRemoteMethod",
+        "principalOf"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-util-values",
+      "added": [
+        "PartialArguments"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-web-app",
+      "added": [],
+      "removed": [
+        "resolveLanTrust"
+      ]
+    }
+  ],
+  "unreadable": {
+    "from": [
+      {
+        "name": "@deepseek-ai/dsh-client-store",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'zustand' imported from /home/runner/.config/dsh-harbor/hosts/0.2.0-rc.2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-store/lib/index.js"
+      },
+      {
+        "name": "@deepseek-ai/dsh-client-ui-primitives",
+        "error": "ERR_MODULE_NOT_FOUND: Cannot find package 'react' imported from /home/runner/.config/dsh-harbor/hosts/0.2.0-rc.2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js"
+      }
+    ],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 11,
+    "packagesAdded": 28,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 8,
+    "versionBumps": 273,
+    "breaking": true
+  }
+}
