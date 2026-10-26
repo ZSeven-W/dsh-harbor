@@ -1,0 +1,37 @@
+{
+  "from": {
+    "version": "0.2.1-rc.3",
+    "packages": 306,
+    "clientModules": 79
+  },
+  "to": {
+    "version": "0.2.1-rc.4",
+    "packages": 306,
+    "clientModules": 79
+  },
+  "packages": {
+    "added": [],
+    "removed": []
+  },
+  "clientModules": {
+    "added": [],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 0,
+    "packagesAdded": 0,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 0,
+    "versionBumps": 295,
+    "breaking": false
+  }
+}
