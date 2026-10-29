@@ -1,0 +1,60 @@
+{
+  "from": {
+    "version": "0.2.1-rc.2",
+    "packages": 305,
+    "clientModules": 78
+  },
+  "to": {
+    "version": "0.2.1-rc.5",
+    "packages": 306,
+    "clientModules": 79
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-entry-customization"
+    ],
+    "removed": []
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-entry-customization"
+    ],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [
+    {
+      "name": "@deepseek-ai/dsh-llm-deepseek",
+      "added": [
+        "DEFAULT_MODELS_MAX_AGE_MS",
+        "DEFAULT_MODELS_TIMEOUT_MS",
+        "LISTING_TIMEOUT",
+        "ModelListingCache",
+        "isBuiltInCatalog",
+        "modelListingConfigFields",
+        "modelListingURL",
+        "parseModelListing",
+        "refuseListedModel",
+        "requestModelListing",
+        "resolveListedCatalog",
+        "resolveListingTiming"
+      ],
+      "removed": []
+    }
+  ],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 0,
+    "packagesAdded": 1,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 0,
+    "versionBumps": 294,
+    "breaking": false
+  }
+}
