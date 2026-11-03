@@ -1,0 +1,95 @@
+{
+  "from": {
+    "version": "0.2.2-alpha.2",
+    "packages": 330,
+    "clientModules": 87
+  },
+  "to": {
+    "version": "0.2.2-alpha.3",
+    "packages": 330,
+    "clientModules": 88
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-context-menu",
+      "@deepseek-ai/dsh-client-ui-file-actions",
+      "@deepseek-ai/dsh-fs-patch"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-computer-use",
+      "@deepseek-ai/dsh-cua",
+      "@deepseek-ai/dsh-cua-bundle"
+    ]
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-context-menu",
+      "@deepseek-ai/dsh-client-ui-file-actions"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-cua"
+    ]
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [
+    {
+      "name": "@deepseek-ai/cordis-plugin-include",
+      "added": [
+        "ConfigFileError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-fs",
+      "added": [
+        "FS_ERROR_CODES"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-schedule",
+      "added": [
+        "DEFAULT_LIST_LIMIT",
+        "MAX_LIST_LIMIT",
+        "formatScheduleLocalTime"
+      ],
+      "removed": [
+        "SCHEDULE_CHANGE_VERSION",
+        "decodeScheduleChange",
+        "foldScheduleEvents",
+        "scheduleView"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-session-log-deepseek",
+      "added": [
+        "SessionLogDeepSeekService"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-util-time",
+      "added": [
+        "CRON_SEARCH_HORIZON_YEARS",
+        "Cron",
+        "RRule"
+      ],
+      "removed": []
+    }
+  ],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 3,
+    "packagesAdded": 3,
+    "clientModulesRemoved": 1,
+    "exportsRemovedIn": 1,
+    "versionBumps": 323,
+    "breaking": true
+  }
+}
