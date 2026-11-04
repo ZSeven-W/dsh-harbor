@@ -1,0 +1,238 @@
+{
+  "from": {
+    "version": "0.2.1-rc.5",
+    "packages": 306,
+    "clientModules": 79
+  },
+  "to": {
+    "version": "0.2.2-rc.1",
+    "packages": 330,
+    "clientModules": 88
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-action-cards",
+      "@deepseek-ai/dsh-client-ui-action-cards",
+      "@deepseek-ai/dsh-client-ui-context-menu",
+      "@deepseek-ai/dsh-client-ui-creation-recommendations",
+      "@deepseek-ai/dsh-client-ui-file-actions",
+      "@deepseek-ai/dsh-client-ui-file-drag",
+      "@deepseek-ai/dsh-client-ui-plugin-recommendations",
+      "@deepseek-ai/dsh-creation-recommendations",
+      "@deepseek-ai/dsh-deliverable-file-references",
+      "@deepseek-ai/dsh-experimental-client-ui-forge",
+      "@deepseek-ai/dsh-experimental-client-ui-stats",
+      "@deepseek-ai/dsh-experimental-forge",
+      "@deepseek-ai/dsh-experimental-forge-bundle",
+      "@deepseek-ai/dsh-experimental-forge-github",
+      "@deepseek-ai/dsh-experimental-forge-session",
+      "@deepseek-ai/dsh-experimental-liveshare",
+      "@deepseek-ai/dsh-experimental-liveshare-protocol",
+      "@deepseek-ai/dsh-fs-patch",
+      "@deepseek-ai/dsh-message-quotes",
+      "@deepseek-ai/dsh-official-bundles",
+      "@deepseek-ai/dsh-personalized-recommendations",
+      "@deepseek-ai/dsh-plugin-detail",
+      "@deepseek-ai/dsh-plugin-recommendations",
+      "@deepseek-ai/dsh-tool-executor-native",
+      "@deepseek-ai/dsh-tool-executor-ptc"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-client-ui-deepseek-model-label-1017"
+    ]
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-action-cards",
+      "@deepseek-ai/dsh-client-ui-context-menu",
+      "@deepseek-ai/dsh-client-ui-creation-recommendations",
+      "@deepseek-ai/dsh-client-ui-file-actions",
+      "@deepseek-ai/dsh-client-ui-file-drag",
+      "@deepseek-ai/dsh-client-ui-plugin-recommendations",
+      "@deepseek-ai/dsh-experimental-client-ui-forge",
+      "@deepseek-ai/dsh-experimental-client-ui-stats",
+      "@deepseek-ai/dsh-experimental-liveshare",
+      "@deepseek-ai/dsh-message-quotes"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-client-ui-deepseek-model-label-1017"
+    ]
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [
+    {
+      "name": "@deepseek-ai/cordis-plugin-include",
+      "added": [
+        "ConfigFileError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-agent",
+      "added": [
+        "AgentModel",
+        "modelSelectionProjectionDefinition"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-agent-loop",
+      "added": [],
+      "removed": [
+        "turnBoundaryProjectionDefinition"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-api-session-controller",
+      "added": [],
+      "removed": [
+        "buildModelCatalog"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-app-boot",
+      "added": [
+        "UnsupportedBundlePlatformError",
+        "assertBundlePlatform",
+        "validatePluginVersionExemption"
+      ],
+      "removed": [
+        "DEFAULT_PROFILE_BUNDLES",
+        "OFFICIAL_ON_DEMAND_CATALOG",
+        "ON_DEMAND_BUNDLES",
+        "OPTIONAL_BUNDLES",
+        "PROFILE_TEMPLATES"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-client-ui-trajectory",
+      "added": [
+        "default"
+      ],
+      "removed": [
+        "apply"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-experimental-worktree",
+      "added": [
+        "generatedWorktreeName"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-fs",
+      "added": [
+        "FS_ERROR_CODES"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-host-frontend-static",
+      "added": [],
+      "removed": [
+        "serveStatic"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-llm-deepseek",
+      "added": [
+        "createModelListingCache"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-sandbox",
+      "added": [
+        "SandboxInvalidRootError",
+        "SandboxUnsupportedPolicyError",
+        "workspaceWritableRoots"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-schedule",
+      "added": [
+        "DEFAULT_LIST_LIMIT",
+        "MAX_LIST_LIMIT",
+        "formatScheduleLocalTime"
+      ],
+      "removed": [
+        "SCHEDULE_CHANGE_VERSION",
+        "decodeScheduleChange",
+        "foldScheduleEvents",
+        "scheduleView"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-session-log-deepseek",
+      "added": [
+        "SessionLogDeepSeekService"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-session-log-export",
+      "added": [
+        "formatSessionMarkdown"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-tools",
+      "added": [
+        "ToolActivationError",
+        "ToolBatchExecutionError",
+        "ToolExecutorUnavailableError",
+        "ToolsService",
+        "isJsonSchemaRecord",
+        "isPlainJsonArray",
+        "isPlainJsonRecord",
+        "projectToolSchema"
+      ],
+      "removed": [
+        "CodeRunFailedError",
+        "TOOL_RUNTIME_SCHEDULER",
+        "defineContentToolFixture",
+        "jsonSchemaToPy",
+        "jsonSchemaToTs",
+        "renderToolsSdk",
+        "renderToolsSdkPy"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-util-time",
+      "added": [
+        "CRON_SEARCH_HORIZON_YEARS",
+        "Cron",
+        "Duration",
+        "MAX_FOUR_DIGIT_YEAR_MS",
+        "MIN_FOUR_DIGIT_YEAR_MS",
+        "RRule",
+        "canonicalizeTimeZone",
+        "formatFourDigitYearInstant",
+        "fourDigitYearEpoch",
+        "isFourDigitYearInstant",
+        "parseLocalCalendar",
+        "parseOffsetInstant",
+        "resolveLocalInstant"
+      ],
+      "removed": []
+    }
+  ],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 1,
+    "packagesAdded": 25,
+    "clientModulesRemoved": 1,
+    "exportsRemovedIn": 7,
+    "versionBumps": 301,
+    "breaking": true
+  }
+}
