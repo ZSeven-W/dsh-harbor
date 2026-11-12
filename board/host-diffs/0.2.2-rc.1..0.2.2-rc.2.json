@@ -1,0 +1,260 @@
+{
+  "from": {
+    "version": "0.2.2-rc.1",
+    "packages": 330,
+    "clientModules": 88
+  },
+  "to": {
+    "version": "0.2.2-rc.2",
+    "packages": 336,
+    "clientModules": 90
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-agent-team",
+      "@deepseek-ai/dsh-client-ui-account-notifications",
+      "@deepseek-ai/dsh-client-ui-agent-team",
+      "@deepseek-ai/dsh-computer-use",
+      "@deepseek-ai/dsh-cua",
+      "@deepseek-ai/dsh-cua-bundle",
+      "@deepseek-ai/dsh-error",
+      "@deepseek-ai/dsh-mcp-manager",
+      "@deepseek-ai/dsh-office-kit",
+      "@deepseek-ai/dsh-terminal-panel",
+      "@deepseek-ai/dsh-tool-agent-team",
+      "@deepseek-ai/dsh-tool-office",
+      "@deepseek-ai/dsh-util-ripgrep"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-api-account-controller",
+      "@deepseek-ai/dsh-deepseek-account-platform",
+      "@deepseek-ai/dsh-experimental-agent-team",
+      "@deepseek-ai/dsh-experimental-agent-team-profile",
+      "@deepseek-ai/dsh-experimental-client-ui-agent-team",
+      "@deepseek-ai/dsh-experimental-tool-agent-team",
+      "@deepseek-ai/dsh-office-to-pdf"
+    ]
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-client-ui-account-notifications",
+      "@deepseek-ai/dsh-client-ui-agent-team",
+      "@deepseek-ai/dsh-cua"
+    ],
+    "removed": [
+      "@deepseek-ai/dsh-experimental-client-ui-agent-team"
+    ]
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [
+    {
+      "name": "@deepseek-ai/dsh-api-terminal-controller",
+      "added": [
+        "AgentTerminalError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-deepseek-account",
+      "added": [],
+      "removed": [
+        "desktopClientHeaders",
+        "installAccountTaskCancellation",
+        "isRunningAccountTask",
+        "mergePlatformCookies",
+        "platformClientHeaders",
+        "platformWireLocale"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-experimental-liveshare",
+      "added": [],
+      "removed": [
+        "ViewerDeclarations",
+        "viewerDeclarationsOf"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-experimental-worktree",
+      "added": [
+        "CREATED_RECORD",
+        "createdWorktreeSchema",
+        "worktreeProjection"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-fs",
+      "added": [
+        "fsErrorFromErrno"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-http-proxy",
+      "added": [
+        "createRouteDispatcher"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-jobs",
+      "added": [
+        "JOB_ERROR_CODES",
+        "JobError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-llm",
+      "added": [
+        "LLM_FAILURE_CODES",
+        "RETRY_CODE_CHOICES"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-llm-deepseek",
+      "added": [
+        "deepSeekApiKeyConfigured",
+        "rejectDeepSeekAccountToken",
+        "resolveDeepSeekAccountToken",
+        "resolveDeepSeekApiKey"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-llm-deepseek-account",
+      "added": [
+        "plainAccountOptions",
+        "resolveAccountOptions"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-mcp-client",
+      "added": [
+        "ReconnectSchema",
+        "SERVER_NAME_PATTERN",
+        "assertTemplateSyntax",
+        "connectionStatusOf",
+        "probeServer",
+        "resolveReconnectPolicy"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-native-command",
+      "added": [
+        "isWsl"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-plugin-manager",
+      "added": [
+        "pinnedGitOrigin"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-sandbox",
+      "added": [
+        "SANDBOX_ESCALATION_ERROR_CODES",
+        "SANDBOX_PREPARATION_ERROR_CODES",
+        "SandboxEscalationError",
+        "SandboxPreparationError"
+      ],
+      "removed": [
+        "SandboxUnsupportedPolicyError"
+      ]
+    },
+    {
+      "name": "@deepseek-ai/dsh-sandbox-windows-acl",
+      "added": [
+        "isTempRootInsideWorkspace"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-shell-env",
+      "added": [
+        "ShellEnvError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-subagent",
+      "added": [
+        "ROOT_AGENT_NAME"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-subprocess",
+      "added": [
+        "SUBPROCESS_ERROR_CODES",
+        "SubprocessError",
+        "subprocessSpawnFailure"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-tool-executor-ptc",
+      "added": [
+        "CodeResetFailedError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-tool-subagent-control",
+      "added": [
+        "Config"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-tools",
+      "added": [
+        "ToolContextUnavailableError"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-web-deepseek-api",
+      "added": [
+        "DEEPSEEK_SEARCH_REQUESTS_PER_SECOND"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-win32-process",
+      "added": [
+        "WIN32_ERROR"
+      ],
+      "removed": []
+    },
+    {
+      "name": "@deepseek-ai/dsh-working-directory",
+      "added": [
+        "WorkingDirectoryError"
+      ],
+      "removed": []
+    }
+  ],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 7,
+    "packagesAdded": 13,
+    "clientModulesRemoved": 1,
+    "exportsRemovedIn": 3,
+    "versionBumps": 314,
+    "breaking": true
+  }
+}
