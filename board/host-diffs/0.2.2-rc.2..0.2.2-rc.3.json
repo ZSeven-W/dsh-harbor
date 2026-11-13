@@ -1,0 +1,41 @@
+{
+  "from": {
+    "version": "0.2.2-rc.2",
+    "packages": 336,
+    "clientModules": 90
+  },
+  "to": {
+    "version": "0.2.2-rc.3",
+    "packages": 337,
+    "clientModules": 91
+  },
+  "packages": {
+    "added": [
+      "@deepseek-ai/dsh-deepseek-chat-import"
+    ],
+    "removed": []
+  },
+  "clientModules": {
+    "added": [
+      "@deepseek-ai/dsh-deepseek-chat-import"
+    ],
+    "removed": []
+  },
+  "presets": {
+    "added": [],
+    "removed": []
+  },
+  "exports": [],
+  "unreadable": {
+    "from": [],
+    "to": []
+  },
+  "summary": {
+    "packagesRemoved": 0,
+    "packagesAdded": 1,
+    "clientModulesRemoved": 0,
+    "exportsRemovedIn": 0,
+    "versionBumps": 325,
+    "breaking": false
+  }
+}
